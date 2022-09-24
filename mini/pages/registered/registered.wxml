@@ -1,0 +1,49 @@
+<!--pages/registered/registered.wxml-->
+<view class="mainContainer">
+  <view class="headerTip">
+    <text>注册成为企业员工后方可使用预约功能</text>
+  </view>
+  <!-- 公司名称 -->
+  <view class="companyName">
+    <text class="imporant">*</text>
+    <text class="tip1">公司名称</text>
+    <input class="tip2" type="text" placeholder="请填写贵公司名称" placeholder-class="placeholder" bindblur="getCompanyName"
+      maxlength="10" value="" />
+  </view>
+  <!-- 姓名 -->
+  <view class="EmployeeName">
+    <text class="imporant">*</text>
+    <text class="tip1">姓名</text>
+    <input class="tip2" type="text" placeholder="请填写您的姓名" placeholder-class="placeholder" bindblur="getEmployeeName"
+      maxlength="10" value="" />
+  </view>
+  <!-- 电话号码 -->
+  <view class="EmployeePhone">
+    <text class="imporant">*</text>
+    <text class="tip1">电话</text>
+    <input class="tip2" type="number" placeholder="请填写您的电话号码" placeholder-class="placeholder"
+      bindblur="getEmployeePhone" maxlength="11" value="" />
+  </view>
+  <!-- 报错提示 -->
+  <view wx:if="{{phoneError}}" class="phoneErrorTip">
+      <text class="iconfont icon-quxiao"></text>
+      <text>请输入正确的电话号码</text>
+    </view>
+  <!-- 邮箱 -->
+  <view class="EmployeeEmail">
+    <!-- <text class="imporant">*</text> -->
+    <text class="tip1">邮箱</text>
+    <input class="tip2" type="text" placeholder="请填写您的电子邮箱" placeholder-class="placeholder" bindblur="getEmployeeEmail"
+      maxlength="30" value="" />
+  </view>
+  <!-- 职务 -->
+  <view class="EmployeeJob">
+    <text class="tip1">职务</text>
+    <input class="tip2" type="text" placeholder="请填写您在贵公司的职务" placeholder-class="placeholder" bindblur="getEmployeeJob"
+      maxlength="11" value="" />
+  </view>
+  <!-- 提交按钮 -->
+  <view class="submit">
+    <button type="primary" bindtap="handleSubmit">提交</button>
+  </view>
+</view>

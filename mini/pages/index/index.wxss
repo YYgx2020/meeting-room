@@ -1,0 +1,78 @@
+/* pages/index/index.wxss */
+/* .pageContainer {
+  position: relative;
+} */
+
+.saomaContainer {
+  position: relative;
+  width: 400rpx;
+  height: 400rpx;
+  top: 300rpx;
+  left: 50%;
+  margin-left: -200rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 16px 16px 32px #bdbdbd,
+    -16px -16px 32px #ffffff;
+}
+
+.outer {
+  position: absolute;
+  width: 400rpx;
+  height: 400rpx;
+  top: 50%;
+  margin-top: -200rpx;
+  left: 50%;
+  margin-left: -200rpx;
+  border-radius: 50%;
+  background: #07c160;
+  /* border: 1rpx solid red; */
+}
+
+.innerTip {
+  z-index: 10;
+  position: absolute;
+  width: 380rpx;
+  left: 50%;
+  margin-left: -190rpx;
+  height: 40rpx;
+  top: 50%;
+  margin-top: -20rpx;
+  line-height: 40rpx;
+  text-align: center;
+  background: #07c160;
+  font-size: 32rpx;
+  color: #ffffff;
+}
+
+.inner {
+  position: absolute;
+  width: 360rpx;
+  height: 360rpx;
+  top: 50%;
+  margin-top: -180rpx;
+  left: 50%;
+  margin-left: -180rpx;
+  line-height: 360rpx;
+  text-align: center;
+  font-size: 280rpx;
+  color: #ffffff;
+}
+
+.btn {
+  position: relative;
+  top: 400rpx;
+  width: 400rpx;
+  left: 50%;
+  margin-left: -200rpx;
+  bottom: 30%;
+}
+
+.registeredBtn {
+  position: relative;
+  top: 430rpx;
+  width: 400rpx;
+  left: 50%;
+  margin-left: -200rpx;
+  bottom: 30%;
+}

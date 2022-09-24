@@ -1,0 +1,15 @@
+<!--pages/index/index.wxml-->
+<view class="pageContainer">
+  <view class="saomaContainer" bindtap="handleSaoma">
+    <view class="outer">
+      <text class="innerTip">扫码查看教室的预约信息</text>
+      <text class="inner iconfont icon-saoma"></text>
+    </view>
+  </view>
+  <view class="btn">
+    <button class="adminLoginBtn" open-type="getUserInfo" type="primary" bindtap="handleLogin">登录</button>
+  </view>
+  <!-- <view class="registeredBtn" bindtap="handleRegistered">
+    <button disabled="{{!showRegister}}" type="default">注册</button>
+  </view> -->
+</view>

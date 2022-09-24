@@ -1,0 +1,42 @@
+<!--pages/handleAppointItem/handleAppointItem.wxml-->
+<view class="appointContainer">
+  <!-- 提示信息 -->
+  <view class="headTip">
+    <text>以下是{{currentRoomid}},{{month}}月{{day}}日{{currentStartTime}}-{{currentEndTime}}的预约情况</text>
+  </view>
+  <view wx:for="{{detail}}" wx:key="applyTime">
+    <view class="appointItem {{showMore? 'heightClassNomore': 'heightClassMore'}} {{item.isban && 'none'}}">
+      <!-- 申请人 -->
+      <view class="appointName">
+        <text class="tip1">申请人</text>
+        <text class="tip2">{{item.appointName}}</text>
+      </view>
+      <!-- 联系方式 -->
+      <view class="appointPhone">
+        <text class="tip1">联系方式</text>
+        <text class="tip2">{{item.appointPhone}}</text>
+      </view>
+      <!-- 申请时间 -->
+      <view class="applyTime">
+        <text class="tip1">申请时间</text>
+        <text class="tip2">{{item.applyTime}}</text>
+      </view>
+      <!-- 申请事宜 -->
+      <view class="thingText">
+        <text class="thingTextTip1">申请缘由</text>
+        <text class="thingTextTip2 {{showMore && 'thingTextTip2-nomore'}}">{{item.thingsText}}</text>
+        <text wx:if="{{item.thingsText.length > 21}}"
+          class="{{showMore? 'dowmIcon': 'upIcon'}} iconfont {{showMore? 'icon-xiangxia2': 'icon-xiangshang2'}}"
+          bindtap="handleShowMore"></text>
+      </view>
+      <!-- 处理按钮 -->
+      <view class="handleBtn">
+        <text class="disagree " bindtap="handleDisagree" data-index="{{index}}" data-item="{{item}}">不同意</text>
+        <text class="agree {{item.isban?'ban':'noban'}}" bindtap="handleAgree" data-index="{{index}}"
+          data-item="{{item}}">同意</text>
+      </view>
+    </view>
+  </view>
+  <!-- 底部留白 -->
+  <!-- <view class="bottomSpace"></view> -->
+</view>

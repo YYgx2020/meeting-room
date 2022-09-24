@@ -1,0 +1,40 @@
+<!--pages/admin/admin.wxml-->
+<view class="pageContainer">
+  <view class="adminInfo">
+    <view class="avatar">
+      <image src="{{userInfo.avatarUrl}}"></image>
+    </view>
+    <text class="nickName">欢迎您，{{userInfo.nickName}}</text>
+    <view class="adminIcon">
+      <image class="adminImg" src="/static/images/administrator.png"></image>
+      <text class="adminIconText">管理员</text>
+    </view>
+  </view>
+  <!-- 处理员工认证审核 -->
+  <view hover-class="btn-hover" class="employeeContainer" bindtap="handleEmployee">
+    <image class="Icon" src="/static/images/handleEmployee.png"></image>
+    <text class="context">学生/教师认证申请审核</text>
+    <text class="toRightIcon iconfont icon-xiangyou"></text>
+  </view>
+  <!-- 查看预约 -->
+  <view hover-class="btn-hover" class="appointedContainer" bindtap="handleAppointed">
+    <image class="Icon" src="/static/images/yuyue.png"></image>
+    <!-- <text class="appointedIcon iconfont icon-yuyue"></text> -->
+    <text class="context">处理预约</text>
+    <text class="toRightIcon iconfont icon-xiangyou"></text>
+  </view>
+  <!-- 编辑教室/会议室 -->
+  <view hover-class="btn-hover" class="roomContainer" bindtap="handleRoomEdit">
+    <image class="Icon" src="/static/images/roomList.png"></image>
+    <!-- <text class="appointedIcon iconfont icon-yuyue"></text> -->
+    <text class="context">教室/会议室</text>
+    <text class="toRightIcon iconfont icon-xiangyou"></text>
+  </view>
+  <!-- 意见反馈 -->
+  <button style="width: 100%;" class="button" open-type="feedback">
+    <image class="Icon" src="/static/images/feedback.png"></image>
+    <!-- <text class="appointedIcon iconfont icon-yuyue"></text> -->
+    <text class="btnContext">意见反馈</text>
+    <text class="toRightIcon iconfont icon-xiangyou"></text>
+  </button>
+</view>

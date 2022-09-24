@@ -1,0 +1,87 @@
+{
+  "_id": "8937eaa961297e7906c0bb3572f22294",
+  "roomid": "4201",
+  "dateAppointInfo": [{
+      "appointArr": [{
+          "status": "上课",
+          "time": {
+            "endTime": "10:00",
+            "startTime": "08:30"
+          }
+        },
+        {
+          "status": "上课",
+          "time": {
+            "endTime": "12:00",
+            "startTime": "10:30"
+          }
+        },
+        {
+          "status": "上课",
+          "time": {
+            "endTime": "16:00",
+            "startTime": "14:30"
+          }
+        },
+        {
+          "status": "空闲",
+          "time": {
+            "endTime": "18:00",
+            "startTime": "16:30"
+          },
+          "detail": {
+            "contactName": "黄sir",
+            "contactPhone": "15778003016",
+            "applyTime": "2021/8/28 10:34",
+            "appointTime": {
+              "startTime": "17:00",
+              "endTime": "18:00"
+            },
+            "things": "19003007班开班会"
+          }
+        },
+        {
+          "status": "已预约",
+          "time": {
+            "endTime": "21:00",
+            "startTime": "19:00"
+          },
+          "detail": {
+            "contactName": "黄sir",
+            "contactPhone": "15778003016",
+            "applyTime": "2021/8/26 19:27",
+            "appointTime": {
+              "startTime": "19:00",
+              "endTime": "21:00"
+            },
+            "things": "19级四六级模拟考"
+          }
+        },
+        {
+          "status": "空闲",
+          "time": {
+            "endTime": "22:00",
+            "startTime": "21:00"
+          },
+          "detail": ""
+        }
+      ],
+      "date": "9/4"
+    },
+    {
+      "date": "10/11",
+      "appointArr": []
+    },
+    {
+      "appointArr": [],
+      "date": "9/2"
+    }
+  ]
+} {
+  "_id": "cd045e75612990010852add01f3c7707",
+  "roomid": "4108",
+  "dateAppointInfo": [{
+    "appointArr": [],
+    "date": "10/5"
+  }]
+}

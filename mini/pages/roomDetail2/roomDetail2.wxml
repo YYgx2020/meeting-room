@@ -1,0 +1,119 @@
+<!-- pages/roomDetail/roomDetail.wxml -->
+<view class="pageContainer">
+  <!-- 头部 room 信息展示 -->
+  <view class="headerRoomInfo">
+    <!-- 默认只展示 room 的编号 -->
+    <view class="roomid">
+      <text>{{currentRoomid}}</text>
+    </view>
+    <!-- 显示提示信息 -->
+    <view class="tip">
+      <text>预约情况</text>
+    </view>
+    <!-- 加个查看更多 -->
+    <view class="more" bindtap="handleLookMore">
+      <text class="moreTip">查看更多</text>
+      <text class="moreIcon iconfont icon-xiangyou"></text>
+    </view>
+  </view>
+  <!-- 中间预约情况 -->
+  <view class="appointContent">
+    <!-- 导航栏 -->
+    <scroll-view scroll-x enable-flex scroll-into-view="{{'srcoll' + navId}}" scroll-with-animation="true"
+      class="navScroll" enhanced="true" show-scrollbar="false">
+      <view class="navItem" wx:for="{{dateList}}" wx:key="id" id="{{'srcoll' + item.id}}">
+        <view class="navContent {{navId === item.id? 'active': ''}}" bindtap="changeNav" id="{{item.id}}">
+          {{item.date}}
+        </view>
+      </view>
+    </scroll-view>
+    <!-- swiper内容区 -->
+    <swiper class="swiperContainer" bindchange="swiperChange" current="{{current}}" easing-function="default">
+      <block wx:for="{{dateList}}" wx:key="id">
+        <swiper-item>
+          <!-- 每天的预约情况 -->
+          <scroll-view scroll-y class="dateAppointList" bindscrolltolower="bindDownLoad">
+            <!-- 有安排的：显示当前日期的每条安排 -->
+            <view wx:if="{{item.appointArr.length}}" wx:for="{{item.appointArr}}" wx:key="index" wx:for-item="items"
+              wx:for-index="idx">
+              <view hover-class="btn-hover"
+                class="appointItem {{items.status === '空闲'&&'noshangke'}} {{items.isban && 'ban'}}"
+                bindtap="handleAppointItem" data-item="{{items}}" data-index="{{idx}}">
+                <view class="time">
+                  <!-- 应该在点击之后再显示是否修改，而不是点击那个时间就弹出时间选择器 -->
+                  <text class="startTime {{items.isban && 'fontClass'}}">{{items.time.startTime}}</text>
+                  <text class="connector {{items.isban && 'fontClass'}}">-</text>
+                  <text class="endTime {{items.isban && 'fontClass'}}">{{items.time.endTime}}</text>
+                </view>
+                <view class="status ">
+                  <text
+                    class="{{(items.status === '空闲' && !items.isban) && 'kongxian'}} {{items.status === '已预约' && 'appointed'}} {{items.isban && 'fontClass'}}">{{items.status}}</text>
+                </view>
+                <!-- 加一个有预约待处理的提示 -->
+                <view class="toBeProcessed"
+                  wx:if="{{items.detail.length !== 0 && items.status === '空闲' && isAdmin && !items.isban}}">
+                </view>
+                <text wx:if="{{items.status === '空闲'}}" class="toRightIcon iconfont icon-xiangyou"></text>
+              </view>
+            </view>
+            <!-- 没有安排的：显示默认安排 -->
+            <view wx:if="{{!item.appointArr.length}}" wx:for="{{defaultAppoint}}" wx:key="index" wx:for-item="items"
+              wx:for-index="idx">
+              <view hover-class="btn-hover" class="appointItem noshangke {{items.isban === true ? 'ban': ''}}"
+                bindtap="handleAppointItem" data-item="{{items}}" data-index="{{idx}}">
+                <view class="time">
+                  <!-- 应该在点击之后再显示是否修改，而不是点击那个时间就弹出时间选择器 -->
+                  <text class="startTime {{items.isban && 'fontClass'}}">{{items.time.startTime}}</text>
+                  <text class="connector {{items.isban && 'fontClass'}}">-</text>
+                  <text class="endTime {{items.isban && 'fontClass'}}">{{items.time.endTime}}</text>
+                </view>
+                <view class="status">
+                  <text
+                    class="{{(items.status === '空闲' && !items.isban) && 'kongxian'}} {{items.isban && 'fontClass'}}">{{items.status}}</text>
+                </view>
+                <text wx:if="{{items.status === '空闲'}}" class="toRightIcon iconfont icon-xiangyou"></text>
+              </view>
+            </view>
+          </scroll-view>
+        </swiper-item>
+      </block>
+    </swiper>
+    <!-- 保存二维码 -->
+    <view class="btn2" wx:if="{{isAdmin}}">
+      <button type="primary" bindtap="handleGenerateQr">保存二维码</button>
+    </view>
+  </view>
+  <!-- 自定义的下弹窗 -->
+  <view class="backgroundCover" bindtap="backgroundCoverTouch" wx:if="{{btnListTouch}}" catchtouchmove='true'></view>
+  <!-- 处理预约 && 查看预约详情 -->
+  <view class="handleReservation {{!isNone && 'none'}}" style="bottom: {{btnBottom1}};" catchtouchmove='true'>
+    <view class="headTip">
+      <text>预约信息</text>
+    </view>
+    <!-- 展示预约信息 -->
+    <view class="contactName">
+      <text class="tip1">预约人</text>
+      <text class="tip2">{{appointDetail.appointName}}</text>
+    </view>
+    <view class="contactPhone">
+      <text class="tip1">联系方式</text>
+      <text class="tip2">{{appointDetail.appointPhone}}</text>
+    </view>
+    <view class="applyTime">
+      <text class="tip1">申请时间</text>
+      <text class="tip2">{{appointDetail.applyTime}}</text>
+    </view>
+    <view class="appointTime">
+      <text class="tip1">预约时间</text>
+      <text class="tip2">{{appointDetail.time.startTime}}-{{appointDetail.time.endTime}}</text>
+    </view>
+    <view class="things">
+      <text class="thingsTip1">申请缘由</text>
+      <text class="thingsTip2">{{appointDetail.thingsText}}</text>
+    </view>
+    <!-- 预约已经完成，查看预约详情 -->
+    <view class="confirm" catchtouchmove='true'>
+      <button style="width: 240rpx;" type="primary" bindtap="handleConfirm">确定</button>
+    </view>
+  </view>
+</view>

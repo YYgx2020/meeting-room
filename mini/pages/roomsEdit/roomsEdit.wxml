@@ -1,0 +1,67 @@
+<!--pages/roomsEdit/roomsEdit.wxml-->
+<view class="pageContainer">
+  <!-- 如果 isShowSearch === false 则展示头部信息 -->
+  <view wx:if="{{!isShowSearch}}" class="header">
+    <text class="currentDate">{{currentDate}}</text>
+    <text class="headerTitle">教室列表</text>
+    <!-- <text class="headerTitle">教室/会议室列表</text> -->
+    <text wx:if="{{roomInfo.length}}" class="{{isAdmin?'searchIcon': 'searchIcon_0'}} iconfont icon-sousuo"
+      bindtap="handleSearch"></text>
+    <text wx:if="{{isAdmin}}" class="addRoomIcon iconfont icon-tianjia" bindtap="handleAddRoom"></text>
+  </view>
+  <!-- 如果 isShowSearch === true 则展示搜索框 -->
+  <view wx:if="{{isShowSearch}}" class="headerSearch">
+    <view class="inputBox">
+      <text class="searchIcon2 iconfont icon-sousuo"></text>
+      <input type="text" class="" placeholder="搜索" placeholder-class="placeholder" bindinput="handleInputChange"
+        value="{{searchContent}}" />
+      <text bindtap="clearSearchContent" hidden="{{!isShowClearIcon}}" class="clear iconfont icon-quxiao"></text>
+    </view>
+    <text class="cancel" bindtap="handleCancel">取消</text>
+  </view>
+  <!-- 条件搜索跳转链接 -->
+  <view wx:if="{{isShowSearch && !searchContent}}" class="conditionSearch">
+    <text bindtap="handleConditionSearch">条件搜索</text>
+  </view>
+  <view wx:if="{{showTip}}" class="showTip">
+    <text>无相关搜索内容</text>
+  </view>
+  <!-- 如果教室信息列表不为空，则展示 -->
+  <view wx:if="{{(roomInfo.length && !isShowSearch) || searchContent}}" class="roomListContainer">
+    <scroll-view class="roomScroll" scroll-y="true" refresher-enabled="{{isRefresher}}" refresher-threshold="{{200}}"
+      refresher-default-style="black" refresher-background="#ededed" refresher-triggered="{{triggered}}"
+      bindrefresherpulling="onPulling" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore"
+      bindrefresherabort="onAbort">
+      <view class="item {{item.isTouchMove ? 'touch-move-active' : ''}}" wx:for="{{roomInfo}}" wx:key="fileID">
+        <view hover-class="btn-hover" class="roomItem" wx:if="{{item.isShow}}" data-index="{{index}}" data-roomid="{{item.roomid}}"
+          bindtap="handleRoomEdit" bindtouchstart="touchStart" bindtouchend="touchEnd">
+          <view class="roomCoverImg">
+            <image mode="aspectFill" src="{{item.roomCoverImg}}"></image>
+          </view>
+          <view class="content">
+            <text class="roomId">{{item.roomid}}</text>
+            <text class="roomType">{{item.roomType}}</text>
+          </view>
+          <view class="currentStatus">
+            <text class="t1">当前状态: </text>
+            <text
+              class="t2 {{item.currentStatus === '已预约' && 't2_1'}} {{item.currentStatus === '空闲' && 't2_2'}}">{{item.currentStatus}}</text>
+          </view>
+          <view class="roomPeople">
+            <text class="roomPeople_t1">可容纳人数: </text>
+            <text class="roomPeople_t2">{{item.roomPeople}}</text>
+          </view>
+          <view class="moreInfo">
+          </view>
+          <!-- <text class="toRightIcon iconfont icon-xiangyou"></text> -->
+        </view>
+        <view class="delete" wx:if="{{item.isShow}}" data-item="{{item}}" bindtap="delItem">
+          <text class="deleteText">删除</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  <view wx:if="{{roomInfo.length === 0 && !isShowSearch && showTip1}}" class="roomListNone">
+    <text>教室/会议室列表为空~</text>
+  </view>
+</view>

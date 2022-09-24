@@ -1,0 +1,64 @@
+<!--pages/newAppointment/newAppointment.wxml-->
+<!-- 预约填写表单 -->
+<view class="pageContainer">
+  <!-- 头部提示信息 -->
+  <view class="header">
+    <text>请填写相关信息</text>
+  </view>
+  <!-- 内容填写区域 -->
+  <view class="formContainer">
+    <!-- 联系人 -->
+    <view class="roomContactName">
+      <text class="imporant">*</text>
+      <text class="roomContactTip">预约人</text>
+      <input type="text" placeholder="请填写预约人的姓名" placeholder-class="placeholder" bindblur="getContactName"
+        maxlength="7" />
+    </view>
+    <view class="roomContactPhone">
+      <text class="imporant">*</text>
+      <text class="roomContactTip">电话</text>
+      <input type="number" placeholder="请填写预约人的电话号码" placeholder-class="placeholder" bindblur="getContactPhone"
+        maxlength="11" />
+    </view>
+    <!-- 报错提示 -->
+    <view wx:if="{{phoneError}}" class="phoneErrorTip">
+      <text class="iconfont icon-quxiao"></text>
+      <text>请输入正确的电话号码</text>
+    </view>
+    <!-- 禁止用户选择时间 -->
+    <view class="time">
+      <picker mode="multiSelector" bindchange="handleStartTime" range="{{TimeArr}}" disabled="{{true}}">
+        <view class="startTime">
+          <text decode="true">开始时间&nbsp;&nbsp;{{chooseStartTime}}</text>
+        </view>
+      </picker>
+      <picker mode="multiSelector" bindchange="handleEndTime" range="{{TimeArr}}" disabled="{{true}}">
+        <view class="endTime">
+          <text decode="true">结束时间&nbsp;&nbsp;{{chooseEndTime}}</text>
+        </view>
+      </picker>
+    </view>
+    <!-- 填写申请事宜 -->
+    <view class="things">
+      <text class="thingsTip">申请事宜</text>
+      <textarea name="" id="" cols="40" rows="30" maxlength="40" show-confirm-bar="true" bindconfirm="getRoomBriefInfo"
+        confirm-type="return" style="height: 6em" placeholder="请输入您的申请事宜"
+        placeholder-style="font-size: 32rpx; color: #b2b2b2" bindinput="textareaLostFocus"
+        cursor-spacing="90"></textarea>
+      <text class="textLength">{{textLength}}</text>
+    </view>
+    <!-- 提示信息 -->
+    <view class="timeChooseTip">
+      <!-- 提示当前选中的时间段，并告知可以预约的时长 -->
+      <text class="tip1">注意:</text>
+      <text class="tip2" decode="true">&emsp;1.可预约时间段为08:00到22:00，一个时间段为2个小时</text>
+      <text class="tip3"
+        decode="true">&emsp;2.当前选中的教室为&nbsp;<text class="tip3_1">{{currentRoomid}}</text>,日期为&nbsp;<text class="tip3_1">{{currentDate}}</text>,选中的时间段为&nbsp;<text class="tip3_1">{{currentStartTime}}-{{currentEndTime}}</text></text>
+    </view>
+    <!-- 底部提交按钮，不用固定位置 -->
+    <view class="confirmBtn">
+      <button bindtap="handleConfirm" type="primary">提交</button>
+    </view>
+  </view>
+
+</view>

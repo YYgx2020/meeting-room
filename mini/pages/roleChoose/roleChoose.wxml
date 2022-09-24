@@ -1,0 +1,14 @@
+<!--pages/roleChoose/roleChoose.wxml-->
+<view class="page_container">
+  <view class="title_tip">
+    <text>请选择您的角色</text>
+  </view>
+  <view class="student">
+    <image src="/static/images/student.png" alt="" bindtap="navToStudentPage"/>
+    <text class="tip">学生</text>
+  </view>
+  <view class="teacher">
+    <image src="/static/images/teacher.png" alt="" bindtap="navToTeacherPage"/>
+    <text class="tip">教师</text>
+  </view>
+</view>

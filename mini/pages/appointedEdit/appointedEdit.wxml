@@ -1,0 +1,89 @@
+<!--pages/appointedEdit/appointedEdit.wxml-->
+<!-- 
+  展示所有的预约
+  如何展示？
+  分日期展示，按未来一周来展示
+ -->
+<view class="mainContainer">
+  <!-- 导航栏 -->
+  <scroll-view scroll-x enable-flex scroll-into-view="{{'srcoll' + navId}}" scroll-with-animation="true"
+    class="navScroll" enhanced="true" show-scrollbar="false">
+    <view class="navItem" wx:for="{{dateList}}" wx:key="id" id="{{'srcoll' + item.id}}">
+      <view class="navContent {{navId === item.id? 'active': ''}}" bindtap="changeNav" id="{{item.id}}">{{item.date}}
+      </view>
+    </view>
+  </scroll-view>
+  <!-- swiper内容区 -->
+  <swiper class="swiperContainer" bindchange="swiperChange" current="{{current}}" easing-function="default">
+    <block wx:for="{{everydayAppoint}}">
+      <!-- swiper 里面一定要加 swiper-item 否则会报错 -->
+      <swiper-item>
+        <view class="noAppointed" wx:if="{{item.length === 0}}">
+          <text>当前日期无预约待处理~</text>
+        </view>
+        <scroll-view scroll-y class="everydayAppoint">
+          <view wx:for="{{item}}" wx:for-item="item1" wx:for-index="idx">
+            <view class="appointItem" style="height: {{showMore? '700rpx':'600rpx'}};">
+              <!-- 需要展示的内容
+                    申请时间
+                    申请人
+                    联系方式
+                    教室id
+                    预约时间段
+                    申请事宜
+               -->
+              <view class="item1">
+                <text
+                  class="{{item1.applyStatus === '不同意' &&'disagree'}} {{item1.applyStatus === '同意' &&'agree'}} statusTip">{{item1.applyStatus}}</text>
+              </view>
+              <view class="item1">
+                <text class="tip1">申请人</text>
+                <text class="tip2">{{item1.appointName}}</text>
+              </view>
+              <view class="item1">
+                <text class="tip1">联系方式</text>
+                <text class="tip2">{{item1.appointPhone}}</text>
+              </view>
+              <view class="item1">
+                <text class="tip1">预约教室</text>
+                <text class="tip2">{{item1.roomid}}</text>
+              </view>
+              <view class="item1">
+                <text class="tip1">预约时间</text>
+                <text class="tip2">{{item1.time.startTime}}-{{item1.time.endTime}}</text>
+              </view>
+              <view class="item1">
+                <text class="tip1">申请时间</text>
+                <text class="tip2">{{item1.applyTime}}</text>
+              </view>
+              <view class="item2">
+                <text class="tip1">申请事宜</text>
+                <text
+                  class="tip2_2 {{(!showMore && item1.thingsText.length > 21) && 'tip2_2-nomore'}}">{{item1.thingsText}}</text>
+                <text wx:if="{{item1.thingsText.length > 21}}"
+                  class="{{!showMore? 'dowmIcon': 'upIcon'}} iconfont {{!showMore? 'icon-xiangxia2': 'icon-xiangshang2'}} "
+                  bindtap="handleShowMore"></text>
+                <!-- 后续修改建议：
+                    当文本溢出时，出现一个按钮/图标，可点击按钮/图标查看更多申请事宜
+                 -->
+              </view>
+              <!-- 选择按钮 -->
+              <view class="chooseBtn">
+                <view class="disagree_1">
+                  <button disabled="{{item1.applyStatus === '不同意' || item1.applyStatus === '同意'}}"
+                    style="width: 240rpx; height: 60rpx; line-height: 30rpx; color: red;" bindtap="handleDisagree"
+                    data-item="{{item1}}" data-index="{{idx}}">不同意</button>
+                </view>
+                <view class="agree_1">
+                  <button disabled="{{item1.applyStatus === '不同意' || item1.applyStatus === '同意'}}"
+                    style="width: 240rpx; height: 60rpx; line-height: 30rpx;" type="primary" bindtap="handleAgree"
+                    data-item="{{item1}}" data-index="{{idx}}">同意</button>
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </swiper-item>
+    </block>
+  </swiper>
+</view>

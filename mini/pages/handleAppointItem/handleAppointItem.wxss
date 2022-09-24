@@ -1,0 +1,198 @@
+/* pages/handleAppointItem/handleAppointItem.wxss */
+page {
+  background: #ededed;
+}
+
+.headTip {
+  position: relative;
+  width: 100%;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+}
+
+.headTip text {
+  font-size: 28rpx;
+  color: #191919;
+  font-weight: 700;
+}
+
+/* 预约条目 */
+.appointItem {
+  position: relative;
+  margin: auto;
+  margin-top: 40rpx;
+  width: 90%;
+  /* height: 480rpx; */
+  padding-top: 20rpx;
+  border-radius: 10rpx;
+  background: #ffffff;
+  /* border: 1rpx solid red; */
+}
+
+/* 没有展开的高度 */
+.heightClassNomore {
+  height: 400rpx;
+}
+
+/* 展开显示更多的高度 */
+.heightClassMore {
+  height: 480rpx;
+}
+
+.none {
+  display: none;
+}
+
+/* 申请人 */
+.appointName,
+.appointPhone,
+.applyTime {
+  position: relative;
+  width: 100%;
+  height: 60rpx;
+  line-height: 60rpx;
+  /* border: 1rpx solid red; */
+}
+
+.tip1 {
+  position: absolute;
+  width: 180rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  left: 30rpx;
+  text-align: left;
+  color: #b2b2b2;
+}
+
+.tip2 {
+  position: absolute;
+  left: 230rpx;
+  padding-right: 30rpx;
+  width: calc(100% - 260rpx);
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: left;
+  color: #191919;
+}
+
+/* 申请缘由 */
+.thingText {
+  position: relative;
+  width: 100%;
+  height: 120rpx;
+  line-height: 120rpx;
+}
+
+.thingTextTip1 {
+  position: absolute;
+  width: 180rpx;
+  height: 120rpx;
+  line-height: 60rpx;
+  left: 30rpx;
+  text-align: left;
+  color: #b2b2b2;
+}
+
+.thingTextTip2 {
+  display: block;
+  position: absolute;
+  left: 230rpx;
+  /* padding-right: 30rpx; */
+  /* width: calc(100% - 240rpx); */
+  width: 400rpx;
+  height: 120rpx;
+  line-height: 60rpx;
+  text-align: left;
+  color: #191919;
+
+}
+
+.thingTextTip2-nomore {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.dowmIcon {
+  position: absolute;
+  width: 40rpx;
+  height: 20rpx;
+  line-height: 20rpx;
+  text-align: center;
+  bottom: 16rpx;
+  right: 20rpx;
+}
+
+.upIcon {
+  position: absolute;
+  width: 40rpx;
+  height: 20rpx;
+  line-height: 20rpx;
+  text-align: center;
+  bottom: -50rpx;
+  right: 20rpx;
+}
+
+/* 处理按钮 */
+.handleBtn {
+  position: absolute;
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  bottom: 0;
+  border-bottom-left-radius: 10rpx;
+  border-bottom-right-radius: 10rpx;
+}
+
+.disagree {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  width: 50%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  background: #f2f2f2;
+  font-size: 32rpx;
+  color: #07c160;
+  font-weight: 700;
+  border-bottom-left-radius: 10rpx;
+}
+
+
+.agree {
+  display: inline-block;
+  position: absolute;
+  right: 0;
+  width: 50%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 700;
+  border-bottom-right-radius: 10rpx;
+}
+
+/* 禁用按钮样式 */
+.ban {
+  background-color: #fafafa;
+  color: #cdcdcd;
+}
+
+.noban {
+  background: #07c160;
+  color: #ffffff;
+}
+
+
+.bottomSpace {
+  position: relative;
+  margin-top: 20rpx;
+  bottom: 0rpx;
+  width: 100%;
+  height: 60rpx;
+  /* border: 1rpx solid red; */
+}

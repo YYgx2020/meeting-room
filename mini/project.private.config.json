@@ -1,0 +1,129 @@
+{
+  "setting": {
+    "compileHotReLoad": true,
+    "urlCheck": false,
+    "preloadBackgroundData": false
+  },
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "管理员页面",
+          "pathName": "pages/admin/admin",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "首页",
+          "pathName": "pages/index/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "教室/会议室列表",
+          "pathName": "pages/roomsEdit/roomsEdit",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "新增room",
+          "pathName": "pages/addRoom/addRoom",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "room详情页1",
+          "pathName": "pages/roomDetail/roomDetail",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "新增预约",
+          "pathName": "pages/newAppointment/newAppointment",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "测试获取openid的",
+          "pathName": "pages/test/test",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "小程序码展示页面",
+          "pathName": "pages/showRoomQrimg/showRoomQrimg",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "教室详情页2",
+          "pathName": "pages/roomDetail2/roomDetail2",
+          "query": "roomid=4201",
+          "scene": null
+        },
+        {
+          "name": "给普通用户展示教室信息",
+          "pathName": "pages/showRoomInfo/showRoomInfo",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "普通用户页面",
+          "pathName": "pages/user/user",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "用户查看预约页",
+          "pathName": "pages/showUserAppoint/showUserAppoint",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业员工注册页面",
+          "pathName": "pages/registered/registered",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "企业员工认证页面",
+          "pathName": "pages/handleEmployee/handleEmployee",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "条件搜索",
+          "pathName": "pages/conditionSearch/conditionSearch",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "管理员处理所有预约页面",
+          "pathName": "pages/appointedEdit/appointedEdit",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "获取openid页面",
+          "pathName": "pages/test/test",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "游客页面",
+          "pathName": "pages/tourists/tourists",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "招聘会信息页面",
+          "pathName": "pages/jobFair/jobFair",
+          "query": "",
+          "scene": null
+        }
+      ]
+    }
+  },
+  "projectname": "mini",
+  "description": "项目私有配置文件。此文件中的内容将覆盖 project.config.json 中的相同字段。项目的改动优先同步到此文件中。详见文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/projectconfig.html"
+}

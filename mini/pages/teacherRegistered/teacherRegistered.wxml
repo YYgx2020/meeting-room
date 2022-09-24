@@ -1,0 +1,43 @@
+<!--pages/teacherRegistered/teacherRegistered.wxml-->
+<view class="mainContainer">
+  <view class="headerTip">
+    <text>申请教师认证之后方可使用预约功能</text>
+  </view>
+  <!-- 姓名 -->
+  <view class="teacher_name">
+    <text class="imporant">*</text>
+    <text class="tip1">姓名</text>
+    <input class="tip2" type="text" placeholder="请填写您的姓名" placeholder-class="placeholder" bindblur="getTeacherName"
+      maxlength="10" value="" />
+  </view>
+  <!-- 电话号码 -->
+  <view class="teacher_phone">
+    <text class="imporant">*</text>
+    <text class="tip1">电话</text>
+    <input class="tip2" type="number" placeholder="请填写您的电话号码" placeholder-class="placeholder"
+      bindblur="getTeacherPhone" maxlength="11" value="" />
+  </view>
+  <!-- 报错提示 -->
+  <view wx:if="{{phoneError}}" class="phoneErrorTip">
+      <text class="iconfont icon-quxiao"></text>
+      <text>请输入正确的电话号码</text>
+    </view>
+  <!-- 邮箱 -->
+  <view class="teacher_email">
+    <!-- <text class="imporant">*</text> -->
+    <text class="tip1">邮箱</text>
+    <input class="tip2" type="text" placeholder="请填写您的电子邮箱" placeholder-class="placeholder" bindblur="getTeacherEmail"
+      maxlength="30" value="" />
+  </view>
+  <!-- 实验室 -->
+  <view class="lab">
+    <text class="tip1">实验室</text>
+    <input type="text" class="tip2" placeholder="请填写您所管理的实验室编号" placeholder-class="placeholder" bindblur="getLabNumber"
+      maxlength="11" value=""/>
+  </view>
+  <!-- 提交按钮 -->
+  <view class="submit">
+    <button type="primary" bindtap="handleSubmit">提交</button>
+  </view>
+</view>
+

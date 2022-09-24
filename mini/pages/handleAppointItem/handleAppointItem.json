@@ -1,0 +1,9 @@
+{
+  "usingComponents": {},
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "#ededed",
+  "navigationBarTitleText": "教室预约小程序",
+  "navigationBarTextStyle": "black",
+  "navigationStyle": "default",
+  "backgroundColor": "#ededed"
+}

@@ -1,0 +1,80 @@
+<!--pages/addRoom/addRoom.wxml-->
+<view class="pageContainer">
+  <!-- 头部提示信息 -->
+  <view class="headerMsg">
+    <text class="headTitle">新增教室</text>
+    <text class="headContent">您可以在这里新增一个教室的信息
+      Tip: <text class="xing">*</text> 为必填项</text>
+  </view>
+  <!-- 表单区域 -->
+  <view class="form">
+    <!-- 上传图片 -->
+    <view hover-class="btn-hover" wx:if="{{tempFilePaths === ''}}" class="chooseImage">
+      <view class="tip1" bindtap="handleChooseImage">
+        <text>+</text>
+      </view>
+      <text class="tip2">选择一张图片</text>
+    </view>
+    <!-- 展示图片 -->
+    <!-- 点击图片可预览 -->
+    <view wx:if="{{tempFilePaths}}" class="showRoomCover">
+      <image mode='widthFix' src="{{tempFilePaths}}"></image>
+      <text class="reChoose" bindtap="handleChooseImage">重新选择图片</text>
+    </view>
+    <!-- 编号 -->
+    <view class="roomIdFrom">
+      <text class="imporant">*</text>
+      <text class="roomIdTip">编号</text>
+      <input type="text" placeholder="请填写教室的编号" placeholder-class="placeholder" bindblur="getRoomid" maxlength="10"
+        value="{{roomidValue}}" />
+    </view>
+    <!-- 名称 -->
+    <view class="roomNameFrom">
+      <text class="imporant">*</text>
+      <text class="roomNameTip">名称</text>
+      <input type="text" placeholder="请填写教室的名称" placeholder-class="placeholder" bindblur="getRoomName" maxlength="20"
+        value="{{roomNameValue}}" />
+    </view>
+    <!-- 联系人 -->
+    <view class="roomContactName">
+      <text class="roomContactTip">姓名</text>
+      <input type="text" placeholder="请填写教室联系人的姓名" placeholder-class="placeholder" bindblur="getRoomContactName"
+        maxlength="15" value="{{roomContactNameValue}}" />
+    </view>
+    <view class="roomContactPhone">
+      <text class="phone">电话</text>
+      <input type="number" placeholder="请填写教室联系人的电话号码" placeholder-class="placeholder" bindblur="getRoomContactPhone"
+        maxlength="11" value="{{roomContactPhoneValue}}" />
+    </view>
+    <!-- 报错提示 -->
+    <view wx:if="{{phoneError}}" class="phoneErrorTip">
+      <text class="iconfont icon-quxiao"></text>
+      <text>请输入正确的电话号码</text>
+    </view>
+    <!-- 类型 -->
+    <view class="roomTypeForm">
+      <text class="imporant">*</text>
+      <text class="roomTypeTip">类型</text>
+      <picker range="{{roomType}}" bindchange="bindPicker3Change">
+        <text class="roomTypeChoose">{{roomType[roomTypeCodeIndex]}} <text class="iconfont icon-collapse"></text></text>
+      </picker>
+    </view>
+    <!-- 人数 -->
+    <view class="roomPeopleForm">
+      <text class="imporant">*</text>
+      <text class="roomPeopleTip">人数</text>
+      <input type="text" placeholder="请填写教室可容纳的人数" placeholder-class="placeholder" bindblur="getRoomPeople"
+        maxlength="3" value="{{roomPeopleTipValue}}" />
+    </view>
+    <!-- 简介 -->
+    <view class="briefIntroductionForm">
+      <text class="briefIntroductionTip">简介</text>
+    </view>
+    <textarea name="" id="" cols="40" rows="30" maxlength="500" show-confirm-bar="true" bindconfirm="getRoomBriefInfo"
+      confirm-type="return" style="height: 9em" placeholder="请输入新增教室的简介" placeholder-style="font-size: 32rpx"
+      bindinput="textareaLostFocus" value="{{briefIntroductionValue}}" cursor-spacing="140"></textarea>
+    <view class="confirmBtn">
+      <button bindtap="handleConfirm" type="primary">提交</button>
+    </view>
+  </view>
+</view>

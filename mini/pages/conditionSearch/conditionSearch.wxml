@@ -1,0 +1,75 @@
+<!--pages/conditionSearch/conditionSearch.wxml-->
+<!-- 
+  条件查询，4个条件
+  类型，
+  日期，
+  人数，
+  时间段，
+ -->
+<view class="mainContainer">
+  <!-- 条件查询导航栏 -->
+  <view class="searchContainer">
+    <view class="conditionItem">
+      <text class="tip">类型</text>
+      <picker range="{{roomType}}" bindchange="roomTypeChoose">
+        <text class="roomTypeChoose">{{roomType[roomTypeCodeIndex]}} <text class="iconfont icon-collapse"></text></text>
+      </picker>
+    </view>
+    <view class="conditionItem">
+      <text class="tip">日期</text>
+      <picker range="{{dateList}}" bindchange="dateChoose">
+        <text class="dateChoose">{{dateList[dateListCodeIndex]}} <text class="iconfont icon-collapse"></text></text>
+      </picker>
+    </view>
+    <!-- <view class="conditionItem">
+      <text class="tip">状态</text>
+      <picker range="{{status}}" bindchange="statusChoose">
+        <text class="statusChoose">{{status[statusCodeIndex]}} <text class="iconfont icon-collapse"></text></text>
+      </picker>
+    </view> -->
+    <view class="conditionItem">
+      <text class="tip">人数</text>
+      <input type="text" placeholder="请输入您希望容纳的人数" placeholder-class="placeholder" bindinput="getRoomPeople"
+        maxlength="3" />
+    </view>
+    <view class="conditionItem">
+      <text class="tip">时间段</text>
+      <picker range="{{time}}" bindchange="timeChoose">
+        <text class="timeChoose">{{time[timeCodeIndex]}} <text class="iconfont icon-collapse"></text></text>
+      </picker>
+    </view>
+    <!-- 查询 -->
+    <view class="searchBtn">
+      <button bindtap="handleSearchBtn" style="top: 20rpx;" type="primary">查询</button>
+    </view>
+  </view>
+  <!-- 搜索内容展示 -->
+  <view wx:if="{{!result.length && isSearch}}" class="noResult">
+    <text>找不到相关教室~</text>
+  </view>
+  <view class="item" wx:for="{{result}}" wx:key="fileID">
+    <view hover-class="btn-hover" class="roomItem" data-index="{{index}}" data-roomid="{{item.roomid}}" data-status="{{item.currentStatus}}" bindtap="handleRoomItem">
+      <view class="roomCoverImg">
+        <image mode="aspectFill" src="{{item.roomCoverImg}}"></image>
+      </view>
+      <view class="content">
+        <text class="roomId">{{item.roomid}}</text>
+        <text class="roomType">{{item.roomType}}</text>
+      </view>
+      <view class="currentStatus">
+        <text class="t1">当前状态: </text>
+        <text
+          class="t2 {{item.currentStatus === '已预约' && 't2_1'}} {{item.currentStatus === '空闲' && 't2_2'}}">{{item.currentStatus}}</text>
+      </view>
+      <view class="roomPeople">
+        <text class="roomPeople_t1">可容纳人数: </text>
+        <text class="roomPeople_t2">{{item.roomPeople}}</text>
+      </view>
+      <view class="moreInfo">
+      </view>
+    </view>
+  </view>
+  <!-- <view class="searchResultContainer">
+    
+  </view> -->
+</view>

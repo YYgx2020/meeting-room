@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/admin/admin",
+    "pages/appointedEdit/appointedEdit",
+    "pages/roomsEdit/roomsEdit",
+    "pages/roomDetail/roomDetail",
+    "pages/addRoom/addRoom",
+    "pages/newAppointment/newAppointment",
+    "pages/test/test",
+    "pages/showRoomQrimg/showRoomQrimg",
+    "pages/roomDetail2/roomDetail2",
+    "pages/showRoomInfo/showRoomInfo",
+    "pages/user/user",
+    "pages/showUserAppoint/showUserAppoint",
+    "pages/handleAppointItem/handleAppointItem",
+    "pages/handleEmployee/handleEmployee",
+    "pages/registered/registered",
+    "pages/conditionSearch/conditionSearch",
+    "pages/tourists/tourists",
+    "pages/jobFair/jobFair",
+    "pages/studentRegistered/studentRegistered",
+    "pages/roleChoose/roleChoose",
+    "pages/teacherRegistered/teacherRegistered"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "教室预约小程序",
+    "navigationBarTextStyle": "black",
+    "navigationStyle": "default"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

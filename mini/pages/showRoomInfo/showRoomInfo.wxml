@@ -1,0 +1,35 @@
+<!--pages/showRoomInfo/showRoomInfo.wxml-->
+<view class="showRoomInfoContainer">
+  <view class="showRoomCover">
+    <image mode='widthFix' src="{{tempFilePaths}}" data-src="{{tempFilePaths}}" bindtap="preview"></image>
+  </view>
+  <view class="roomItem">
+    <text class="roomtip1">编号</text>
+    <text class="roomtip2" user-select="true">{{roomid}}</text>
+  </view>
+  <view class="roomItem">
+    <text class="roomtip1">名称</text>
+    <text class="roomtip2" user-select="true">{{roomName}}</text>
+  </view>
+  <view class="roomItem">
+    <text class="roomtip1">联系人</text>
+    <text class="roomtip2" user-select="true">{{roomContactName}}</text>
+  </view>
+  <view class="roomItem">
+    <text class="roomtip1">电话</text>
+    <text class="roomtip2" user-select="true">{{roomContactPhone}}</text>
+  </view>
+  <view class="roomItem">
+    <text class="roomtip1">类型</text>
+    <text class="roomtip2" user-select="true">{{roomType}}</text>
+  </view>
+  <view class="roomItem">
+    <text class="roomtip1">人数</text>
+    <text class="roomtip2" user-select="true">{{roomPeople}}</text>
+  </view>
+  <view class="roomBriefTextItem">
+    <text class="roomBriefTextTip1">简介</text>
+    <text class="roomBriefTextTip2" user-select="true" decode="true">&emsp;&emsp;{{roomBriefText}}</text>
+  </view>
+  <view class="space"></view>
+</view>

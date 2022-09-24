@@ -1,0 +1,35 @@
+<!--pages/tourists/tourists.wxml-->
+<!-- 新建一个游客页面，把注册功能放到这里来 -->
+<!--pages/admin/admin.wxml-->
+<view class="pageContainer">
+  <view class="adminInfo">
+    <view class="avatar">
+      <image src="{{userInfo.avatarUrl}}"></image>
+    </view>
+    <text class="nickName">欢迎您，{{userInfo.nickName}}</text>
+    <view class="adminIcon">
+      <image class="adminImg" src="/static/images/unauthorized.png"></image>
+      <text class="adminIconText">游客</text>
+    </view>
+  </view>
+  <!-- 注册功能 -->
+  <view hover-class="btn-hover" class="registered" bindtap="handleRegistered">
+    <image class="Icon" src="/static/images/registered.png"></image>
+    <text class="context">学生/教师认证申请</text>
+    <text wx:if="{{showRegister}}" class="updateRemind"></text>
+    <text class="toRightIcon iconfont icon-xiangyou"></text>
+  </view>
+  <!-- 编辑教室/会议室 -->
+  <view hover-class="btn-hover" class="roomContainer" bindtap="handleRoomEdit">
+    <image class="Icon" src="/static/images/roomList.png"></image>
+    <text class="context">教室/会议室</text>
+    <text class="toRightIcon iconfont icon-xiangyou"></text>
+  </view>
+  <!-- 意见反馈 -->
+  <button style="width: 100%;" class="button" open-type="feedback">
+    <image class="Icon" src="/static/images/feedback.png"></image>
+    <text class="btnContext">意见反馈</text>
+    <text class="toRightIcon iconfont icon-xiangyou"></text>
+  </button>
+</view>
+<!-- delEmployeeInfo -->

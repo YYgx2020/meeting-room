@@ -1,0 +1,259 @@
+/* pages/conditionSearch/conditionSearch.wxss */
+
+
+.conditionItem {
+  position: relative;
+  width: 100%;
+  height: 120rpx;
+  line-height: 120rpx;
+}
+
+.conditionItem::after {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -45%;
+  content: '';
+  width: 90%;
+  height: 1rpx;
+  background: #ededed;
+}
+
+/* 提示词 */
+.tip {
+  position: absolute;
+  left: 40rpx;
+  width: 160rpx;
+  height: 120rpx;
+  line-height: 120rpx;
+  font-size: 36rpx;
+  color: #191919;
+}
+
+.roomTypeChoose {
+  position: absolute;
+  width: 400rpx;
+  height: 120rpx;
+  line-height: 120rpx;
+  left: 200rpx;
+  text-align: left;
+  font-size: 36rpx;
+}
+
+.dateChoose {
+  position: absolute;
+  width: 240rpx;
+  height: 120rpx;
+  line-height: 120rpx;
+  left: 200rpx;
+  text-align: left;
+  font-size: 36rpx;
+}
+
+.statusChoose {
+  position: absolute;
+  width: 200rpx;
+  height: 120rpx;
+  line-height: 120rpx;
+  left: 200rpx;
+  text-align: left;
+  font-size: 36rpx;
+}
+
+.conditionItem input {
+  position: absolute;
+  left: 200rpx;
+  width: calc(100% - 240rpx);
+  height: 60rpx;
+  top: 50%;
+  margin-top: -30rpx;
+  font-size: 36rpx;
+}
+
+.timeChoose {
+  position: absolute;
+  left: 200rpx;
+  width: 300rpx;
+  height: 120rpx;
+  text-align: left;
+  font-size: 36rpx;
+}
+
+.searchBtn {
+  position: relative;
+  width: 100%;
+  height: 120rpx;
+  line-height: 120rpx;
+  text-align: center;
+}
+
+.noResult {
+  position: relative;
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  top: 40rpx;
+}
+
+.noResult text {
+  font-size: 44rpx;
+  color: #b2b2b2;
+}
+
+/* 搜索内容展示 */
+.item {
+  display: flex;
+  width: 100%;
+  height: 150rpx;
+}
+
+.roomItem {
+  position: relative;
+  width: 100%;
+  height: 150rpx;
+  background: #ffffff;
+}
+
+.roomCoverImg {
+  position: absolute;
+  left: 40rpx;
+  width: 100rpx;
+  height: 100rpx;
+  top: 50%;
+  margin-top: -50rpx;
+}
+
+.roomCoverImg image {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 10rpx;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: 160rpx;
+  width: 204rpx;
+  top: 50%;
+  margin-top: -50rpx;
+  height: 100rpx;
+
+}
+
+.roomId {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: left;
+  font-size: 40rpx;
+  font-weight: 700;
+}
+
+.roomType {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: left;
+  font-size: 28rpx;
+  color: #bbbbbb;
+}
+
+.moreInfo {
+  position: absolute;
+  width: 300rpx;
+  height: 120rpx;
+  right: 40rpx;
+  top: 50%;
+  margin-top: -60rpx;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 5px 5px 9px #f5f5f5,
+    -5px -5px 9px #ffffff;
+}
+
+.currentStatus {
+  z-index: 10;
+  position: absolute;
+  right: 50rpx;
+  width: 260rpx;
+  height: 50rpx;
+  top: 30rpx;
+}
+
+.t1 {
+  position: absolute;
+  display: inline-block;
+  /* vertical-align: bottom; */
+  width: 150rpx;
+  left: 0;
+  height: 50rpx;
+  line-height: 52rpx;
+  text-align: left;
+  font-size: 28rpx;
+  color: #bbbbbb;
+}
+
+.t2 {
+  display: inline-block;
+  position: absolute;
+  width: 120rpx;
+  left: 150rpx;
+  height: 50rpx;
+  line-height: 52rpx;
+  text-align: left;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+/* 已预约颜色样式 */
+.t2_1 {
+  color: #fa9d3b;
+}
+
+/* 空闲颜色样式 */
+.t2_2 {
+  color: #07c160;
+}
+
+.roomPeople {
+  z-index: 10;
+  position: absolute;
+  right: 50rpx;
+  width: 260rpx;
+  height: 50rpx;
+  bottom: 30rpx;
+}
+
+.roomPeople_t1 {
+  position: absolute;
+  display: inline-block;
+  width: 160rpx;
+  left: 0;
+  height: 50rpx;
+  line-height: 60rpx;
+  text-align: left;
+  font-size: 28rpx;
+  color: #bbbbbb;
+}
+
+.roomPeople_t2 {
+  display: inline-block;
+  position: absolute;
+  width: 95rpx;
+  left: 165rpx;
+  height: 50rpx;
+  line-height: 60rpx;
+  text-align: left;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+.btn-hover {
+  background-color: #ededed;
+}

@@ -1,0 +1,31 @@
+@import "/static/iconfont/iconfont.wxss";
+/* @import "/weui.wxss"; */
+
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}
+
+text {
+  letter-spacing: 2rpx;
+}
+
+/* 
+  背景色
+  #ffffff 白色
+  #ededed 背景灰色
+  #adadad 灰色背景里面的文字颜色
+  #676767 蒙板颜色(微信自带的)
+  #black + opacity: 0.597; 可以达到微信自带的背景蒙版效果
+  #b2b2b2 白色背景板中的提示文字颜色
+  #fafafa 禁止的背景色
+  #cdcdcd 禁止背景色中的文字颜色
+  #f7f7f7 微信中的置顶颜色
+  #d4d4d4 点击条目之后出现的灰色
+*/

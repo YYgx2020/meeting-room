@@ -1,0 +1,5 @@
+<!--pages/test/test.wxml-->
+<view class="container">
+  <text class="openidText">{{openid}}</text>
+  <button data-openid="{{openid}}" bindtap="copyUserOpenid" type="primary">点击复制openid</button>
+</view>

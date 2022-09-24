@@ -1,0 +1,204 @@
+/* pages/showUserAppoint/showUserAppoint.wxss */
+page {
+  background: #ededed;
+}
+
+.navScroll {
+  position: relative;
+  /* top: 110rpx; */
+  width: 100%;
+  display: flex;
+  white-space: nowrap;
+  height: 60rpx;
+}
+
+/* scroll-view去掉滚动条 */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.navItem {
+  /* display: inline-block; */
+  padding: 0 40rpx;
+  font-size: 32rpx;
+  width: calc(100% / 3);
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  /* box-sizing 是定义带边框 */
+  box-sizing: border-box;
+}
+
+.active {
+  color: #07c160;
+  border-bottom: 3rpx solid #07c160;
+}
+
+.swiperContainer {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 63rpx);
+  background: #ededed;
+  /* border: 1rpx solid red; */
+}
+
+.userScroll {
+  position: absolute;
+  width: 100%;
+  /* height: calc(100vh - 300rpx); */
+  height: 100%;
+}
+
+.appointArrNone {
+  position: absolute;
+  top: 200rpx;
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+}
+
+.appointArrNone text {
+  font-size: 42rpx;
+  color: #adadad;
+}
+
+.appointArrItem {
+  position: relative;
+  margin: auto;
+  margin-top: 30rpx;
+  width: 90%;
+  /* height: 460rpx; */
+  background: #ffffff;
+  border-radius: 20rpx;
+}
+
+.status {
+  position: relative;
+  margin-top: 10rpx;
+  left: 40rpx;
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: left;
+}
+
+.status text {
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+/* 审核样式 */
+.audit {
+  color: #191919;
+}
+
+/* 通过样式 */
+.agree {
+  /* color: #fa9d3b; */
+  color: #00c375;
+}
+
+/* 不通过样式 */
+.disagree {
+  color: #e64340;
+}
+
+.roomid,
+.date,
+.time,
+.applyTime {
+  position: relative;
+  width: 100%;
+  height: 60rpx;
+  line-height: 60rpx;
+}
+
+.tip1 {
+  position: absolute;
+  width: 180rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  left: 40rpx;
+  text-align: left;
+  color: #b2b2b2;
+}
+
+.tip2 {
+  position: absolute;
+  left: 220rpx;
+  padding-right: 30rpx;
+  width: calc(100% - 240rpx);
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: left;
+  color: #191919;
+}
+
+/* 申请缘由 */
+.thing {
+  position: relative;
+  width: 100%;
+  height: 120rpx;
+  line-height: 120rpx;
+}
+
+.thingTip1 {
+  position: absolute;
+  width: 180rpx;
+  height: 120rpx;
+  line-height: 60rpx;
+  left: 40rpx;
+  text-align: left;
+  color: #b2b2b2;
+}
+
+.thingTip2 {
+  position: absolute;
+  left: 220rpx;
+  padding-right: 40rpx;
+  width: calc(100% - 280rpx);
+  height: 120rpx;
+  line-height: 60rpx;
+  text-align: left;
+  color: #191919;
+}
+
+.thingTip2-nomore {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.dowmIcon {
+  position: absolute;
+  width: 40rpx;
+  height: 20rpx;
+  line-height: 20rpx;
+  text-align: center;
+  bottom: 16rpx;
+  right: 20rpx;
+}
+
+.upIcon {
+  position: absolute;
+  width: 40rpx;
+  height: 20rpx;
+  line-height: 20rpx;
+  text-align: center;
+  bottom: -50rpx;
+  right: 20rpx;
+}
+
+.bottomSpace {
+  position: relative;
+  margin-top: 20rpx;
+  bottom: 0rpx;
+  width: 100%;
+  height: 10rpx;
+  /* border: 1rpx solid red; */
+}

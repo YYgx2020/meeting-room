@@ -1,0 +1,175 @@
+/* pages/handleEmployee/handleEmployee.wxss */
+
+.navScroll {
+  position: relative;
+  /* top: 110rpx; */
+  width: 100%;
+  display: flex;
+  white-space: nowrap;
+  height: 60rpx;
+}
+
+/* scroll-view去掉滚动条 */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
+
+.navItem {
+  /* display: inline-block; */
+  padding: 0 40rpx;
+  font-size: 32rpx;
+  width: calc(100% / 3);
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+  /* box-sizing 是定义带边框 */
+  box-sizing: border-box;
+}
+
+.active {
+  color: #07c160;
+  border-bottom: 3rpx solid #07c160;
+}
+
+.swiperContainer {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 63rpx);
+  background: #ededed;
+  /* border: 1rpx solid red; */
+}
+
+.employeeScroll {
+  position: absolute;
+  width: 100%;
+  /* height: calc(100vh - 300rpx); */
+  height: 100%;
+}
+.studentItem {
+  position: relative;
+  margin: auto;
+  margin-top: 30rpx;
+  width: 90%;
+  height: 560rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+}
+
+.teacherItem {
+  position: relative;
+  margin: auto;
+  margin-top: 30rpx;
+  width: 90%;
+  height: 440rpx;
+  border-radius: 20rpx;
+  background: #ffffff;
+}
+
+.status {
+  position: relative;
+  width: 100%;
+  left: 40rpx;
+  top: 20rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: left;
+  margin-bottom: 20rpx;
+}
+
+.status text {
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+/* 审核样式 */
+.audit {
+  color: #191919;
+}
+
+/* 通过样式 */
+.agree {
+  /* color: #fa9d3b; */
+  color: #00c375;
+}
+
+/* 不通过样式 */
+.disagree {
+  color: #e64340;
+}
+
+.item_label {
+  position: relative;
+  width: 100%;
+  height: 60rpx;
+  line-height: 60rpx;
+}
+
+.tip1 {
+  position: absolute;
+  width: 180rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  left: 40rpx;
+  color: #b2b2b2;
+}
+
+.tip2 {
+  position: absolute;
+  left: 240rpx;
+  padding-right: 30rpx;
+  width: calc(100% - 240rpx);
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: left;
+  color: #191919;
+}
+
+.chooseBtn {
+  position: relative;
+  width: 100%;
+  height: 60rpx;
+  margin-top: 20rpx;
+  flex-direction: row;
+}
+
+.disagree_1 {
+  position: absolute;
+  width: 40%;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding-left: 50rpx;
+  /* text-align: center; */
+  left: 0;
+}
+
+.agree_1 {
+  position: absolute;
+  width: 40%;
+  height: 60rpx;
+  line-height: 60rpx;
+  padding-right: 50rpx;
+  /* text-align: center; */
+  right: 0;
+}
+
+.noData {
+  position: relative;
+  top: 30rpx;
+  width: 100%;
+  height: 60rpx;
+  line-height: 60rpx;
+  color: #b2b2b2;
+  font-size: 44rpx;
+  text-align: center;
+}
+
+/* 底部留白 */
+.bottomSpace {
+  position: relative;
+  margin-top: 20rpx;
+  bottom: 0rpx;
+  width: 100%;
+  height: 10rpx;
+}
