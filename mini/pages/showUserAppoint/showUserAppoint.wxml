@@ -25,7 +25,7 @@
       <text>{{item.navName}}</text>
     </view>
   </scroll-view>
-  <swiper class="swiperContainer" bindchange="swiperChange" current="{{current}}" easing-function="default">
+  <swiper wx:if="{{swiperItem.length !== 0}}" class="swiperContainer" bindchange="swiperChange" current="{{current}}" easing-function="default">
     <block wx:for="{{swiperItem}}">
       <swiper-item>
         <scroll-view scroll-y class="userScroll">

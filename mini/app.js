@@ -11,7 +11,7 @@ App({
   onLaunch() {
     // var that = this;
     wx.cloud.init({
-      env: 'yghome-2g9p1ffr9e770440'
+      env: 'meeting-0gpffok549a159d3'
     })
     // 获取管理员openid列表
     // wx.cloud.database().collection('adminInfo')

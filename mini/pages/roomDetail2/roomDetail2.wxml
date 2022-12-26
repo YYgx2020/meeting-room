@@ -34,7 +34,7 @@
           <!-- 每天的预约情况 -->
           <scroll-view scroll-y class="dateAppointList" bindscrolltolower="bindDownLoad">
             <!-- 有安排的：显示当前日期的每条安排 -->
-            <view wx:if="{{item.appointArr.length}}" wx:for="{{item.appointArr}}" wx:key="index" wx:for-item="items"
+            <view wx:if="{{true}}" wx:for="{{defaultAppoint}}" wx:key="index" wx:for-item="items"
               wx:for-index="idx">
               <view hover-class="btn-hover"
                 class="appointItem {{items.status === '空闲'&&'noshangke'}} {{items.isban && 'ban'}}"
@@ -57,7 +57,7 @@
               </view>
             </view>
             <!-- 没有安排的：显示默认安排 -->
-            <view wx:if="{{!item.appointArr.length}}" wx:for="{{defaultAppoint}}" wx:key="index" wx:for-item="items"
+            <view wx:if="{{false}}" wx:for="{{defaultAppoint}}" wx:key="index" wx:for-item="items"
               wx:for-index="idx">
               <view hover-class="btn-hover" class="appointItem noshangke {{items.isban === true ? 'ban': ''}}"
                 bindtap="handleAppointItem" data-item="{{items}}" data-index="{{idx}}">

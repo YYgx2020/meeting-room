@@ -9,6 +9,9 @@
   <view class="btn">
     <button class="adminLoginBtn" open-type="getUserInfo" type="primary" bindtap="handleLogin">登录</button>
   </view>
+  <view class="adminBtn">
+    <button style="color: black;" type="default" bindtap="toAdminLoginPage">管理员登录</button>
+  </view>
   <!-- <view class="registeredBtn" bindtap="handleRegistered">
     <button disabled="{{!showRegister}}" type="default">注册</button>
   </view> -->

@@ -53,8 +53,22 @@ Page({
       .then(res => {
         wx.hideLoading()
         console.log(res);
-        let appointArr = res.data[0].appointArr.reverse();
-        this.dataInit(appointArr);
+        /* 
+          如果用户是第一次使用，那么当用户首次进入页面时是没有预约数据的，页面应该提示用户“无数据”
+        */
+        if (res.data.length === 0) {
+          this.setData({
+            swiperItem: [],
+          })
+        } else {
+          let appointArr = res.data[0].appointArr.reverse();
+          /* 
+            这里获取用户预约信息的方式也需要更改，在小程序里面获取默认只能获取20条而已，
+            如果用户的预约数据过多时，将无法获取到之前的预约数据
+            所以本页面应该增加一个上拉/下拉刷新的功能
+          */
+          this.dataInit(appointArr);
+        }
         // this.setData({
         //   appointArr: res.data[0].appointArr.reverse(),
         // })

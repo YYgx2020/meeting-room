@@ -68,7 +68,7 @@
   bottom: 30%;
 }
 
-.registeredBtn {
+.adminBtn {
   position: relative;
   top: 430rpx;
   width: 400rpx;

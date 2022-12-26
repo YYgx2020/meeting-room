@@ -5,6 +5,8 @@
  *
  */
 const app = getApp();
+const time = 518400000;  // 7 天的时间差
+
 Page({
   data: {
     openid: '',
@@ -22,7 +24,7 @@ Page({
     weekday: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'], // 周表
     dateList: [],
     isAdmin: false, // 标记是否是管理员
-    dateAppointedList: [], // 每天的安排
+    roomAppointArrList: [], // 当天的安排（数据库中存有的）
     current: 0, // swiper的索引，默认显示第一个
     currentIndex: '', // 暂存当前条目的索引
     btnListTouch: false, // 弹出层的判断标签
@@ -81,7 +83,7 @@ Page({
       },
       detail: [],
       status: '空闲',
-    }], // 默认的安排
+    }], // 一天默认的安排
   },
 
   /**
@@ -106,21 +108,21 @@ Page({
         navId: options.current,
       })
     }
-    wx.showLoading({
-      title: '数据加载中',
-      mask: true,
-    })
+    // wx.showLoading({
+    //   title: '数据加载中',
+    //   mask: true,
+    // })
+    // 判断当前用户的身份
+    this.judgeIdentity()
+
     // 调用云函数获取当前教室的相关安排信息
     this.getDateAppointList();
 
-    // 判断当前用户的身份
-    this.judgeIdentity()
-    // 先判断当前用户的openid是否是管理员
-    // this.getOpenid();
-    // 初始化默认的日期安排
-    this.initDefaultAppoint(options.current);
+    // // 初始化默认的日期安排
+    // this.initDefaultAppoint(options.current);
   },
 
+  // 判断当前用户身份
   judgeIdentity() {
     let {
       isStudent,
@@ -140,6 +142,7 @@ Page({
 
   },
 
+  // 增加是否可以点击的属性
   initDefaultAppoint(current) {
     console.log(current);
     if (current == undefined) {
@@ -153,11 +156,15 @@ Page({
       defaultAppoint.forEach(item => {
         if (item.time.endTime.split(":")[0] * 1 <= currentHour) {
           item['isban'] = true;
+        } else {
+          item['isban'] = false;
         }
+        item['isAppointed'] = false;
       })
     } else {
       defaultAppoint.forEach(item => {
         item['isban'] = false;
+        item['isAppointed'] = false;
       })
     }
     this.setData({
@@ -180,9 +187,11 @@ Page({
         }
       })
       let dateTemp = (myDate.getMonth() + 1) + '/' + myDate.getDate() + ' ' + currentWeekday;
+      let timeStamp = new Date(myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()).getTime();
       dateList.push({
         id: i,
-        date: dateTemp
+        date: dateTemp,
+        timeStamp,  // 增加一个时间戳，方便后续处理预约信息时进行时间的对比
       });
       myDate.setDate(myDate.getDate() + 1);
     }
@@ -192,32 +201,82 @@ Page({
   },
 
   // 调用云函数获取当前教室的相关预约信息
+  /* 
+    1. 根据当前会议室的 id 以及当前日期的时间戳和7天后的时间戳去数据库获取这7天内，该会议室的预约信息
+    2. 然后再将这些会议室的信息填到对应日期的时间段中
+      - 对于非管理员用户，如果该时间段的预约没有通过，则不显示，可以继续预约
+      - 如果是管理员用户，则除了显示已经通过的预约信息以外，还将显示那些还没有处理的预约信息，以提醒管理员处理
+  */
   getDateAppointList() {
 
     let {
       currentRoomid
     } = this.data;
-    wx.cloud.callFunction({
-        name: 'getDateAppointList',
-        data: {
-          roomid: currentRoomid
-        }
+
+    // 获取当前日期的时间戳
+    const date = new Date();
+    let startDate = new Date(date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()).getTime();
+    console.log('startDate: ', startDate);
+    let endDate = startDate + time;
+    console.log('endDate: ', endDate);
+    wx.showToast({
+      title: '数据加载中',
+      mask: true,
+      duration: 3000,
+      icon: 'loading'
+    })
+    // 这里预估预约信息应该不会超过 20 条，因此先不管超出后的情况
+    const db = wx.cloud.database();
+    const _ = db.command;
+    db.collection('roomAppointInfo')
+      .where({
+        roomid: currentRoomid,
+        date: _.gte(startDate).and(_.lte(endDate))
       })
+      .get()
       .then(res => {
-        wx.hideLoading();
-        console.log(res.result.data[0].dateAppointInfo);
-        let dateAppointedList = res.result.data[0].dateAppointInfo;
-        // 对 dateAppointedList 进行排序
-        dateAppointedList = this.dateSort(dateAppointedList);
+        wx.hideToast();
+        console.log(res.data);
         this.setData({
-          dateAppointedList
+          roomAppointArrList: res.data,
         })
-        this.handleShowAppointInfo();
-        // this.dataInit2();
+        // 开始处理信息
+        this.handleShowAppointInfo(res.data);
       })
       .catch(err => {
+        wx.hideToast();
+        wx.showModal({
+          title: '提示',
+          content: '数据加载出错，请退出重试',
+          success: res => {
+            wx.navigateBack({
+              delta: 1
+            })
+          }
+        })
         console.log(err);
       })
+    // wx.cloud.callFunction({
+    //     name: 'getDateAppointList',
+    //     data: {
+    //       roomid: currentRoomid
+    //     }
+    //   })
+    //   .then(res => {
+    //     wx.hideLoading();
+    //     console.log(res.result.data[0].dateAppointInfo);
+    //     let dateAppointedList = res.result.data[0].dateAppointInfo;
+    //     // 对 dateAppointedList 进行排序
+    //     dateAppointedList = this.dateSort(dateAppointedList);
+    //     this.setData({
+    //       dateAppointedList
+    //     })
+    //     this.handleShowAppointInfo();
+    //     // this.dataInit2();
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   })
   },
 
   // 对数据库中的日期进行排序
@@ -239,12 +298,52 @@ Page({
   },
 
   // 预约信息处理
-  handleShowAppointInfo() {
+  handleShowAppointInfo(roomAppointArr) {
     let {
-      dateAppointedList,
-      dateList
+      // dateAppointedList,
+      defaultAppoint,
+      dateList,
+      current,
+      roomAppointArrList,
     } = this.data;
-    console.log(dateAppointedList.length);
+    if (roomAppointArr === 'undefined') {
+      roomAppointArr = roomAppointArrList;
+    }
+    // 获取 current 的日期，然后，将该日期与 roomAppointArr 中的日期进行对比，如果有，则使用有预约的数据，否则还是按照原来的来
+    let dateItem = dateList[current];
+    // 标志当前日期是否有更改
+    let changed = false;
+    roomAppointArr.forEach((item, index) => {
+      if (item.date === dateItem.timeStamp) {
+        defaultAppoint = item.appointArr;
+        changed = true;
+      }
+    })
+
+    if (changed) {
+      // 处理时间段中已经预约的条目
+      let currentHour = new Date().getHours();
+      defaultAppoint.map(item => {
+        if (item.status === '空闲' && item.time.endTime.split(":")[0] * 1 <= currentHour && current === 0) {
+          console.log("不可预约");
+          item['isban'] = true;
+        } else {
+          item['isban'] = false;
+        }
+        item['isAppointed'] = true;  // 标记当前日期是否是数据库中已经预约过的
+        return item;
+      })
+      this.setData({
+        defaultAppoint
+      })
+    } else {
+      // 否则使用默认的日期安排
+      this.initDefaultAppoint(current);
+    }
+
+
+    /*********  以下为旧代码  ********/
+    /* // console.log(dateAppointedList.length);
     let currentDate = dateList[0].date.split(" ")[0];
     let currentHour = new Date().getHours();
     // 判断安排的日期的长度
@@ -302,15 +401,15 @@ Page({
       this.setData({
         disabled: true,
       })
-    }
-
+    } */
+    /*********  以上为旧代码  ********/
   },
 
   // 初始化一个获取用户openid的函数
   getOpenid() {
     wx.cloud.callFunction({
-        name: 'getOpenId',
-      })
+      name: 'getOpenId',
+    })
       .then(res => {
         console.log(res);
         this.setData({
@@ -411,34 +510,38 @@ Page({
       navId: navId * 1,
       current: navId * 1,
     })
+    // 该日期的预约信息也要改变
+    this.handleShowAppointInfo('undefined');
   },
 
   // 监听swiper变换事件
   swiperChange(e) {
     // 变换之后查看当前页的安排是程序自动生成的还是数据库中有安排的
     console.log(e);
-    this.initDefaultAppoint(e.detail.current);
+    // this.initDefaultAppoint(e.detail.current);
     this.setData({
       addNewAppoint: true,
       current: e.detail.current,
       navId: e.detail.current
     })
-    let {
-      dateList
-    } = this.data;
-    if (dateList[e.detail.current].appointArr.length === 0) {
-      console.log("当前日期是程序自动生成的");
-      this.setData({
-        disabled: true,
-      })
-    } else {
-      this.setData({
-        disabled: false,
-      })
-    }
+    // 该日期的预约信息也要改变
+    this.handleShowAppointInfo('undefined');
+    // let {
+    //   dateList
+    // } = this.data;
+    // if (dateList[e.detail.current].appointArr.length === 0) {
+    //   console.log("当前日期是程序自动生成的");
+    //   this.setData({
+    //     disabled: true,
+    //   })
+    // } else {
+    //   this.setData({
+    //     disabled: false,
+    //   })
+    // }
   },
 
-  // 安排条目点击事件
+  // 具体时间段点击事件
   handleAppointItem(e) {
     let {
       current,
@@ -447,53 +550,62 @@ Page({
       isTeacher,
       isAdmin,
       first,
+      currentRoomid,
     } = this.data;
     console.log(e);
     let isban = false;
-    isban = e.currentTarget.dataset.item.isban;
+    let { item } = e.currentTarget.dataset;
+    isban = item.isban;
     if (isban) {
       return;
     }
     // let {defaultAppoint, dateList, current} = this.data;
     // 先看当前日期在数据库中是否有安排
-    let currentStatus = e.currentTarget.dataset.item.status;
+    let currentStatus = item.status;
     let currentIndex = e.currentTarget.dataset.index;
     if (currentStatus === '空闲') {
+      /* 
+        如果当前状态是空闲，则跳转到新建预约或者管理员处理预约页面
+        新建预约页面需要传递的参数：
+        当前会议室的 id，当前日期的时间戳，预约开始时间和结束时间，还有一个转换后的日期，用于预约页面底部的提示
+      */
       // 跳转到申请预约页面，需要填入当前的时间和日期
       let currentDate = dateList[current].date;
-      let currentStartTime = e.currentTarget.dataset.item.time.startTime;
-      let currentEndTime = e.currentTarget.dataset.item.time.endTime;
-      console.log(e);
-      let {
-        currentRoomid
-      } = this.data;
-      let currentDetail = e.currentTarget.dataset.item.detail;
+      let timeStamp = dateList[current].timeStamp;
+      let currentStartTime = item.time.startTime;
+      let currentEndTime = item.time.endTime;
+      let currentDetail = item.detail;  // 查看当前是否有未处理的预约
+      let isAppointed = item.isAppointed;  // 标记当前日期在数据库中是否存在预约记录
       if (isAdmin) {
         // 如果当前是管理员
         if (currentDetail.length === 0) {
-          // 说明没有安排，跳转到预约页面
+          /* 
+            说明没有预约待处理，跳转到预约页面
+          */
           wx.navigateTo({
-            url: '/pages/newAppointment/newAppointment?currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentEndTime=' + currentEndTime + '&currentRoomid=' + currentRoomid + '&currentIndex=' + currentIndex + '&current=' + current,
+            url: '/pages/newAppointment/newAppointment?currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentEndTime=' + currentEndTime + '&currentRoomid=' + currentRoomid + '&currentIndex=' + currentIndex + '&current=' + current + '&timeStamp=' + timeStamp + '&isAppointed=' + isAppointed,
           })
         } else {
-          // 说明有安排，跳转到处理预约页面
-          wx.navigateTo({
+          /* 
+            有预约待处理，跳转到管理员处理预约页面
+          */
+          /* wx.navigateTo({
             url: '/pages/handleAppointItem/handleAppointItem?currentRoomid=' + currentRoomid + '&currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentIndex=' + currentIndex + '&current=' + current + '&currentEndTime=' + currentEndTime,
-          })
+          }) */
         }
       } else {
         // 否则说明不是管理员
         // 再判断是否是已认证的学生或者老师
         if (isStudent || isTeacher) {
           wx.navigateTo({
-            url: '/pages/newAppointment/newAppointment?currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentEndTime=' + currentEndTime + '&currentRoomid=' + currentRoomid + '&currentIndex' + currentIndex + '&current=' + current,
+            url: '/pages/newAppointment/newAppointment?currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentEndTime=' + currentEndTime + '&currentRoomid=' + currentRoomid + '&currentIndex=' + currentIndex + '&current=' + current + '&timeStamp=' + timeStamp + '&isAppointed=' + isAppointed,
           })
         } else {
           // 提示普通用户（游客）
           if (first === 1) {
             wx.showModal({
               title: '提示',
-              content: '您不是企业用户，无法使用预约功能',
+              content: '您不是本系统认证用户，无法使用预约功能',
               confirmText: '不再提示',
               success: res => {
                 if (res.confirm) {
@@ -528,13 +640,13 @@ Page({
       })
 
       this.animate('.handleReservation', [{
-          ease: 'linear',
-          translateY: 0
-        },
-        {
-          ease: 'linear',
-          translateY: -400
-        },
+        ease: 'linear',
+        translateY: 0
+      },
+      {
+        ease: 'linear',
+        translateY: -400
+      },
       ], 250)
 
       // 获取数据
@@ -577,12 +689,12 @@ Page({
       mask: true,
     })
     wx.cloud.callFunction({
-        name: 'generateQr',
-        data: {
-          path: 'pages/roomDetail2/roomDetail2?roomid=' + currentRoomid,
-          name: currentRoomid,
-        }
-      })
+      name: 'generateQr',
+      data: {
+        path: 'pages/roomDetail2/roomDetail2?roomid=' + currentRoomid,
+        name: currentRoomid,
+      }
+    })
       .then(res => {
 
         console.log(res.result.fileID);
@@ -597,10 +709,10 @@ Page({
   // 获取图片url
   getQrimgurl(fileID) {
     wx.cloud.getTempFileURL({
-        fileList: [{
-          fileID,
-        }]
-      })
+      fileList: [{
+        fileID,
+      }]
+    })
       .then(res => {
         console.log(res);
         let Qrimgurl = res.fileList[0].tempFileURL;
