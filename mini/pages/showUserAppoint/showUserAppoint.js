@@ -21,7 +21,11 @@ Page({
     current: 0,
     openid: '',
     appointArr: [], // 用户预约表
-    swiperItem: [],
+    // 分类存储
+    swiperItem: [[], [], []],
+    // swiperItem1: [],  // 待审核
+    // swiperItem2: [],  // 预约成功
+    // swiperItem3: [],  // 预约失败
     showMore: false, // 是否展示更多
   },
 
@@ -32,50 +36,62 @@ Page({
     this.setData({
       openid: app.globalData.openid,
     })
-    wx.showLoading({
-      title: '数据加载中',
-      mask: true,
-    })
-    this.getUserAppointInfo();
+
+    let isAgree = 0;
+    this.getUserAppointInfo(isAgree);
   },
 
   // 获取用户的预约表
   // 获取用户的预约表
-  getUserAppointInfo() {
+  getUserAppointInfo(isAgree) {
     let {
-      openid
+      openid,
+      current,
+      swiperItem
     } = this.data;
-    wx.cloud.database().collection('userAppointInfo')
-      .where({
-        openid,
+    // 发请求之前先查看是否有数据
+    if (swiperItem[current].length === 0) {
+      wx.showToast({
+        title: '数据加载中',
+        mask: true,
+        duration: 3000,
+        icon: 'loading'
       })
-      .get()
-      .then(res => {
-        wx.hideLoading()
-        console.log(res);
-        /* 
-          如果用户是第一次使用，那么当用户首次进入页面时是没有预约数据的，页面应该提示用户“无数据”
-        */
-        if (res.data.length === 0) {
-          this.setData({
-            swiperItem: [],
+      wx.cloud.database().collection('userAppointInfo')
+        .where({
+          openid,
+          isAgree
+        })
+        .orderBy('applyTime', 'desc')
+        .get()
+        .then(res => {
+          wx.hideToast();
+          console.log(res);
+          res.data.map(item => {
+            item['showMore'] = false;
           })
-        } else {
-          let appointArr = res.data[0].appointArr.reverse();
-          /* 
-            这里获取用户预约信息的方式也需要更改，在小程序里面获取默认只能获取20条而已，
-            如果用户的预约数据过多时，将无法获取到之前的预约数据
-            所以本页面应该增加一个上拉/下拉刷新的功能
-          */
-          this.dataInit(appointArr);
-        }
-        // this.setData({
-        //   appointArr: res.data[0].appointArr.reverse(),
-        // })
-      })
-      .catch(err => {
-        console.log(err);
-      })
+          swiperItem[current] = res.data;
+          this.setData({
+            swiperItem,
+          })
+        })
+        .catch(err => {
+          wx.hideToast();
+          wx.showModal({
+            title: '提示',
+            content: '预约信息获取失败，请退出重试',
+            success: res => {
+              wx.navigateBack({
+                delta: 1,
+              })
+            }
+          })
+          console.log(err);
+        })
+    } else {
+      return
+    }
+
   },
 
   // 数据的初始化
@@ -104,11 +120,23 @@ Page({
 
   // 导航栏点击事件
   changeNav(e) {
-    let navId = e.currentTarget.id;
+    let navId = e.currentTarget.id * 1;
     this.setData({
-      navId: navId * 1,
-      current: navId * 1,
+      navId,
+      current: navId,
     })
+    // 发起请求，重新获取数据
+    switch (navId) {
+      case 0:
+        this.getUserAppointInfo(0);
+        break;
+      case 1:
+        this.getUserAppointInfo(2);
+        break;
+      case 2:
+        this.getUserAppointInfo(-1);
+        break;
+    }
   },
 
   // 监听swiper变换事件
@@ -122,9 +150,17 @@ Page({
     })
   },
 
-  handleShowMore() {
+  handleShowMore(e) {
+    console.log(e);
+    let {index} = e.currentTarget.dataset;
+    let {
+      current,
+      swiperItem,
+    } = this.data;
+    // console.log(swiperItem[current][index].showMore);
+    swiperItem[current][index].showMore = !swiperItem[current][index].showMore;
     this.setData({
-      showMore: !this.data.showMore,
+      swiperItem,
     })
   },
 

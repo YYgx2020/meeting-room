@@ -1,4 +1,8 @@
 // pages/roomsEdit/roomsEdit.js
+/* 
+  获取会议室信息、以及每个会议室当天当前时间段的预约情况
+  
+*/
 const app = getApp();
 Page({
 

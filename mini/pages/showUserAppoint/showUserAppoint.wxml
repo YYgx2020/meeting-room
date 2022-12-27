@@ -1,6 +1,5 @@
-<!--pages/showUserAppoint/showUserAppoint.wxml-->
-<!-- 
-  需要展示的信息：
+<!-- pages/showUserAppoint/showUserAppoint.wxml -->
+<!-- 需要展示的信息：
   1. 预约的教室，
   2. 预约日期
   3. 预约的时间段，
@@ -11,21 +10,64 @@
     通过-2，
     不通过-1，
   
- -->
+  取消左右滑动功能 -->
 <view class="mainContainer">
-  <view wx:if="{{swiperItem.length === 0}}" class="appointArrNone">
+  <!-- <view wx:if="{{swiperItem.length === 0}}" class="appointArrNone">
     <text>您还没有发起预约哦~</text>
-  </view>
+  </view> -->
   <!-- 分三页展示，一页是待审核，一页是已通过，一页是不通过 -->
   <!-- 导航栏 -->
-  <scroll-view scroll-x enable-flex scroll-into-view="{{'scroll' + navId}}" scroll-with-animation="true"
-    wx:if="{{swiperItem.length !== 0}}" class="navScroll" enhanced="true" show-scrollbar="false">
-    <view class="navItem {{navId === item.id? 'active': ''}}" wx:for="{{navData}}" wx:key="id" id="{{item.id}}"
-      bindtap="changeNav">
+  <!-- wx:if="{{swiperItem.length !== 0}}" -->
+  <scroll-view scroll-x enable-flex scroll-into-view="{{'scroll' + navId}}" scroll-with-animation="true"  class="navScroll" enhanced="true" show-scrollbar="false">
+    <view class="navItem {{navId === item.id? 'active': ''}}" wx:for="{{navData}}" wx:key="id" id="{{item.id}}" bindtap="changeNav">
       <text>{{item.navName}}</text>
     </view>
   </scroll-view>
-  <swiper wx:if="{{swiperItem.length !== 0}}" class="swiperContainer" bindchange="swiperChange" current="{{current}}" easing-function="default">
+  <scroll-view scroll-y class="userScroll">
+    <view wx:for="{{swiperItem[current]}}" wx:for-item="item1">
+      <view class="appointArrItem" style="height: {{item1.showMore? '580rpx':'460rpx'}};">
+        <!-- 预约状态 -->
+        <view class="status">
+          <text wx:if="{{item1.isAgree === 0}}" class="audit">待审核</text>
+          <text wx:if="{{item1.isAgree === 1}}" class="disagree">预约失败</text>
+          <text wx:if="{{item1.isAgree === 2}}" class="agree">预约成功</text>
+        </view>
+        <!-- 预约教室 -->
+        <view class="roomid">
+          <text class="tip1">预约教室</text>
+          <text class="tip2">{{item1.roomid}}</text>
+        </view>
+        <!-- 预约日期 -->
+        <view class="date">
+          <text class="tip1">预约日期</text>
+          <text class="tip2">{{item1.time.date}}</text>
+        </view>
+        <!-- 预约时间段 -->
+        <view class="time">
+          <text class="tip1">预约时间</text>
+          <text class="tip2">{{item1.time.startTime}}-{{item1.time.endTime}}</text>
+        </view>
+        <!-- 申请时间 -->
+        <view class="applyTime">
+          <text class="tip1">申请时间</text>
+          <text class="tip2">{{item1.applyTime}}</text>
+        </view>
+        <!-- 申请缘由 -->
+        <view class="thing">
+          <text class="thingTip1">申请缘由</text>
+          <text class="thingTip2 {{(!item1.showMore && item1.thingsText.length > 21) && 'thingTip2-nomore'}}">{{item1.thingsText}}</text>
+          <text wx:if="{{item1.thingsText.length > 21}}" class="{{!item1.showMore? 'dowmIcon': 'upIcon'}} iconfont {{!item1.showMore? 'icon-xiangxia2': 'icon-xiangshang2'}} " bindtap="handleShowMore" data-index="{{index}}"></text>
+        </view>
+      </view>
+    </view>
+    <view class="emptyMessage" wx:if="{{swiperItem[current].length === 0}}">
+      <!-- <image mode="heightFix" src="../../static/images/empty_message.png"/> -->
+      <text>无数据~</text>
+    </view>
+    <!-- 底部留白 -->
+    <view wx:if="{{swiperItem[current].length >= 3}}" class="bottomSpace"></view>
+  </scroll-view>
+  <swiper wx:if="{{0}}" class="swiperContainer" bindchange="swiperChange" current="{{current}}" easing-function="default">
     <block wx:for="{{swiperItem}}">
       <swiper-item>
         <scroll-view scroll-y class="userScroll">
@@ -60,10 +102,10 @@
               <!-- 申请缘由 -->
               <view class="thing">
                 <text class="thingTip1">申请缘由</text>
-                <text class="thingTip2 {{(!showMore && item1.thingsText.length > 21) && 'thingTip2-nomore'}}">{{item1.thingsText}}</text>
-                <text wx:if="{{item1.thingsText.length > 21}}"
-                  class="{{!showMore? 'dowmIcon': 'upIcon'}} iconfont {{!showMore? 'icon-xiangxia2': 'icon-xiangshang2'}} "
-                  bindtap="handleShowMore"></text>
+                <text class="thingTip2 {{(!showMore && item1.thingsText.length > 21) && 'thingTip2-nomore'}}">
+                  {{item1.thingsText}}
+                </text>
+                <text wx:if="{{item1.thingsText.length > 21}}" class="{{!showMore? 'dowmIcon': 'upIcon'}} iconfont {{!showMore? 'icon-xiangxia2': 'icon-xiangshang2'}} " bindtap="handleShowMore"></text>
               </view>
             </view>
           </view>
@@ -73,5 +115,4 @@
       </swiper-item>
     </block>
   </swiper>
-
 </view>
