@@ -42,17 +42,16 @@
             <text class="roomId">{{item.roomid}}</text>
             <text class="roomType">{{item.roomType}}</text>
           </view>
-          <view class="currentStatus">
+          <!-- <view class="currentStatus">
             <text class="t1">当前状态: </text>
-            <text
-              class="t2 {{item.currentStatus === '已预约' && 't2_1'}} {{item.currentStatus === '空闲' && 't2_2'}}">{{item.currentStatus}}</text>
-          </view>
+            <text class="t2 {{item.currentStatus === '已预约' && 't2_1'}} {{item.currentStatus === '空闲' && 't2_2'}}">{{item.currentStatus}}</text>
+          </view> -->
           <view class="roomPeople">
             <text class="roomPeople_t1">可容纳人数: </text>
             <text class="roomPeople_t2">{{item.roomPeople}}</text>
           </view>
-          <view class="moreInfo">
-          </view>
+          <!-- <view class="moreInfo">
+          </view> -->
           <!-- <text class="toRightIcon iconfont icon-xiangyou"></text> -->
         </view>
         <view class="delete" wx:if="{{item.isShow}}" data-item="{{item}}" bindtap="delItem">

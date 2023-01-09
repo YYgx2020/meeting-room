@@ -34,7 +34,7 @@ Page({
     // 关闭导航栏的刷新图标
     wx.hideNavigationBarLoading();
     this.getCurrentDate();
-    this.getRoomAppointInfo();
+    // this.getRoomAppointInfo();
     wx.showLoading({
       title: '数据加载中',
     })

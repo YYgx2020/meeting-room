@@ -337,7 +337,7 @@ page {
   right: 50rpx;
   width: 260rpx;
   height: 50rpx;
-  bottom: 30rpx;
+  top: 30rpx;
 }
 
 .roomPeople_t1 {
@@ -355,12 +355,12 @@ page {
 .roomPeople_t2 {
   display: inline-block;
   position: absolute;
-  width: 95rpx;
+  /* width: 95rpx; */
   left: 165rpx;
-  height: 50rpx;
-  line-height: 60rpx;
+  /* height: 50rpx; */
+  /* line-height: 60rpx; */
   text-align: left;
-  font-size: 32rpx;
+  font-size: 52rpx;
   font-weight: 700;
 }
 
