@@ -57,23 +57,6 @@
               </view>
             </view>
             <!-- 没有安排的：显示默认安排 -->
-            <view wx:if="{{false}}" wx:for="{{defaultAppoint}}" wx:key="index" wx:for-item="items"
-              wx:for-index="idx">
-              <view hover-class="btn-hover" class="appointItem noshangke {{items.isban === true ? 'ban': ''}}"
-                bindtap="handleAppointItem" data-item="{{items}}" data-index="{{idx}}">
-                <view class="time">
-                  <!-- 应该在点击之后再显示是否修改，而不是点击那个时间就弹出时间选择器 -->
-                  <text class="startTime {{items.isban && 'fontClass'}}">{{items.time.startTime}}</text>
-                  <text class="connector {{items.isban && 'fontClass'}}">-</text>
-                  <text class="endTime {{items.isban && 'fontClass'}}">{{items.time.endTime}}</text>
-                </view>
-                <view class="status">
-                  <text
-                    class="{{(items.status === '空闲' && !items.isban) && 'kongxian'}} {{items.isban && 'fontClass'}}">{{items.status}}</text>
-                </view>
-                <text wx:if="{{items.status === '空闲'}}" class="toRightIcon iconfont icon-xiangyou"></text>
-              </view>
-            </view>
           </scroll-view>
         </swiper-item>
       </block>

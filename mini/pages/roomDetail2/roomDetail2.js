@@ -84,6 +84,7 @@ Page({
       detail: [],
       status: '空闲',
     }], // 一天默认的安排
+    // showAppoint: [],
   },
 
   /**
@@ -159,10 +160,12 @@ Page({
         } else {
           item['isban'] = false;
         }
+        item['detail'] = [];
         item['isAppointed'] = false;
       })
     } else {
       defaultAppoint.forEach(item => {
+        item['detail'] = [];
         item['isban'] = false;
         item['isAppointed'] = false;
       })
@@ -305,9 +308,11 @@ Page({
       dateList,
       current,
       roomAppointArrList,
+      // showAppoint
     } = this.data;
     if (roomAppointArr === 'undefined') {
-      roomAppointArr = roomAppointArrList;
+      // 这里不要直接相等，因为 roomAppointArrList 是一个对象数组，直接传值会导致后面的变量跟其指向同一个地址，从而一起发生改变
+      roomAppointArr = JSON.parse(JSON.stringify(roomAppointArrList));
     }
     // 获取 current 的日期，然后，将该日期与 roomAppointArr 中的日期进行对比，如果有，则使用有预约的数据，否则还是按照原来的来
     let dateItem = dateList[current];
@@ -319,6 +324,9 @@ Page({
         changed = true;
       }
     })
+
+    console.log('changed: ', changed);
+
 
     if (changed) {
       // 处理时间段中已经预约的条目
@@ -333,6 +341,7 @@ Page({
         item['isAppointed'] = true;  // 标记当前日期是否是数据库中已经预约过的
         return item;
       })
+      console.log('defaultAppoint: ', defaultAppoint);
       this.setData({
         defaultAppoint
       })
@@ -586,6 +595,7 @@ Page({
             url: '/pages/newAppointment/newAppointment?currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentEndTime=' + currentEndTime + '&currentRoomid=' + currentRoomid + '&currentIndex=' + currentIndex + '&current=' + current + '&timeStamp=' + timeStamp + '&isAppointed=' + isAppointed,
           })
         } else {
+          console.log("跳转到管理员处理预约页面");
           /* 
             有预约待处理，跳转到管理员处理预约页面
           */
