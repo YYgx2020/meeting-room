@@ -46,6 +46,12 @@ Page({
       然后在展示页面设置上拉刷新，获取旧的记录
       目前版本只是个demo，所以暂时不做这个功能
     */
+      wx.showToast({
+        title: '数据加载中',
+        mask: true,
+        duration: 3000,
+        icon: 'loading'
+      });
     // 待审核的学生列表 
 
     this.getData2(1, 0)
@@ -101,10 +107,15 @@ Page({
     let {swiperItem} = this.data;
     let studentList = this.getData('studentInfo', isProve)
     let teacherList = this.getData('teacherInfo', isProve)
-
+    wx.showToast({
+      title: '数据加载中',
+      mask: true,
+      duration: 3000,
+      icon: 'loading'
+    });
     let p = Promise.all([studentList, teacherList])
     p.then(res => {
-        wx.hideLoading()
+        wx.hideToast();
         console.log(res);
         let all = res[0].concat(res[1])
         console.log(all);
@@ -117,7 +128,7 @@ Page({
         console.log(swiperItem);
         this.setData({
           swiperItem,
-        })
+        });
         // switch (page) {
         //   case 1: this.setData({
         //     pageData1: all,
@@ -132,7 +143,7 @@ Page({
         // }
       })
       .catch(err => {
-        wx.hideLoading()
+        wx.hideToast();
         wx.showToast({
           title: '数据获取失败',
           icon: 'error'
@@ -151,19 +162,19 @@ Page({
     // 先看是否已经请求过数据，如果没有则发送请求，有则跳过
     if (navId == 1 && swiperItem[1].length == 0) {
       // 发送请求
-      this.getData2(2, 1)
+      this.getData2(2, 1);
     }
 
     if (navId == 2 && swiperItem[2].length == 0) {
       // 发送请求
-      this.getData2(3, -1)
+      this.getData2(3, -1);
     }
     
     let current;
     if (e.currentTarget.id * 1 == 2) {
-      current = -1
+      current = -1;
     } else {
-      current = e.currentTarget.id * 1
+      current = e.currentTarget.id * 1;
     }
     console.log('current: ', current);
     console.log('navId: ', navId);

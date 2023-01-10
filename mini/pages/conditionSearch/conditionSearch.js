@@ -397,8 +397,7 @@ Page({
   */
   handleRoomItem(e) {
     const {
-      isAdmin,
-      isEmployee,
+      role,
       weekday
     } = this.data;
     console.log(e);
@@ -414,7 +413,7 @@ Page({
     let currentStartTime = time[timeCodeIndex].split("-")[0];
     let currentEndTime = time[timeCodeIndex].split("-")[1];
     const currentStatus = e.currentTarget.dataset.status;
-    if (isAdmin || isEmployee) {
+    if (role === 'admin' || role === 'teacher' || role === 'student') {
       if (currentStatus !== '空闲') {
         return
       } else {

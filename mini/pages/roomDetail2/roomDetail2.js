@@ -599,9 +599,9 @@ Page({
           /* 
             有预约待处理，跳转到管理员处理预约页面
           */
-          /* wx.navigateTo({
+          wx.navigateTo({
             url: '/pages/handleAppointItem/handleAppointItem?currentRoomid=' + currentRoomid + '&currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentIndex=' + currentIndex + '&current=' + current + '&currentEndTime=' + currentEndTime,
-          }) */
+          })
         }
       } else {
         // 否则说明不是管理员
