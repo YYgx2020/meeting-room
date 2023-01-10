@@ -424,6 +424,13 @@ Page({
     })
   },
 
+  // 管理员登录，跳转到管理员登陆页面
+  toAdminLoginPage() {
+    wx.navigateTo({
+      url: '/pages/adminLogin/adminLogin',
+    })
+  },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

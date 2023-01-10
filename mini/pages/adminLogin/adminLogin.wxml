@@ -1,0 +1,22 @@
+<!-- pages/adminLogin/adminLogin.wxml -->
+<view class="login-wrapper">
+  <view class="admin-login-form">
+    <form action="">
+      <view class="user-phone">
+        <text class="form-tip">手机号</text>
+        <input type="number" placeholder="请输入您的手机号" maxlength="11" bindinput="getUserPhone" />
+      </view>
+      <view class="user-password">
+        <text class="form-tip">密码</text>
+        <input type="{{type}}" placeholder="请输入您的密码" maxlength="11" bindinput="getPassword" />
+        <text class="eye-icon iconfont icon-yanjing" wx:if="{{type === 'password'}}" bindtap="eyeClick"></text>
+        <text class="eye-icon iconfont icon-biyanjing" wx:if="{{type === 'text'}}" bindtap="eyeClick"></text>
+      </view>
+      <view class="submit-button">
+        <button hover-class="hover-button" type="primary" bindtap="loginEvent">
+          登录
+        </button>
+      </view>
+    </form>
+  </view>
+</view>

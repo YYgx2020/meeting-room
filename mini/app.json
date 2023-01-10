@@ -21,7 +21,8 @@
     "pages/jobFair/jobFair",
     "pages/studentRegistered/studentRegistered",
     "pages/roleChoose/roleChoose",
-    "pages/teacherRegistered/teacherRegistered"
+    "pages/teacherRegistered/teacherRegistered",
+    "pages/adminLogin/adminLogin"
   ],
   "window": {
     "backgroundTextStyle": "light",

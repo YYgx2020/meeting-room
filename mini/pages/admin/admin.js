@@ -1,4 +1,5 @@
 // pages/admin/admin.js
+const app = getApp();
 Page({
 
   /**
@@ -13,7 +14,7 @@ Page({
    */
   onLoad: function (options) {
     // 获取用户信息
-    let userInfo = wx.getStorageSync('userInfo');
+    let userInfo = app.globalData.userInfo;
     this.setData({
       userInfo
     })
