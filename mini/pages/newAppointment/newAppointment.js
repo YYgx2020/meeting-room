@@ -312,7 +312,9 @@ Page({
         "endTime": currentEndTime
       },
       "thingsText": thingsText,
-      "applyTime": applyTime
+      "applyTime": applyTime,
+      "createTime": new Date(applyTime).getTime(),
+      "openid": app.globalData.openid,
     })
     if (app.globalData.isAdmin) {
       defaultAppoint[currentIndex].status = '已预约';
@@ -461,6 +463,7 @@ Page({
             },
             "thingsText": thingsText,
             "applyTime": applyTime,
+            "createTime": new Date(applyTime).getTime(),
             "isAgree": 0, // 审核标志，0-待审核，1-通过，2-不通过
           }
         })

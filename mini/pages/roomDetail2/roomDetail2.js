@@ -572,6 +572,7 @@ Page({
     // 先看当前日期在数据库中是否有安排
     let currentStatus = item.status;
     let currentIndex = e.currentTarget.dataset.index;
+    let timeStamp = dateList[current].timeStamp;
     if (currentStatus === '空闲') {
       /* 
         如果当前状态是空闲，则跳转到新建预约或者管理员处理预约页面
@@ -600,7 +601,7 @@ Page({
             有预约待处理，跳转到管理员处理预约页面
           */
           wx.navigateTo({
-            url: '/pages/handleAppointItem/handleAppointItem?currentRoomid=' + currentRoomid + '&currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentIndex=' + currentIndex + '&current=' + current + '&currentEndTime=' + currentEndTime,
+            url: '/pages/handleAppointItem/handleAppointItem?currentRoomid=' + currentRoomid + '&currentDate=' + currentDate + '&currentStartTime=' + currentStartTime + '&currentIndex=' + currentIndex + '&current=' + current + '&currentEndTime=' + currentEndTime + '&timeStamp=' + timeStamp,
           })
         }
       } else {

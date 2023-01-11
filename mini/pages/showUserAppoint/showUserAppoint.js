@@ -62,7 +62,7 @@ Page({
           openid,
           isAgree
         })
-        .orderBy('applyTime', 'desc')
+        .orderBy('createTime', 'desc')
         .get()
         .then(res => {
           wx.hideToast();
