@@ -19,6 +19,8 @@ Page({
     index: '', // 点击条目的索引，如果有多个
     detailAppointed: {},
     showMore: true,
+    appointArr: [],  // 更新会议室预约信息时用
+    detail: [],
   },
 
   /**
@@ -35,10 +37,63 @@ Page({
       currentEndTime: options.currentEndTime,
       month: options.currentDate.split(" ")[0].split("/")[0],
       day: options.currentDate.split(" ")[0].split("/")[1],
+      timeStamp: options.timeStamp * 1,
     })
-    this.getDateAppointList();
+
+    /* 
+      处理逻辑：
+      先根据 roomid 跟时间戳以及当前时间段去获取该会议室当前日期当前时间段的安排
+    */
+    this.getAppointInfo(options.currentRoomid, options.timeStamp, options.currentIndex, []);
+    // this.getDateAppointList();
     // 获取用户的预约表
-    this.getUserAppointInfo();
+    // this.getUserAppointInfo();
+  },
+
+  // 获取当前会议室当前日期当前时间段的安排
+  getAppointInfo(currentRoomid, timeStamp, currentIndex, detail) {
+    wx.showToast({
+      title: '数据加载中',
+      mask: true,
+      duration: 3000,
+      icon: 'loading'
+    })
+    wx.cloud.database().collection('roomAppointInfo')
+      .where({
+        roomid: currentRoomid,
+        date: timeStamp * 1,
+      })
+      .get()
+      .then(res => {
+        wx.hideToast();
+        console.log(res);
+        const appointArr = res.data[0].appointArr;
+        detail = appointArr[currentIndex].detail.reverse();
+        // detail = appointArr[currentIndex].detail;
+        // detail = detail.map(item => {
+        //   // item['isban'] = false;
+        //   return item;
+        // })
+        // 处理预约信息中用户的预约申请缘由
+        detail = detail.map(item => {
+          item.showMore = true;
+          return item;
+        })
+        console.log(detail);
+        this.setData({
+          appointArr,
+          detail,
+        })
+      })
+      .catch(err => {
+        console.log(err);
+        wx.hideToast();
+        wx.showModal({
+          title: '提示',
+          content: '数据获取失败，请退出重试',
+        })
+      })
+
   },
 
   // 获取用户的预约表
@@ -63,11 +118,11 @@ Page({
       currentRoomid
     } = this.data;
     wx.cloud.callFunction({
-        name: 'getDateAppointList',
-        data: {
-          roomid: currentRoomid
-        }
-      })
+      name: 'getDateAppointList',
+      data: {
+        roomid: currentRoomid
+      }
+    })
       .then(res => {
         console.log(res.result.data[0].dateAppointInfo);
         let dateAppointedList = res.result.data[0].dateAppointInfo;
@@ -113,83 +168,43 @@ Page({
   handleDisagree(e) {
     console.log(e);
     /**
-     * 点击不同意之后，将会删除当前条目，并告知用户的申请状态为不通过，那就要修改数据库，要获取用户的openid
+      管理员点击不同意之后，更新用户的预约表和会议室的预约表，
+      然后重新获取数据，重新渲染页面
      */
     let {
       detail,
-      dateAppointedList,
-      userAppointInfo,
-      currentRoomid,
       currentIndex,
-      currentStartTime,
-      currentDate,
+      appointArr,
     } = this.data;
-    detail.forEach((item1, index1) => {
-      if (index1 === e.currentTarget.dataset.index) {
-        // 获取申请人的预约表，修改其状态
-        for (let i = 0; i < userAppointInfo.length; i++) {
-          if (userAppointInfo[i].openid === item1.openid) {
-            // 修改状态为不通过 - 1
-            userAppointInfo[i].appointArr.forEach(item2 => {
-              if (item2.applyTime === e.currentTarget.dataset.item.applyTime) {
-                console.log(item2.applyTime);
-                console.log(e.currentTarget.dataset.item.applyTime);
-                item2.isAgree = 1;
-                return item2;
-              }
-            })
-            // 更新用户的预约表
-            this.updateUserAppointInfo(item1.openid, userAppointInfo[i].appointArr);
-            break
-          }
-        }
 
-        // 更新 dateAppointedList
-        console.log(dateAppointedList);
-        console.log(item1);
-        // console.log(current);
-        dateAppointedList.forEach(item3 => {
-          console.log(item3);
-          if (item3.date === currentDate) {
-            if (currentStartTime === item3.appointArr[currentIndex].time.startTime) {
-              // 修改状态为空闲
-              item3.appointArr[currentIndex].detail = [];
-              item3.appointArr[currentIndex].status = '空闲';
-              return item3;
-            }
-          }
-        })
-        console.log(dateAppointedList);
-      }
-    })
-
-    // 将数据重新传回data中
-    this.setData({
-      detail,
-      dateAppointedList,
-      userAppointInfo
-    })
-    if (detail.length === 1) {
-      // 上传 dateAppointedList 数据
-      this.updateRoomAppointInfo(currentRoomid, dateAppointedList);
+    let { index, item } = e.currentTarget.dataset;
+    if (item.isban) {
+      return
     }
+    // 先存储其他预约申请的关键信息
+    let otherAppointInfo = [];
+    otherAppointInfo.push(JSON.parse(JSON.stringify(detail[index])));
+    otherAppointInfo[0].choosed = false;
+    detail[index].isban = true;
+    console.log(otherAppointInfo);
+    // detail = JSON.parse(JSON.stringify(detail[index]));
+    appointArr[currentIndex].detail = detail.reverse();
+    // 开始更新
+    let rejectReason = '';
+    this.updateAppointInfo(appointArr, otherAppointInfo, 1, rejectReason);
   },
 
   // 同意按钮处理事件
   handleAgree(e) {
     let {
-      currentRoomid,
       currentIndex,
-      current,
-      userAppointInfo,
-      currentStartTime,
-      currentDate,
-      dateAppointedList,
+      appointArr,
     } = this.data;
     console.log(e);
-    wx.showLoading({
-      title: '数据上传中',
-    })
+    let { index, item } = e.currentTarget.dataset;
+    // wx.showLoading({
+    //   title: '数据上传中',
+    // })
     /**
      * 点击当前条目的同意按钮之后，其他条目的同意按钮将被禁用，
      * 并且数据库中自动修改其他条目的申请状态，即不通过
@@ -199,155 +214,175 @@ Page({
       detail
     } = this.data;
     // 先判断当前的同意按钮是否被禁用，如果被禁用，则直接返回
-    if (e.currentTarget.dataset.item.isban) {
+    if (item.isban) {
       return
     }
-    let detailAppointed = {};
-    detail.forEach((item, index) => {
-      console.log(index);
-      console.log(e.currentTarget.dataset.index);
-      if (index === e.currentTarget.dataset.index) {
-        // 获取申请人的预约表，修改其状态
-        for (let i = 0; i < userAppointInfo.length; i++) {
-          if (userAppointInfo[i].openid === item.openid) {
-            // 修改状态为通过
-            userAppointInfo[i].appointArr.forEach(items => {
-              // if (items.roomid === currentRoomid) {
-              //   if (items.time.date.split(" ")[0] === currentDate) {
-              //     // 如果 openid，roomid，日期都匹配上了，那就修改审核状态
-              //     items.isAgree = 2;
-              //   }
-              // }
-              console.log(items.applyTime);
-              console.log(e.currentTarget.dataset.item.applyTime);
-              if (items.applyTime === e.currentTarget.dataset.item.applyTime) {
-                console.log(items.applyTime);
-                console.log(e.currentTarget.dataset.item.applyTime);
-                items.isAgree = 2;
-                return items;
+    if (detail.length === 1) {
+      // 直接处理，不需要提示说明
+      // 确定同意当前的预预约申请
+      // 先存储其他预约申请的关键信息
+      let otherAppointInfo = JSON.parse(JSON.stringify(detail));
+      // 用一个字段去标识当前项是预约通过的
+      otherAppointInfo = otherAppointInfo.map((itm, idx) => {
+        if (index === idx) {
+          itm.choosed = true;
+        } else {
+          itm.choosed = false;
+        }
+        return itm;
+      });
+      detail = JSON.parse(JSON.stringify(detail[index]));
+      appointArr[currentIndex].detail = detail;
+      appointArr[currentIndex].status = '已预约';
+      // 更新用户预约信息和会议室预约信息
+      let rejectReason = '其他预约申请的优先级更高';
+      this.updateAppointInfo(appointArr, otherAppointInfo, 2, rejectReason);
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '点击同意后，其他同一时间段的预约申请将会被设置为不同意',
+        success: res => {
+          if (res.confirm) {
+            // 确定同意当前的预预约申请
+            // 先存储其他预约申请的关键信息
+            let otherAppointInfo = JSON.parse(JSON.stringify(detail));
+            // 用一个字段去标识当前项是预约通过的
+            otherAppointInfo = otherAppointInfo.map((itm, idx) => {
+              if (index === idx) {
+                itm.choosed = true;
+              } else {
+                itm.choosed = false;
               }
-            })
-            console.log(userAppointInfo[i].appointArr);
-            // 更新用户的预约表
-            this.updateUserAppointInfo(item.openid, userAppointInfo[i].appointArr);
+              return itm;
+            });
+            detail = JSON.parse(JSON.stringify(detail[index]));
+            appointArr[currentIndex].detail = detail;
+            appointArr[currentIndex].status = '已预约';
+            // 更新用户预约信息和会议室预约信息
+            let rejectReason = '其他预约申请的优先级更高';
+            this.updateAppointInfo(appointArr, otherAppointInfo, 2, rejectReason);
+          }
+          if (res.cancel) {
+            return;
           }
         }
-        item.isban = true;
-        // 更新 dateAppointedList
-        console.log(dateAppointedList);
-        console.log(item);
-        // console.log(current);
-        dateAppointedList.forEach(_item => {
-          console.log(_item);
-          if (_item.date === currentDate) {
-            if (currentStartTime === _item.appointArr[currentIndex].time.startTime) {
-              _item.appointArr[currentIndex].detail = item;
-              _item.appointArr[currentIndex].status = '已预约';
-              return _item;
-            }
-          }
-        })
-        console.log(dateAppointedList);
-        return item
-      } else {
-        // 获取申请人的预约表，修改其状态
-        for (let i = 0; i < userAppointInfo.length; i++) {
-          if (userAppointInfo[i].openid === item.openid) {
-            // 修改状态为不通过
-            userAppointInfo[i].appointArr.forEach(items => {
-              if (items.applyTime !== e.currentTarget.dataset.item.applyTime) {
-                console.log(items.applyTime);
-                console.log(e.currentTarget.dataset.item.applyTime);
-                items.isAgree = 1;
-                return items;
-              }
-            })
-            console.log(userAppointInfo[i].appointArr);
-            // 更新用户的预约表
-            this.updateUserAppointInfo(item.openid, userAppointInfo[i].appointArr);
-          }
-        }
-        // detailAppointed = item;
-        // 更新 dateAppointedList
-        console.log(dateAppointedList);
-        console.log(item);
-        // console.log(current);
-        dateAppointedList.forEach(_item => {
-          console.log(_item);
-          if (_item.date === currentDate) {
-            if (currentStartTime === _item.appointArr[currentIndex].time.startTime) {
-              _item.appointArr[currentIndex].detail = item;
-              _item.appointArr[currentIndex].status = '已预约';
-              return _item;
-            }
-          }
-        })
-        console.log(dateAppointedList);
-      }
-    })
-    console.log(userAppointInfo);
-    // 将不同意的申请隐藏
-    // 重新将 detail 写回data中
-    this.setData({
-      detail,
-      dateAppointedList,
-      userAppointInfo
-    })
-    this.updateRoomAppointInfo(currentRoomid, dateAppointedList);
-    // 同意之后直接跳回教室详情页
-
+      })
+    }
   },
 
-  // 更新用户的预约表（传入openid）
-  updateUserAppointInfo(openid, appointArr) {
-    wx.cloud.callFunction({
-        name: 'updateUserAppointInfo',
-        data: {
-          openid,
-          appointArr
-        }
-      })
-      .then(res => {
-        // wx.hideLoading();
-        console.log(res);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  },
-
-  // roomAppointInfo 数据表更新操作
-  updateRoomAppointInfo(roomid, dateAppointInfo) {
+  // 更新 roomAppointInfo 和 userAppointInfo 
+  updateAppointInfo(appointArr, otherAppointInfo, page, rejectReason) {
     let {
-      current
+      currentRoomid,
+      timeStamp,
+      current,
+      currentIndex,
+      detail
     } = this.data;
-    wx.cloud.callFunction({
-        name: 'updateRoomAppointInfo',
+    wx.showToast({
+      title: '数据更新中',
+      icon: 'loading',
+      mask: true,
+      duration: 3000,
+    })
+    // 创建 promise 数组
+    const p_arr = [];
+    console.log("appointArr: ", appointArr);
+    let p1 = wx.cloud.database().collection('roomAppointInfo')
+      .where({
+        roomid: currentRoomid,
+        date: timeStamp * 1,
+      })
+      .update({
         data: {
-          roomid,
-          dateAppointInfo
+          appointArr,
         }
       })
-      .then(res => {
-        wx.hideLoading();
-        console.log(res);
-        // 应该等数据更新成功后再跳转
-        // 将当前教室的roomid传回去
-        wx.navigateBack({
-          url: '/pages/roomDetail2/roomDetail2?roomid=' + roomid + '&current=' + current,
-        })
-      })
+    p_arr.push(p1);
+    otherAppointInfo.forEach(item => {
+      console.log('item: ', item);
+      // 先判断当前预约是否已经被处理过，即看 isban 字段
+      // 如果被处理过，则不处理了
+      // if (item.choosed) {
+      //   // 说明当前的申请是给予通过的
+      // }
+      if (!item.isban) {
+        let p = null;
+        if (item.choosed) {
+          p = wx.cloud.database().collection('userAppointInfo')
+            .where({
+              openid: item.openid,
+              createTime: item.createTime,
+            })
+            .update({
+              data: {
+                isAgree: 1,
+                handleTime: new Date().getTime(),
+              }
+            });
+        } else {
+          p = wx.cloud.database().collection('userAppointInfo')
+            .where({
+              openid: item.openid,
+              createTime: item.createTime,
+            })
+            .update({
+              data: {
+                isAgree: -1,
+                handleTime: new Date().getTime(),  // 管理员处理时间
+                rejectReason,
+              }
+            });
+        }
+        p_arr.push(p);
+      }
+
+    })
+    console.log('p_arr: ', p_arr);
+    // 发请求
+    Promise.all(p_arr).then(res => {
+      console.log(res);
+      wx.hideToast();
+      wx.showToast({
+        title: '数据更新成功',
+        icon: 'success',
+        duration: 500,
+      });
+      setTimeout(() => {
+        if (page === 2) {
+          wx.navigateBack({
+            url: '/pages/roomDetail2/roomDetail2?roomid=' + currentRoomid + '&current=' + current,
+          })
+        } else {
+          // 重新加载页面
+          this.getAppointInfo(currentRoomid, timeStamp, currentIndex, detail);
+        }
+
+      }, 500);
+
+    })
       .catch(err => {
+        wx.hideToast();
+        wx.showModal({
+          title: '提示',
+          content: '数据更新失败，请重新尝试',
+        })
         console.log(err);
       })
   },
 
   // 点击查看更多按钮
-  handleShowMore() {
-    let {showMore} = this.data;
+  handleShowMore(e) {
+    let { detail } = this.data;
+    // 获取当前索引
+    let { index } = e.currentTarget.dataset;
+    // 动态修改 css 样式
+    // if (!detail[index].showMore) {
+    // }
+    detail[index].showMore = !detail[index].showMore;
     console.log("用户点击了查看更多按钮")
     this.setData({
-      showMore: !showMore,
+      detail,
     })
   },
   /**
