@@ -291,7 +291,7 @@ Page({
       } else {
         // 把所有预约信息加入到 map 中
         appointedList.forEach(item => {
-          map.set(item.roomid, item);
+          map.set(item.roomid * 1, item);
         })
 
         // 开始匹配会议室，看是否有已经安排的预约
@@ -299,6 +299,7 @@ Page({
           if (map.has(item.roomid)) {
             // 查看当前时间段是否有安排
             item.currentStatus = map.get(item.roomid).appointArr[timeCodeIndex].status;
+            item.detail = map.get(item.roomid).appointArr[timeCodeIndex].detail;
           } else {
             item.currentStatus = '空闲';
           }
@@ -313,77 +314,6 @@ Page({
       wx.hideToast();
       console.log(err);
     })
-    // roomInfo.forEach(item => {
-    //   if (chooseRoomType === item.roomType) {
-    //     console.log(item.roomType);
-    //     for (let i = 0; i < roomAppointInfo.length; i++) {
-    //       if (roomAppointInfo[i].roomid * 1 === item.roomid * 1) {
-    //         console.log(item.roomid);
-    //         if (roomAppointInfo[i].dateAppointInfo.length === 0) {
-    //           // 说明都有空，都可以预约
-    //           // 看人数符不符合要求
-    //           console.log(item.roomPeople);
-    //           if (roomPeople !== '' && item.roomPeople * 1 >= roomPeople * 1) {
-    //             item['currentStatus'] = '空闲';
-    //             result.push(item);
-    //             console.log(result);
-    //           } else {
-    //             if (roomPeople === '') {
-    //               item['currentStatus'] = '空闲';
-    //               result.push(item);
-    //               console.log(result);
-    //             }
-    //           }
-    //         } else {
-    //           // 搜索日期，
-    //           let hasDay = false;
-    //           roomAppointInfo[i].dateAppointInfo.forEach(item1 => {
-    //             if (item1.date === chooseDate) {
-    //               hasDay = true;
-    //               // 如果当前日期有安排，则再查看相应的时间段的状态
-    //               item1.appointArr.forEach(item2 => {
-    //                 let time = item2.time.startTime + '-' + item2.time.endTime;
-    //                 if (time === chooseTime) {
-    //                   // 再看人数是否合适
-    //                   if (roomPeople !== '' && item.roomPeople * 1 >= roomPeople * 1) {
-    //                     console.log(roomPeople);
-    //                     console.log(item.roomPeople);
-    //                     item['currentStatus'] = '空闲';
-    //                     result.push(item);
-    //                     console.log(result);
-    //                   } else {
-    //                     if (roomPeople === '') {
-    //                       item['currentStatus'] = '空闲';
-    //                       result.push(item);
-    //                       console.log(result);
-    //                     }
-    //                   }
-    //                 }
-    //               })
-    //             }
-    //           })
-    //           // 遍历完之后仍然找不到对应的日期
-    //           if (!hasDay) {
-    //             // 再判断一次人数是否够
-    //             if (roomPeople !== '' && item.roomPeople * 1 >= roomPeople * 1) {
-    //               console.log(roomPeople);
-    //               console.log(item.roomPeople);
-    //               item['currentStatus'] = '空闲';
-    //               result.push(item);
-    //               console.log(result);
-    //             } else {
-    //               if (roomPeople === '') {
-    //                 item['currentStatus'] = '空闲';
-    //                 result.push(item);
-    //                 console.log(result);
-    //               }
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    // });
     this.setData({
       result
     })

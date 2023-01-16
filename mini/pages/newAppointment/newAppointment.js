@@ -319,6 +319,7 @@ Page({
     })
     if (app.globalData.isAdmin) {
       defaultAppoint[currentIndex].status = '已预约';
+      defaultAppoint[currentIndex].detail = defaultAppoint[currentIndex].detail[0];
     } else {
       defaultAppoint[currentIndex].status = '空闲';
     }

@@ -338,6 +338,30 @@ Page({
         } else {
           item['isban'] = false;
         }
+        // 判断当前时间段中是否有待处理的预约申请，【小红点功能】
+        if (item.status === '空闲') {
+          let len = item.detail.length;
+          if (len === 0) {
+            item.hasDealAll = true;
+          } else {
+            let count = 0;
+            item.detail.forEach(i => {
+              // 如果当前预约申请条例中的 isban 字段为 true，
+              // 则说明当前的预约申请已经被处理过了（可能通过，也可能不通过，这里不需要知道是否通过，只需要知道是否被审核过即可）
+              if (i.isban) {
+                count++;
+              }
+            });
+            if (count === len) {
+              // 说明都处理过了
+              item.hasDealAll = true;
+            } else {
+              item.hasDealAll = false;
+            }
+          }
+        } else {
+          item.hasDealAll = true;
+        }
         item['isAppointed'] = true;  // 标记当前日期是否是数据库中已经预约过的
         return item;
       })
@@ -349,69 +373,6 @@ Page({
       // 否则使用默认的日期安排
       this.initDefaultAppoint(current);
     }
-
-
-    /*********  以下为旧代码  ********/
-    /* // console.log(dateAppointedList.length);
-    let currentDate = dateList[0].date.split(" ")[0];
-    let currentHour = new Date().getHours();
-    // 判断安排的日期的长度
-    if (dateAppointedList.length === 0) {
-      dateList.forEach(item => {
-        item['appointArr'] = [];
-        return item;
-      })
-    } else if (dateAppointedList.length > 0) {
-      // 如果安排的日期数 < 7，将导航栏中的日期与安排的日期进行逐一匹配
-      dateList.forEach((item, index) => {
-        // 拆分日期
-        let flag = false; // 标志位
-        let date = item.date.split(' ')[0];
-        for (let i = 0; i < dateAppointedList.length; i++) {
-          if (dateAppointedList[i].date === date) {
-            // 再判断当前日期是否有安排
-            if (dateAppointedList[i].appointArr.length) {
-              // 将当前日期的安排加入到 dateList 中
-              if (dateAppointedList[i].date === currentDate) {
-                dateAppointedList[i].appointArr.forEach(item1 => {
-                  if (item1.status === '空闲' && item1.time.endTime.split(":")[0] * 1 <= currentHour) {
-                    // 显示不可预约
-                    console.log("不可预约");
-                    item1['isban'] = true;
-                    return item1;
-                  }
-                })
-              }
-              item['appointArr'] = dateAppointedList[i].appointArr;
-              flag = true;
-              break;
-            }
-          }
-        }
-        if (flag) {
-          console.log(date + "有安排");
-        } else {
-          item['appointArr'] = [];
-          console.log(date + "没有安排");
-        }
-      })
-    }
-    // 将 dateList 重新传回去
-    this.setData({
-      dateList
-    })
-
-    // 检查当前日期的安排是否是程序自动生成的
-    let {
-      current
-    } = this.data;
-    if (dateList[current].appointArr.length === 0) {
-      console.log("1");
-      this.setData({
-        disabled: true,
-      })
-    } */
-    /*********  以上为旧代码  ********/
   },
 
   // 初始化一个获取用户openid的函数
@@ -560,10 +521,11 @@ Page({
       isAdmin,
       first,
       currentRoomid,
+      defaultAppoint
     } = this.data;
     console.log(e);
     let isban = false;
-    let { item } = e.currentTarget.dataset;
+    let { item, index } = e.currentTarget.dataset;
     isban = item.isban;
     if (isban) {
       return;
@@ -661,7 +623,7 @@ Page({
       ], 250)
 
       // 获取数据
-      let appointDetail = dateList[current].appointArr[currentIndex].detail;
+      let appointDetail = defaultAppoint[index].detail;
       this.setData({
         appointDetail
       })

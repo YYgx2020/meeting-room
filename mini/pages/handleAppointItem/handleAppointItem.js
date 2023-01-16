@@ -178,6 +178,7 @@ Page({
     } = this.data;
 
     let { index, item } = e.currentTarget.dataset;
+    // 如果 isban === true，就说明已经处理过了
     if (item.isban) {
       return
     }

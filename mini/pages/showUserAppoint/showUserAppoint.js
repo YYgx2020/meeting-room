@@ -131,7 +131,7 @@ Page({
         this.getUserAppointInfo(0);
         break;
       case 1:
-        this.getUserAppointInfo(2);
+        this.getUserAppointInfo(1);
         break;
       case 2:
         this.getUserAppointInfo(-1);

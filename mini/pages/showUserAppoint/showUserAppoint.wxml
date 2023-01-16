@@ -29,8 +29,8 @@
         <!-- 预约状态 -->
         <view class="status">
           <text wx:if="{{item1.isAgree === 0}}" class="audit">待审核</text>
-          <text wx:if="{{item1.isAgree === 1}}" class="disagree">预约失败</text>
-          <text wx:if="{{item1.isAgree === 2}}" class="agree">预约成功</text>
+          <text wx:if="{{item1.isAgree === -1}}" class="disagree">预约失败</text>
+          <text wx:if="{{item1.isAgree === 1}}" class="agree">预约成功</text>
         </view>
         <!-- 预约教室 -->
         <view class="roomid">
@@ -76,8 +76,8 @@
               <!-- 预约状态 -->
               <view class="status">
                 <text wx:if="{{item1.isAgree === 0}}" class="audit">待审核</text>
-                <text wx:if="{{item1.isAgree === 1}}" class="disagree">预约失败</text>
-                <text wx:if="{{item1.isAgree === 2}}" class="agree">预约成功</text>
+                <text wx:if="{{item1.isAgree === -1}}" class="disagree">预约失败</text>
+                <text wx:if="{{item1.isAgree === 1}}" class="agree">预约成功</text>
               </view>
               <!-- 预约教室 -->
               <view class="roomid">

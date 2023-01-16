@@ -51,7 +51,7 @@
                 </view>
                 <!-- 加一个有预约待处理的提示 -->
                 <view class="toBeProcessed"
-                  wx:if="{{items.detail.length !== 0 && items.status === '空闲' && isAdmin && !items.isban}}">
+                  wx:if="{{items.detail.length !== 0 && items.status === '空闲' && !items.hasDealAll && isAdmin && !items.isban}}">
                 </view>
                 <text wx:if="{{items.status === '空闲'}}" class="toRightIcon iconfont icon-xiangyou"></text>
               </view>
