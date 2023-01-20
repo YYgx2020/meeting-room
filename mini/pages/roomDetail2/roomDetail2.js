@@ -461,7 +461,7 @@ Page({
     if (isAdmin) {
       console.log("当前用户是管理员");
       wx.navigateTo({
-        url: '/pages/addRoom/addRoom?roomid=' + currentRoomid,
+        url: '/pages/addRoom/addRoom?roomid=' + currentRoomid + '&fun=update',
       })
     } else {
       console.log("当前用户不是管理员");

@@ -4,7 +4,9 @@
   <view class="headerMsg">
     <text class="headTitle">新增教室</text>
     <text class="headContent">您可以在这里新增一个教室的信息
-      Tip: <text class="xing">*</text> 为必填项</text>
+      Tip: 
+      1.<text class="xing">*</text> 为必填项;
+      <text style="font-size: 30rpx; font-wight: bold; color: red;">2.会议室编号一旦输入并提交成功，则不予修改;</text></text>
   </view>
   <!-- 表单区域 -->
   <view class="form">
@@ -26,7 +28,7 @@
       <text class="imporant">*</text>
       <text class="roomIdTip">编号</text>
       <input type="text" placeholder="请填写教室的编号" placeholder-class="placeholder" bindblur="getRoomid" maxlength="10"
-        value="{{roomidValue}}" />
+        value="{{roomidValue}}" disabled="{{disableRoomidInput}}"/>
     </view>
     <!-- 名称 -->
     <view class="roomNameFrom">
@@ -64,7 +66,7 @@
       <text class="imporant">*</text>
       <text class="roomPeopleTip">人数</text>
       <input type="text" placeholder="请填写教室可容纳的人数" placeholder-class="placeholder" bindblur="getRoomPeople"
-        maxlength="3" value="{{roomPeopleTipValue}}" />
+        maxlength="3" value="{{roomPeople}}" />
     </view>
     <!-- 简介 -->
     <view class="briefIntroductionForm">

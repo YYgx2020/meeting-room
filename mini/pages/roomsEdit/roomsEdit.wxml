@@ -32,7 +32,7 @@
       refresher-default-style="black" refresher-background="#ededed" refresher-triggered="{{triggered}}"
       bindrefresherpulling="onPulling" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore"
       bindrefresherabort="onAbort">
-      <view class="item {{item.isTouchMove ? 'touch-move-active' : ''}}" wx:for="{{roomInfo}}" wx:key="fileID">
+      <view class="item {{item.isTouchMove ? 'touch-move-active' : ''}} {{index === roomInfo.length - 1 ? '' : 'separator'}}" wx:for="{{roomInfo}}" wx:key="fileID">
         <view hover-class="btn-hover" class="roomItem" wx:if="{{item.isShow}}" data-index="{{index}}" data-roomid="{{item.roomid}}"
           bindtap="handleRoomEdit" bindtouchstart="touchStart" bindtouchend="touchEnd">
           <view class="roomCoverImg">

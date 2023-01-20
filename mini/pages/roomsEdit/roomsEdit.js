@@ -472,7 +472,7 @@ Page({
   handleAddRoom(e) {
     // 获取当前 room 的编号
     wx.navigateTo({
-      url: '/pages/addRoom/addRoom',
+      url: '/pages/addRoom/addRoom' + '?fun=add',
     })
     // 跳转后将当前的roomInfo数据存至全局，供下一个页面使用
     app.globalData.roomInfo = this.data.roomInfo;

@@ -37,141 +37,217 @@ Page({
     briefText: '', // 简介信息
     fileID: '', // 图片 fileID
     tempFilePaths: '', // 展示的图片链接
+    disableRoomidInput: false,  // 是否禁用会议室编号的输入，当前设置会议室编号不可变，故不给修改
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    if (Object.keys(options).length === 0) {
-      // 当前是从教室列表页跳转过来的
+    console.log(options);
+    let fun = options.fun;
+    if (options.fun === 'add') {
+      // 当前是从教室列表页跳转过来的，增加会议室
       console.log("当前是从教室列表页跳转过来的");
     } else {
+      // 更新会议室信息
       console.log(options.roomid);
       this.setData({
-        currentRoomid: options.roomid,
+        currentRoomid: options.roomid * 1,
       })
+      // 发请求获取教室信息并初始化
+      this.getRoomInfo(options.roomid * 1);
     }
-    console.log(options);
-    wx.showLoading({
-      title: '加载中',
+    this.setData({
+      fun,
     })
+    // wx.showLoading({
+    //   title: '加载中',
+    // })
     // 向数据库发送请求获取 roomInfo
-    this.getRoomInfo();
+    // this.getRoomInfo();
+  },
+
+  // 获取 roomInfo
+  getRoomInfo(roomid) {
+    // 向数据库发送请求获取会议室信息
+    wx.showToast({
+      title: '数据载入中',
+      icon: 'loading',
+      mask: true,
+      duration: 3000,
+    })
+    wx.cloud.database().collection('roomInfo')
+      .where({
+        roomid,
+      })
+      .get()
+      .then(res => {
+        console.log(res);
+        wx.hideToast();
+        const roomInfo = res.data[0];
+        // 开始初始化数据
+        this.init(roomInfo);
+      })
+      .catch(err => {
+        wx.hideToast();
+        wx.showModal({
+          title: '提示',
+          content: '数据载入失败，请退出重试'
+        })
+        console.log(err);
+      })
   },
 
   // 如果携带了 roomid 则初始化页面
-  init() {
-    let {
-      currentRoomid,
-      roomType
-    } = this.data;
-    if (currentRoomid === '') {
-      return
-    } else {
-      console.log("1");
-      // 填充页面数据
-      let {
-        roomInfo
-      } = this.data;
-      console.log(this.data);
-      let currentRoomInfo = [];
-      console.log(roomInfo);
-      for (let i = 0; i < roomInfo.length; i++) {
-        if (roomInfo[i].roomid + '' === currentRoomid) {
-          currentRoomInfo = roomInfo[i];
-          break
-        }
+  init(roomInfo) {
+    let { roomType } = this.data;
+    // 匹配当前教室的类型
+    for (let i = 0; i < roomType.length; i++) {
+      if (roomInfo.roomType === roomType[i]) {
+        console.log(i);
+        this.setData({
+          roomTypeCodeIndex: i,
+        })
       }
-      console.log(currentRoomInfo);
-      // 匹配当前教室的类型
-      for (let i = 0; i < roomType.length; i++) {
-        if (currentRoomInfo.roomType === roomType[i]) {
-          console.log(i);
-          this.setData({
-            roomTypeCodeIndex: i,
-          })
-        }
-      }
-      // 获取教室的封面
-      wx.cloud.getTempFileURL({
-          fileList: [{
-            fileID: currentRoomInfo.fileID,
-          }]
-        })
-        .then(res => {
-          console.log(res.fileList);
-          this.setData({
-            tempFilePaths: res.fileList[0].tempFileURL,
-            roomPeopleTipValue: currentRoomInfo.roomPeople,
-            roomidValue: currentRoomInfo.roomid,
-            roomid: currentRoomInfo.roomid + '',
-            roomNameValue: currentRoomInfo.roomName,
-            roomName: currentRoomInfo.roomName,
-            roomContactNameValue: currentRoomInfo.roomContactName,
-            roomContactName: currentRoomInfo.roomContactName,
-            roomContactPhoneValue: currentRoomInfo.roomContactPhone,
-            roomContactPhone: currentRoomInfo.roomContactPhone,
-            briefIntroductionValue: currentRoomInfo.roomBriefInfo,
-            briefText: currentRoomInfo.roomBriefInfo,
-          })
-        })
-        .catch(err => {
-          console.log(err);
-        })
-
-
-
     }
+
+    // 更新页面数据
+    this.setData({
+      tempFilePaths: roomInfo.roomCoverImg,
+      roomCoverImg: roomInfo.roomCoverImg,
+      roomPeople: roomInfo.roomPeople,
+      roomidValue: roomInfo.roomid,
+      roomid: roomInfo.roomid + '',
+      roomNameValue: roomInfo.roomName,
+      roomName: roomInfo.roomName,
+      roomContactNameValue: roomInfo.roomContactName,
+      roomContactName: roomInfo.roomContactName,
+      roomContactPhoneValue: roomInfo.roomContactPhone,
+      roomContactPhone: roomInfo.roomContactPhone,
+      briefIntroductionValue: roomInfo.roomBriefInfo,
+      briefText: roomInfo.roomBriefInfo,
+      disableRoomidInput: true,
+    })
   },
 
   // 上传图片功能
   handleChooseImage() {
     let that = this;
-    let timestamp = (new Date()).valueOf();
+    // let _tempFilePaths = this.data.tempFilePaths;
+    // this.setData({
+    //   tempFilePaths: '',
+    //   _tempFilePaths,
+    // })
+    let { fun, roomid, } = this.data;
+    // let timestamp = (new Date()).valueOf();
     wx.chooseImage({
       count: 1, // 默认为9
       sizeType: ['original'], // 指定原图或者压缩图
       sourceType: ['album'], // 指定图片来源
       success: chooseResult => {
+        console.log(chooseResult);
         let tempFilePaths = chooseResult.tempFilePaths[0];
-        this.setData({
-          tempFilePaths,
-        })
+        // let tempFilePaths = null;
+        let timestamp = null;
+        // 查看当前页面是要增加新页面还是更新
+        if (fun === 'add') {
+          // tempFilePaths = chooseResult.tempFilePaths[0];
+          // 使用时间戳作为图片的标识
+          timestamp = new Date().getTime();
+        } else {
+          // 更新图片
+          let roomCoverImg = this.data.tempFilePaths;
+          timestamp = roomCoverImg.split('roomCoverImage/')[1].split('.')[0];
+        }
+        // 上传图片到云存储中
+        this.uploadCoverImg(timestamp, tempFilePaths);
+        
+      },
+      fail: err => {
+        console.log(err);
       }
     })
   },
 
-  // 获取 roomInfo
-  getRoomInfo() {
-    // 向数据库请求 roomInfo
-    wx.cloud.callFunction({
-        name: 'getRoomInfo',
-      })
-      .then(res => {
-        wx.hideLoading();
-        console.log(res);
-        this.setData({
-          roomInfo: res.result.data
+  // 上传图片
+  uploadCoverImg(timestamp, tempFilePaths) {
+    wx.showToast({
+      title: '图片上传中',
+      icon: 'loading',
+      mask: true,
+      duration: 3000,
+    })
+    // 将图片上传至云存储空间
+    wx.cloud.uploadFile({
+      // 指定上传到的云路径
+      cloudPath: 'roomCoverImage/' + timestamp + '.png',
+      // 指定要上传的文件的小程序临时文件路径
+      filePath: tempFilePaths,
+      // 成功回调
+      success: res1 => {
+        console.log("上传成功", res1);
+        // 获取图片的url
+        if (res1.fileID) {
+          console.log(res1.fileID);
+          wx.cloud.getTempFileURL({
+            fileList: [{
+              fileID: res1.fileID,
+            }]
+          })
+            .then(res3 => {
+              wx.hideToast();
+              wx.showToast({
+                title: '图片上传成功',
+                icon: 'success',
+              })
+              console.log(res3.fileList);
+              let roomCoverImg = res3.fileList[0].tempFileURL;
+              this.setData({
+                fileID: res1.fileID,
+                roomCoverImg,
+                tempFilePaths,
+              })
+              // setTimeout(() => {
+              //   this.setData({
+              //     fileID: res1.fileID,
+              //     roomCoverImg,
+              //     tempFilePaths: roomCoverImg,
+              //   })
+              // }, 5000)
+            })
+            .catch(err => {
+              wx.hideToast();
+              wx.showToast({
+                title: '图片上传失败',
+                icon: 'error',
+              })
+              console.log(err);
+            })
+        }
+      },
+      fail: err1 => {
+        wx.hideToast();
+        wx.showToast({
+          title: '图片上传失败',
+          icon: 'error',
         })
-        // 初始化页面数据
-        this.init();
-      })
-      .catch(err => {
-        console.log(err);
-      })
+        console.log(err1);
+      }
+
+    })
   },
 
   // 获取用户输入的 room 编号
   getRoomid(e) {
     console.log(e);
     this.setData({
-      roomid: e.detail.value
+      roomid: e.detail.value,
     })
     // 上传图片
-    if (e.detail.value) {
-      this.uploadCoverImg();
-    }
+    // if (e.detail.value) {
+    //   this.uploadCoverImg();
+    // }
   },
 
   // 获取用户输入的 room 名称
@@ -274,7 +350,7 @@ Page({
       roomContactName,
       roomContactPhone,
       roomTypeChoose,
-      briefText,
+      briefText,  // 会议室信息不需要检查，可以为空
       roomPeople,
       phoneError
     } = this.data;
@@ -332,55 +408,11 @@ Page({
           }
         })
       } else {
-        // 如果都填了，那也要查询
+        // 如果都填了，则开始进行数据上传的操作
         console.log(1);
         this.formConfirm();
         // 
       }
-    }
-  },
-
-  // 上传图片
-  uploadCoverImg() {
-    let {
-      roomid,
-      tempFilePaths
-    } = this.data;
-    if (tempFilePaths === '') {
-      // 用户没有上传图片
-      return
-    } else {
-      // 将图片上传至云存储空间
-      wx.cloud.uploadFile({
-        // 指定上传到的云路径
-        cloudPath: 'roomCoverImage/' + roomid + '.png',
-        // 指定要上传的文件的小程序临时文件路径
-        filePath: tempFilePaths,
-        // 成功回调
-        success: res1 => {
-          console.log("上传成功", res1);
-          // 获取图片的url
-          if (res1.fileID) {
-            console.log(res1.fileID);
-            wx.cloud.getTempFileURL({
-                fileList: [{
-                  fileID: res1.fileID,
-                }]
-              })
-              .then(res3 => {
-                console.log(res3.fileList);
-                let roomCoverImg = res3.fileList[0].tempFileURL;
-                this.setData({
-                  fileID: res1.fileID,
-                  roomCoverImg,
-                })
-              })
-              .catch(err => {
-                console.log(err);
-              })
-          }
-        }
-      })
     }
   },
 
@@ -397,103 +429,156 @@ Page({
       briefText,
       roomInfo,
       currentRoomid,
-      roomCoverImg
+      roomCoverImg,
+      fun,
     } = this.data;
-    let roomidExist = false;
     // 1. 先判断是否存在当前room，如果存在，则提示管理员是否要更新该room的信息
-
+    console.log("briefText: ", briefText);
     console.log(typeof roomid);
-    for (let i = 0; i < roomInfo.length; i++) {
-      if (roomid === (roomInfo[i].roomid + '')) {
-        // 更新单条数据
-        roomInfo[i].roomPeople = roomPeople;
-        roomInfo[i].fileID = fileID;
-        roomInfo[i].roomName = roomName;
-        roomInfo[i].roomContactName = roomContactName;
-        roomInfo[i].roomContactPhone = roomContactPhone;
-        roomInfo[i].roomType = roomTypeChoose;
-        roomInfo[i].roomBriefText = briefText;
-        roomInfo[i].roomCoverImg = roomCoverImg;
-        // 如果是从教室详情页跳转过来的，则直接问管理员确定是否要更新数据，无需再提示教室已经存在
-        if (currentRoomid !== '') {
-          console.log("1");
-          wx.showModal({
-            title: '提示',
-            content: '确定要更新当前教室的信息吗',
-            success: res => {
-              if (res.confirm) {
-                console.log("确定要更新");
-                console.log("用户想要更新当前教室的信息");
-                console.log(roomInfo[i]);
-                // 2. 把管理员填写的数据更新到数据库中
-                wx.showLoading({
-                  title: '上传中',
-                })
-                this.updateRoomInfo(roomInfo[i]);
-              } else if (res.cancel) {
-                console.log("用户取消更新");
-              }
-            }
-          })
-        } else {
-          console.log(1);
-          wx.showModal({
-            title: '提示',
-            content: '当前教室已经存在，确定要更新当前教室的信息吗',
-            success: res => {
-              if (res.confirm) {
-                console.log("确定要更新");
-                console.log("用户想要更新当前教室的信息");
-                console.log(roomInfo[i]);
-                // 2. 把管理员填写的数据更新到数据库中
-                wx.showLoading({
-                  title: '上传中',
-                })
-                this.updateRoomInfo(roomInfo[i]);
-              } else if (res.cancel) {
-                console.log("用户取消更新");
-              }
-            }
-          })
-        }
-
-        roomidExist = true;
-        break
-      }
-    }
-
-    // 遍历完之后查看 roomid 是否存在的标志，不存在则向数据库中的roomInfo表新增一个room的信息
-    if (!roomidExist) {
-      // 插入一条 room 数据
-      const roomInfo = {
-        fileID: fileID,
-        roomPeople: roomPeople,
-        roomid: roomid * 1,
-        roomName: roomName,
-        roomContactName: roomContactName,
-        roomContactPhone: roomContactPhone * 1,
-        roomType: roomTypeChoose,
-        roomBriefInfo: briefText,
-        roomCoverImg: roomCoverImg,
-      };
-      // 询问管理员是否确定提交
-      wx.showModal({
-        title: '提示',
-        content: '确认提交吗',
-        success: res => {
-          if (res.confirm) {
-            wx.showLoading({
-              title: '上传中',
-            })
-            this.addRoomInfo(roomInfo);
-          } else if (res.cancel) {
-            return
-          }
-        }
+    // 如果是更新则先去数据库查找，看当前
+    // 先看是要更新还是增加
+    if (fun === 'update') {
+      // 更新数据
+      wx.showToast({
+        title: '数据更新中',
+        icon: 'loading',
+        duration: 3000,
+        mask: true,
       })
+      wx.cloud.database().collection('roomInfo')
+        .where({
+          roomid: roomid * 1,
+        })
+        .update({
+          data: {
+            fileID,
+            roomPeople,
+            roomCoverImg,
+            roomType: roomTypeChoose,
+            roomName,
+            roomContactPhone,
+            roomContactName,
+            roomBriefInfo: briefText,
+          }
+        })
+        .then(res => {
+          console.log(res);
+          wx.hideToast();
+          wx.showToast({
+            title: '更新成功',
+            icon: 'success',
+          })
+          setTimeout(() => {
+            // 跳转回room列表页面
+            wx.navigateBack({
+              url: '/pages/roomsEdit/roomsEdit',
+            })
+          }, 500)
+        })
+        .catch(err => {
+          console.log(err);
+          wx.hideToast();
+          wx.showModal({
+            title: '提示',
+            content: '数据上传失败，请重新尝试提交',
+          })
+        })
+    } else {
+      // 添加新的一条记录
+      // 先看当前会议室是否已经添加，如果有，则不给添加
+      wx.showToast({
+        title: '正在上传数据',
+        icon: 'loading',
+        duration: 3000,
+        mask: true,
+      })
+      wx.cloud.database().collection('roomInfo')
+        .where({
+          roomid: roomid * 1,
+        })
+        .get()
+        .then(res => {
+          if (res.data.length !== 1) {
+            // 说明没有当前会议室的记录，增加一条新的纪录
+            wx.cloud.database().collection('roomInfo')
+              .add({
+                data: {
+                  fileID,
+                  roomPeople,
+                  roomCoverImg,
+                  roomType: roomTypeChoose,
+                  roomName,
+                  roomContactPhone,
+                  roomContactName,
+                  roomBriefInfo: briefText,
+                  roomid: roomid * 1,
+                }
+              })
+              .then(res1 => {
+                console.log(res1);
+                wx.showToast({
+                  title: '添加成功',
+                  icon: 'success',
+                });
+                setTimeout(() => {
+                  // 跳转回room列表页面
+                  wx.navigateBack({
+                    url: '/pages/roomsEdit/roomsEdit',
+                  })
+                }, 500);
+              })
+              .catch(err1 => {
+                console.log(err1);
+                wx.hideToast();
+                wx.showModal({
+                  title: '提示',
+                  content: '数据上传失败，请重新尝试提交',
+                })
+              })
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          wx.hideToast();
+          wx.showModal({
+            title: '提示',
+            content: '数据上传失败，请重新尝试提交',
+          })
+        })
     }
 
-    this.getDateAppointList(roomid);
+    // // 遍历完之后查看 roomid 是否存在的标志，不存在则向数据库中的roomInfo表新增一个room的信息
+    // if (!roomidExist) {
+    //   // 插入一条 room 数据
+    //   const roomInfo = {
+    //     fileID: fileID,
+    //     roomPeople: roomPeople,
+    //     roomid: roomid * 1,
+    //     roomName: roomName,
+    //     roomContactName: roomContactName,
+    //     roomContactPhone: roomContactPhone * 1,
+    //     roomType: roomTypeChoose,
+    //     roomBriefInfo: briefText,
+    //     roomCoverImg: roomCoverImg,
+    //   };
+    //   // 询问管理员是否确定提交
+    //   wx.showModal({
+    //     title: '提示',
+    //     content: '确认提交吗',
+    //     success: res => {
+    //       if (res.confirm) {
+    //         wx.showLoading({
+    //           title: '上传中',
+    //         })
+    //         this.addRoomInfo(roomInfo);
+    //       } else if (res.cancel) {
+    //         return
+    //       }
+    //     }
+    //   })
+    // }
+
+    // this.getDateAppointList(roomid);
 
   },
 
@@ -525,11 +610,11 @@ Page({
   // roomAppointInfo 表新增操作
   addRoomAppointInfo(roomid) {
     wx.cloud.callFunction({
-        name: 'addRoomAppointInfo',
-        data: {
-          roomid
-        }
-      })
+      name: 'addRoomAppointInfo',
+      data: {
+        roomid
+      }
+    })
       .then(res => {
         console.log(res);
       })
@@ -545,18 +630,18 @@ Page({
     } = this.data;
     console.log(roomInfo);
     wx.cloud.callFunction({
-        name: 'updateRoomInfo',
-        data: {
-          fileID: roomInfo.fileID,
-          roomPeople: roomInfo.roomPeople,
-          roomid: roomInfo.roomid,
-          roomType: roomInfo.roomType,
-          roomName: roomInfo.roomName,
-          roomContactPhone: roomInfo.roomContactPhone,
-          roomContactName: roomInfo.roomContactName,
-          roomBriefInfo: roomInfo.roomBriefText,
-        }
-      })
+      name: 'updateRoomInfo',
+      data: {
+        fileID: roomInfo.fileID,
+        roomPeople: roomInfo.roomPeople,
+        roomid: roomInfo.roomid,
+        roomType: roomInfo.roomType,
+        roomName: roomInfo.roomName,
+        roomContactPhone: roomInfo.roomContactPhone,
+        roomContactName: roomInfo.roomContactName,
+        roomBriefInfo: roomInfo.roomBriefText,
+      }
+    })
       .then(res => {
         wx.hideLoading();
         console.log(res);
@@ -578,11 +663,11 @@ Page({
   // roomInfo数据表插入操作
   addRoomInfo(roomInfo) {
     wx.cloud.callFunction({
-        name: 'addRoomInfo',
-        data: {
-          roomInfo
-        }
-      })
+      name: 'addRoomInfo',
+      data: {
+        roomInfo
+      }
+    })
       .then(res => {
         wx.hideLoading();
         console.log(res);
