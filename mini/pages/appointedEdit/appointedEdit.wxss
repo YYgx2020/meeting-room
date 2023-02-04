@@ -56,6 +56,7 @@
   line-height: 80rpx;
   text-align: center;
   background: #ededed;
+  padding-top: 50rpx;
 }
 
 .noAppointed text {
@@ -106,6 +107,18 @@
 .agree {
   color: #07c160;
   font-weight: 700;
+}
+
+/* 审核状态 */
+.handleStatus {
+  position: absolute;
+  right: 30rpx;
+  top: 20rpx;
+}
+
+.handleStatus text {
+  font-size: 80rpx;
+  color: #e64340;
 }
 
 .item2 {
@@ -159,7 +172,7 @@
   height: 20rpx;
   line-height: 20rpx;
   text-align: center;
-  bottom: -50rpx;
+  top: 20rpx;
   right: 20rpx;
 }
 
@@ -213,4 +226,10 @@
   padding-right: 50rpx;
   /* text-align: center; */
   right: 0;
+}
+
+.space {
+  position: relative;
+  width: 100rpx;
+  height: 80rpx;
 }

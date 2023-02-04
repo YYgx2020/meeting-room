@@ -5,8 +5,7 @@
     <text class="headTitle">新增教室</text>
     <text class="headContent">您可以在这里新增一个教室的信息
       Tip: 
-      1.<text class="xing">*</text> 为必填项;
-      <text style="font-size: 30rpx; font-wight: bold; color: red;">2.会议室编号一旦输入并提交成功，则不予修改;</text></text>
+      1.<text class="xing">*</text> 为必填项;\n<text style="font-size: 30rpx; font-wight: bold; color: red;">2.会议室编号一旦输入并提交成功，则不予修改;</text></text>
   </view>
   <!-- 表单区域 -->
   <view class="form">

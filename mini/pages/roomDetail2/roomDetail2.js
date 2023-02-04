@@ -162,12 +162,14 @@ Page({
         }
         item['detail'] = [];
         item['isAppointed'] = false;
+        item.status = '空闲';
       })
     } else {
       defaultAppoint.forEach(item => {
         item['detail'] = [];
         item['isban'] = false;
         item['isAppointed'] = false;
+        item.status = '空闲';
       })
     }
     this.setData({
