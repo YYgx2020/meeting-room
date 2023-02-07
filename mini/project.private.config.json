@@ -120,6 +120,13 @@
           "pathName": "pages/jobFair/jobFair",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "测试页面",
+          "pathName": "pages/test/test",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

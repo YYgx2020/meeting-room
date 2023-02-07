@@ -47,6 +47,22 @@ Page({
     })
   },
 
+  // 测试发短信功能
+  sendSms() {
+    wx.cloud.callFunction({
+      name: "sendSms",    //这个名字要跟上传并部署的那个文件名一样
+      data: {
+        name: '15778003016',
+      }
+    })
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  },
+
 
   /**
    * 生命周期函数--监听页面初次渲染完成

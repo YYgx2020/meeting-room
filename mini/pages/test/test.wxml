@@ -2,4 +2,5 @@
 <view class="container">
   <text class="openidText">{{openid}}</text>
   <button data-openid="{{openid}}" bindtap="copyUserOpenid" type="primary">点击复制openid</button>
+  <button bindtap="sendSms" type="primary" style="margin-top: 80rpx;">发送短信功能</button>
 </view>

@@ -276,6 +276,7 @@ Page({
       // }
       if (!item.isban) {
         let p = null;
+        let p_message = null;
         if (item.choosed) {
           p = wx.cloud.database().collection('userAppointInfo')
             .where({
@@ -301,10 +302,16 @@ Page({
                 rejectReason,
               }
             });
+          // p_message = wx.cloud.callFunction({
+          //   name: "sendSms",    //这个名字要跟上传并部署的那个文件名一样
+          //   data: {
+          //     name: item.phone,
+          //   }
+          // })
         }
         p_arr.push(p);
+        // p_arr.push(p_message);
       }
-
     })
     console.log('p_arr: ', p_arr);
     // 发请求
@@ -321,6 +328,7 @@ Page({
       this.setData({
         everydayAppoint,
       })
+      // 发短信通过用户
       this.getRoomAppointInfo(current);
 
     })
