@@ -108,6 +108,7 @@ export default {
       每次登录时都去发一次请求获取 access_token，然后存入 cookie 中，时间间隔为 2 小时
     */
     loginEvent(formLabelAlign) {
+      console.log('测试自动化部署是否成功');
       console.log('点击了登录按钮');
       this.$refs[formLabelAlign].validate((valid) => {
         console.log(valid);

@@ -2,3 +2,5 @@
 mini/node_modules/
 会议记录
 meeting-admin/node_modules/
+meeting-admin/dist/
+meeting-admin/autoDeploy.js

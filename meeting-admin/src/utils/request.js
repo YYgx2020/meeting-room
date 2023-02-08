@@ -4,11 +4,8 @@ import { Notification } from 'element-ui';
 import store from '../store/index';
 import Cookies from 'js-cookie';
 
-// const baseURL = process.env.NODE_ENV === 'production' ? 'https://www.lianghongyi.com': '/api'
-// const baseURL = process.env.VUE_APP_URL
-
 let config = {
-  baseURL: '/api',
+  baseURL: '/api',  // 跨域匹配的路径，当发送请求遇到 /api 时就转发到微信的地址上，然后再拼接具体的路径
   timeout: 5000       //设置最大请求时间
 }
 

@@ -1,6 +1,6 @@
 import axios from "../utils/request";
 import Cookies from "js-cookie";
-import {env} from "@/utils/constant";
+import { env } from "@/utils/constant";
 
 // 从 cookie 中获取 access_token
 const access_token = Cookies.get('access_token');
@@ -26,10 +26,10 @@ export function getAccessToken(data) {
 // 登录验证
 /**
  * @name 登录验证
- * @param {string} access_token
- * @param {string} phone 
- * @param {string} password
- * @return {function}
+ * @param { string } access_token
+ * @param { string } phone 
+ * @param { string } password
+ * @return { axios }
  */
 
 export function loginAuth(access_token, phone, password) {
