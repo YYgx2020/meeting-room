@@ -142,6 +142,11 @@ export default {
                 const adminInfo = JSON.parse(res2.data.data[0]);
                 // 将用户信息存入 cookie 中
                 console.log(adminInfo);
+                Cookie.set('adminInfo', JSON.stringify(adminInfo));
+                // 跳转到首页
+                this.$router.replace({
+                  name: 'home',
+                });
                 
               } else {
                 this.$message.error('登录错误，请检查登录信息');
