@@ -1,3 +1,10 @@
+/*
+ * @Author: liangminqiang
+ * @Description: 
+ * @Date: 2023-03-15 13:05:14
+ * @LastEditTime: 2023-03-16 12:20:47
+ */
+
 import axios from "../utils/request";
 import Cookies from "js-cookie";
 import { env } from "@/utils/constant";
@@ -43,3 +50,76 @@ export function loginAuth(access_token, phone, password) {
     }
   })
 }
+
+export function getRoomInfo() {
+  return axios({
+    url: `/tcb/databasequery?access_token=${access_token}`,
+    method: 'post',
+    data: {
+      env,
+      query: `db.collection(\"roomInfo\").get()`,
+    }
+  })
+
+}
+  // cloud.database().collection('roomInfo')
+  //   .get()
+  export function getScount() {
+    return axios({
+      url: `/tcb/databasequery?access_token=${access_token}`,
+      method: 'post',
+      data: {
+        env,
+        query: `db.collection(\"studentInfo\").count()`,
+      }
+    })
+}
+
+export function getTcount() {
+  return axios({
+    url: `/tcb/databasequery?access_token=${access_token}`,
+    method: 'post',
+    data: {
+      env,
+      query: `db.collection(\"teacherInfo\").count()`,
+    }
+  })
+}
+
+export function getUserAppointInfo() {
+  return axios({
+    url: `/tcb/databasequery?access_token=${access_token}`,
+    method: 'post',
+    data: {
+      env,
+      query: `db.collection(\"userAppointInfo\").get()`,
+    }
+  })
+}
+  
+// export function getRoomInfo() {
+//   return axios({
+//     url: `/tcb/databasequery?access_token=${access_token}`,
+//     method: 'post',
+//     data: {
+//       env,
+//       query: `db.collection(\"roomInfo\").get()`,
+//     }
+//   })
+export function getRoomAppointInfo(time) {
+  return axios({
+    url: `/tcb/databasequery?access_token=${access_token}`,
+    method: 'post',
+    data: {
+      env,
+      query: `db.collection('roomAppointInfo')
+      .where({
+        date: ${time},
+      })
+      .get()`,
+    }
+  })
+}
+
+
+
