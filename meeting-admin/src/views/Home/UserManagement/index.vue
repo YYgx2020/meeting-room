@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-15 13:05:14
- * @LastEditTime: 2023-03-16 11:23:34
+ * @LastEditTime: 2023-03-16 21:46:09
 -->
 <template>
   <div class="handle-appoinement">
@@ -20,7 +20,7 @@
                     <!-- <china-tabs-table :toggleData="toggleData"></china-tabs-table> -->
                 </el-tab-pane>
                 <div style="minHeight:100%">
-                  <listItem :listData="list" :state="state"></listItem>
+                  <listItem :listData="list" :state1="state"></listItem>
 </div>
             </el-tabs>
 

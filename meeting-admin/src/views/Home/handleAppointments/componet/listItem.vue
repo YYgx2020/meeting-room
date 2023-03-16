@@ -6,7 +6,8 @@
 -->
 <template>
   <div class="container">
-    <el-table :data="tableData" style="width: 100%" align='center' max-height="400px">
+    <el-table v-loading="loading" element-loading-text="加载中，请稍后..." :data="tableData" style="width: 100%" align='center'
+      max-height="400px">
       <el-table-column label="序号" align='center' width="80">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
@@ -54,11 +55,11 @@ export default {
   data() {
     return {
       tableData: [],
+      loading: true,
     };
   },
 
   mounted() {
-    console.warn('jjjjjjjjjjjjjjjjjjjjjjjjjj');
     console.log(this.listData);
     this.initData()
 
@@ -74,8 +75,12 @@ export default {
   methods: {
     addroom() { },
     initData() {
+      this.loading = true
       this.tableData = [...this.listData]
       console.log(this.tableData);
+      setTimeout(() => {
+        this.loading = false
+      }, 1500);
     }
   },
 
@@ -111,4 +116,5 @@ export default {
 
 
 
-}</style>
+}
+</style>

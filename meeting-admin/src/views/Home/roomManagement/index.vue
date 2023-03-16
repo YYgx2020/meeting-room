@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
     <div class="head">
       <span class="time">3/15 周三</span>
       <span>教室列表</span>
@@ -28,24 +28,55 @@
       </div>
 
     </div>
+
+    <div>
+      <el-dialog @open="onOpen" @close="onClose" title="新增教室" :visible="isshow">
+        <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
+
+          <div class="a">您可以在这里新增一个教室的信息</div>
+          <div class="a">Tip:</div>
+          <div class="a">1. <span class="t1">*</span> 为必填项</div>
+          <div class="a t1">2. 会议室编号一旦输入并提交成功，则不予修改</div>
+
+          <el-form-item label="编号" prop="id">
+            <el-input v-model="formData.id" placeholder="请填写教室编号" clearable :style="{ width: '100%' }"></el-input>
+          </el-form-item>
+
+          <el-form-item label="名称" prop="r_name">
+            <el-input v-model="formData.r_name" placeholder="请填写教室名称" clearable :style="{ width: '100%' }"></el-input>
+          </el-form-item>
+
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model="formData.name" placeholder="请填写教室联系人的姓名" clearable :style="{ width: '100%' }"></el-input>
+          </el-form-item>
+          
+          <el-form-item label="电话" prop="mobile">
+            <el-input v-model="formData.mobile" placeholder="请填写教室联系人的电话号码" clearable
+              :style="{ width: '100%' }"></el-input>
+          </el-form-item>
+
+          <el-form-item label="类型" prop="type">
+            <el-select v-model="formData.type" placeholder="请下拉选择" clearable :style="{ width: '100%' }">
+              <el-option v-for="(item, index) in field103Options" :key="index" :label="item.label" :value="item.value"
+                :disabled="item.disabled"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="人数" prop="count">
+            <el-input v-model="formData.count" placeholder="请填写教室可容纳的人数" clearable :style="{ width: '100%' }"></el-input>
+          </el-form-item>
+
+          <el-form-item label="简介" prop="content">
+            <el-input v-model="formData.field101" type="textarea" placeholder="请输入新增教室的简介"
+              :autosize="{ minRows: 4, maxRows: 4 }" :style="{ width: '100%' }"></el-input>
+          </el-form-item>
+
+        </el-form>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
-<view class="roomCoverImg">
-  <image mode="aspectFill" src="{{item.roomCoverImg}}"></image>
-</view>
-<view class="content">
-  <text class="roomId">{{item.roomid}}</text>
-  <text class="roomType">{{item.roomType}}</text>
-</view>
-<!-- <view class="currentStatus">
-  <text class="t1">当前状态: </text>
-  <text class="t2 {{item.currentStatus === '已预约' && 't2_1'}} {{item.currentStatus === '空闲' && 't2_2'}}">{{item.currentStatus}}</text>
-</view> -->
-<view class="roomPeople">
-  <text class="roomPeople_t1">可容纳人数: </text>
-  <text class="roomPeople_t2">{{item.roomPeople}}</text>
-</view>
 
 <script>
 
@@ -55,20 +86,97 @@ import { getRoomInfo } from '@/api';
 export default {
   name: 'room-management',
   components: {
-    
+
   },
   data() {
     return {
       roomInfo: [],
       roomList: [],
       roomName: '',
+      isshow: false,
+      loading: true,
+      formData: {
+        id: '',
+        r_name: '',
+        name: '',
+        mobile: '',
+        type: '',
+        count: '',
+      },
+      field103Options: [{
+        "label": "教室",
+        "value": 0
+      },
+      {
+        "label": "面试间",
+        "value": 1
+      },
+      {
+        "label": "笔试间",
+        "value": 2
+      },
+      {
+        "label": "校企合作基地",
+        "value": 3
+      },
+      {
+        "label": "会议室",
+        "value": 4
+      },
+      {
+        "label": "培训室",
+        "value": 5
+      },
+      {
+        "label": "宣讲室",
+        "value": 6
+      }],
+
+      rules: {
+        id: [{
+          required: true,
+          message: '请输入教室编号',
+          trigger: 'blur'
+        }],
+        r_name: [{
+          required: true,
+          message: '请输入教室名称',
+          trigger: 'blur'
+        }],
+        name: [{
+          required: true,
+          message: '请输入教室联系人姓名',
+          trigger: 'blur'
+        }],
+        mobile: [{
+          required: true,
+          message: '请输入手机号',
+          trigger: 'blur'
+        }, {
+          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
+          message: '手机号格式错误',
+          trigger: 'blur'
+        }],
+        type: [{
+          required: true,
+          message: '请下拉选择类型',
+          trigger: 'change'
+        }],
+        count: [{
+          required: true,
+          message: '请输入教室可容纳人数',
+          trigger: 'blur'
+        }],
+
+      },
     }
   },
   created() {
+    this.loading = true
+
     // 获取教室列表
     getRoomInfo().then(res => {
       console.log('获取教室列表');
-
       console.log();
 
       res.data.data.forEach(item => {
@@ -79,7 +187,9 @@ export default {
     }).catch(e => {
       console.log(e);
     })
-
+    setTimeout(() => {
+      this.loading = false
+    }, 1500);
   },
   watch: {
     roomName(newV, oldV) {
@@ -106,11 +216,18 @@ export default {
   methods: {
     addroom() {
       console.log('this.roomName');
+      this.isshow = true
       for (let index = 0; index < 2; index++) {
         this.roomList.push(this.roomInfo[index])
-        
+
       }
-    }
+    },
+    onOpen() { },
+    onClose() {
+      this.isshow = false;
+      console.log('12312312321312312312312312gdfgdf');
+      this.$refs['elForm'].resetFields()
+    },
   },
 }
 
@@ -118,8 +235,41 @@ export default {
 
 <style lang="less" scoped>
 .container {
+  min-width: 650px;
   height: 100%;
   max-height: 40vh;
+
+  .a {
+    // color: red;
+    // height: 30px;
+    padding-left: 30px;
+    text-align: left;
+    line-height: 30px;
+
+  }
+
+  /deep/.el-dialog__header {
+    line-height: 30px;
+    padding: 10px 20px;
+    max-width: 450px;
+
+  }
+
+  /deep/.el-dialog__body {
+    padding: 0px 20px 20px;
+    max-width: 450px;
+    // min-width: 450px;
+  }
+  /deep/.el-form-item {
+    margin-bottom: 15px;
+  }
+
+  .t1 {
+    color: red;
+  }
+
+  .t2 {}
+
   .head {
     height: 30px;
     line-height: 30px;
@@ -188,7 +338,7 @@ export default {
       float: right;
       flex-direction: row;
       position: absolute;
-      right: 100px;
+      right: 0px;
       width: 180px;
       height: 100px;
       top: 0px;
@@ -213,4 +363,5 @@ export default {
 
 
   }
-}</style>
+}
+</style>
