@@ -1,5 +1,5 @@
 <template>
-  <div class="container" v-loading="loading">
+  <div class="container" v-loading.fullscreen="loading">
     <div class="head">
       <span class="time">3/15 周三</span>
       <span>教室列表</span>
@@ -49,7 +49,7 @@
           <el-form-item label="姓名" prop="name">
             <el-input v-model="formData.name" placeholder="请填写教室联系人的姓名" clearable :style="{ width: '100%' }"></el-input>
           </el-form-item>
-          
+
           <el-form-item label="电话" prop="mobile">
             <el-input v-model="formData.mobile" placeholder="请填写教室联系人的电话号码" clearable
               :style="{ width: '100%' }"></el-input>
@@ -260,6 +260,7 @@ export default {
     max-width: 450px;
     // min-width: 450px;
   }
+
   /deep/.el-form-item {
     margin-bottom: 15px;
   }

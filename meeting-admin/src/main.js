@@ -6,11 +6,12 @@ import axios from 'axios';
 import store from './store';
 
 import 'element-ui/lib/theme-chalk/index.css';
+import Vab from './utils/vab'
 
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios  // 将axios绑定到vue的原型上
 
-
+Vue.use(Vab)
 Vue.use(ElementUI);
 
 new Vue({

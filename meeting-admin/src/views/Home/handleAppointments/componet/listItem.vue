@@ -2,12 +2,13 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-16 08:46:42
- * @LastEditTime: 2023-03-16 13:28:07
+ * @LastEditTime: 2023-03-17 18:07:13
 -->
 <template>
   <div class="container">
     <el-table v-loading="loading" element-loading-text="加载中，请稍后..." :data="tableData" style="width: 100%" align='center'
-      max-height="400px">
+      max-height="400px"
+      :height="height">
       <el-table-column label="序号" align='center' width="80">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
@@ -72,6 +73,11 @@ export default {
       this.initData()
     }
   },
+  computed: {
+      height() {
+        return this.$baseTableHeight()
+      },
+    },
   methods: {
     addroom() { },
     initData() {

@@ -1,7 +1,13 @@
+/*
+ * @Author: liangminqiang
+ * @Description: 
+ * @Date: 2023-03-15 13:05:14
+ * @LastEditTime: 2023-03-17 17:29:19
+ */
 // 封装 axios
 import axios from 'axios';
 import { Notification } from 'element-ui';
-import store from '../store/index';
+import router from '../router';
 import Cookies from 'js-cookie';
 
 let config = {
@@ -45,17 +51,27 @@ _axios.interceptors.response.use(resp => {
   // 返回的数据在 data 中
   const data = resp.data
   if (resp.status != 200) {
-    // Message({
-    //   type: 'error',
-    //   message: data.message,
-    //   offset: 60
-    // })
     Notification({
       title: '错误',
       type: 'error',
       message: data.message,
     })
     return Promise.reject(resp)
+  } else {
+    if (resp.data.errcode === 40001) {
+      console.log(resp.data.errcode === 40001);
+      Notification({
+        title: '错误',
+        type: 'error',
+        message: '登陆已过期,请重新登陆',
+      })
+      //跳转回登录界面
+      router.replace({
+        name:'登录'
+      })
+        // location.reload()// 为了重新实例化vue-router对象 避免bug
+        return Promise.reject('登录token失效') 
+  }
   }
   return resp
 }, err => {
@@ -63,24 +79,13 @@ _axios.interceptors.response.use(resp => {
   if (err.response.status === 403) {
     localStorage.removeItem("token")
     localStorage.removeItem('userInfo')
-    // Message({
-    //   type: 'error',
-    //   message: '登陆已过期,请重新登陆',
-    //   offset: 60
-    // })
+
     Notification({
       title: '错误',
       type: 'error',
       message: '登陆已过期,请重新登陆',
     })
   }
-  // else if (err.response.status === 500) {
-  //   Notification({
-  //     title: '错误',
-  //     type: 'error',
-  //     message: err.response.data.meassage,
-  //   })
-  // }
   return Promise.reject(err)
 })
 

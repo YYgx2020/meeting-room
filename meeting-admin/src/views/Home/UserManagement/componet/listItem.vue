@@ -2,12 +2,14 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-16 08:46:42
- * @LastEditTime: 2023-03-16 21:45:15
+ * @LastEditTime: 2023-03-17 18:11:14
 -->
 <template>
   <div class="container">
     <el-table v-loading="loading" element-loading-text="加载中，请稍后..." :data="tableDate" style="width: 100%" align='center'
-      max-height="400px">
+      max-height="400px"
+      :height="height"
+      >
       <el-table-column label="序号" align='center' width="80">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
@@ -77,15 +79,15 @@ export default {
     return {
       tableDate: [],
       loading: true,
-      state:0,
+      state: 0,
     };
   },
 
   mounted() {
-    this.loading=true
-    console.log('55555555555');
-    console.log(this.listData);
-    console.log(this.state);
+    this.loading = true
+    // console.log('55555555555');
+    // console.log(this.listData);
+    // console.log(this.state);
     this.initData()
     // this.state=0
   },
@@ -95,14 +97,21 @@ export default {
     },
     state1(newV) {
       console.log('123123123123123312332121312fgdgfg');
-      this.state=newV
+      this.state = newV
       this.initData()
     }
   },
+  computed: {
+      height() {
+        return this.$baseTableHeight()
+      },
+    },
   methods: {
     initData() {
-      this.loading=true
+      this.loading = true
       this.tableDate = []
+      console.log('initData');
+      console.warn(this.state);
       this.listData.forEach(item => {
         if (item.isProve === this.state) {
           this.tableDate.push(item)
@@ -118,11 +127,11 @@ export default {
     handleDisagree(item) {
       console.log(item);
       //学生
-      if (item.role==0) {
+      if (item.role == 0) {
         updateUserInfo({
-        openid: item.openid,
-        sheetName:'studentInfo',
-        isProve: -1,
+          openid: item.openid,
+          sheetName: 'studentInfo',
+          isProve: -1,
         }).then(res => {
           this.initData()
         })
@@ -130,21 +139,21 @@ export default {
       //老师
       else {
         updateUserInfo({
-        openid: item.openid,
-        sheetName:'teacherInfo',
-        isProve: -1,
+          openid: item.openid,
+          sheetName: 'teacherInfo',
+          isProve: -1,
         }).then(res => {
           this.initData()
         })
       }
-      
+
     },
     handleAgree(item) {
-      if (item.role==0) {
+      if (item.role == 0) {
         updateUserInfo({
-        openid: item.openid,
-        sheetName:'studentInfo',
-        isProve: 1,
+          openid: item.openid,
+          sheetName: 'studentInfo',
+          isProve: 1,
         }).then(res => {
           this.initData()
         })
@@ -152,9 +161,9 @@ export default {
       //老师
       else {
         updateUserInfo({
-        openid: item.openid,
-        sheetName:'teacherInfo',
-        isProve: 1,
+          openid: item.openid,
+          sheetName: 'teacherInfo',
+          isProve: 1,
         }).then(res => {
           this.initData()
         })
@@ -196,4 +205,5 @@ export default {
 
 
 
-}</style>
+}
+</style>

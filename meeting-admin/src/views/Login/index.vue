@@ -147,7 +147,7 @@ export default {
                 this.$router.replace({
                   name: 'home',
                 });
-                
+
               } else {
                 this.$message.error('登录错误，请检查登录信息');
               }

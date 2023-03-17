@@ -71,11 +71,14 @@ export default {
     .logo {
       line-height: 60px;
       color: #409EFF;
+
       h4 {
         font-weight: 500;
       }
+
       cursor: pointer;
     }
+
     // .logo:hover {
     //   background-color: #303133;
     // }

@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-15 13:05:14
- * @LastEditTime: 2023-03-16 13:48:58
+ * @LastEditTime: 2023-03-17 11:19:29
 -->
 <template>
   <div class="handle-appoinement">
@@ -140,23 +140,25 @@ export default {
   height: 50px;
   line-height: 60px;
   text-align: center;
-  .el-tabs__nav{
-    float:none ;
+
+  .el-tabs__nav {
+    float: none;
   }
 
 }
-  /deep/.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active{
-    background-color: #f5f7fa;
-    color:#909399;
-    font-weight: 700;
-    font-size: larger;
-    border: none;
-  }
+
+/deep/.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
+  background-color: #f5f7fa;
+  color: #909399;
+  font-weight: 700;
+  font-size: larger;
+  border: none;
+}
+
 /deep/.el-tabs__content {
   // background-color: aqua;
   // line-height: 60px;
 
   padding: 0;
 
-}
-</style>
+}</style>
