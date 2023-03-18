@@ -71,6 +71,11 @@
               :autosize="{ minRows: 4, maxRows: 4 }" :style="{ width: '100%' }"></el-input>
           </el-form-item>
 
+          <div style="lineHeight:50px">
+            <el-button type="primary">提交</el-button>
+            <el-button type="warning">取消</el-button>
+          </div>
+
         </el-form>
       </el-dialog>
     </div>
@@ -217,10 +222,10 @@ export default {
     addroom() {
       console.log('this.roomName');
       this.isshow = true
-      for (let index = 0; index < 2; index++) {
-        this.roomList.push(this.roomInfo[index])
+      // for (let index = 0; index < 2; index++) {
+      //   this.roomList.push(this.roomInfo[index])
 
-      }
+      // }
     },
     onOpen() { },
     onClose() {
@@ -303,7 +308,7 @@ export default {
       width: 100px;
     }
 
-    background-color: beige;
+    background-color: #dbdbdb;
   }
 
   .list-box {

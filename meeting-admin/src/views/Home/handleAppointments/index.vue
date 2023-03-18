@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-15 13:05:14
- * @LastEditTime: 2023-03-17 11:19:29
+ * @LastEditTime: 2023-03-18 18:19:54
 -->
 <template>
   <div class="handle-appoinement">
@@ -12,8 +12,20 @@
         <span slot="label">处理预约</span>
       </el-tab-pane>
 
+      <el-form :inline="true">
+        <el-form-item>
+          <el-input v-model="serch" placeholder="姓名或电话号码" size="mini" />
+        </el-form-item>
+
+        <el-form-item label-width="50px">
+          <el-button icon="el-icon-search" type="primary" size="mini"  @click="handleQuery">
+            查询
+          </el-button>
+        </el-form-item>
+
+      </el-form>
       <div style="minHeight:100%">
-        <listItem :listData="list"></listItem>
+        <listItem :listData="list" :serchValue="serchValue"></listItem>
       </div>
     </el-tabs>
 
@@ -33,6 +45,8 @@ export default {
     return {
       list: [],
       week: [],
+      serch: '',
+      serchValue:''
     }
   },
   created() {
@@ -49,19 +63,11 @@ export default {
     this.setAppointInfoList()
   },
   methods: {
-
-
-
     setWeek() {
       const myDate = new Date();
       let dateList = [];
       for (let i = 0; i < 7; i++) {
         let currentWeekday = myDate.getDay();
-        // weekday.forEach((item, index) => {
-        //   if (currentWeekday === index) {
-        //     currentWeekday = item;
-        //   }
-        // })
         let tempDate = ((myDate.getMonth() + 1) + '/' + myDate.getDate() + ' ' + currentWeekday);
         let time = new Date(myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate()).getTime();
         dateList.push({
@@ -125,7 +131,9 @@ export default {
         this.list = data
 
       })
-
+    },
+    handleQuery() {
+      this.serchValue=this.serch
 
     },
   },
@@ -147,6 +155,16 @@ export default {
 
 }
 
+.handle-appoinement {
+  line-height: 20px;
+}
+
+/deep/ .el-form {
+  float: right;
+  height: 40px;
+
+}
+
 /deep/.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
   background-color: #f5f7fa;
   color: #909399;
@@ -161,4 +179,5 @@ export default {
 
   padding: 0;
 
-}</style>
+}
+</style>

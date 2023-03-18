@@ -78,10 +78,6 @@ export default {
 
       cursor: pointer;
     }
-
-    // .logo:hover {
-    //   background-color: #303133;
-    // }
   }
 
   .el-main {
@@ -89,6 +85,7 @@ export default {
     color: #333;
     text-align: center;
     line-height: 160px;
+    padding: 20px 20px 0px;
   }
 
   body>.el-container {

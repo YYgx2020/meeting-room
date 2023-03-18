@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-17 16:56:04
- * @LastEditTime: 2023-03-17 18:02:55
+ * @LastEditTime: 2023-03-18 17:31:01
  */
 
 const install = (Vue, opts = {}) => {
@@ -22,7 +22,7 @@ const install = (Vue, opts = {}) => {
     let layout = 'vertical'
 
     if (layout === 'vertical') {
-      paddingHeight = 100
+      paddingHeight = 280
     }
 
     if ('number' == typeof formType) {

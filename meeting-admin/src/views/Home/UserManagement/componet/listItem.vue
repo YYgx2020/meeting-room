@@ -2,14 +2,12 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-16 08:46:42
- * @LastEditTime: 2023-03-17 18:11:14
+ * @LastEditTime: 2023-03-18 18:14:27
 -->
 <template>
   <div class="container">
     <el-table v-loading="loading" element-loading-text="加载中，请稍后..." :data="tableDate" style="width: 100%" align='center'
-      max-height="400px"
-      :height="height"
-      >
+      max-height="400px" :height="height">
       <el-table-column label="序号" align='center' width="80">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
@@ -38,7 +36,7 @@
           <span v-else>{{ scope.row.studentName }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="tel" label="电话号码" align='center' width="150" sortable>
+      <el-table-column prop="tel" label="学号" align='center' width="150" sortable>
         <template slot-scope="scope">
           <span v-if="scope.row.role == 1">{{ scope.row.teacherPhone }}</span>
           <span v-else>{{ scope.row.studentNumber }}</span>
@@ -62,6 +60,8 @@
       </el-table-column>
 
     </el-table>
+    <el-pagination :background="true" :current-page="queryForm.pageNo" :layout="layout" :page-size="queryForm.pageSize"
+      :total="total" @current-change="handleCurrentChange" @size-change="handleSizeChange"></el-pagination>
   </div>
 </template>
 
@@ -72,7 +72,8 @@ export default {
   name: 'MeetingAdminListItem',
   props: {
     listData: Array,
-    state1: Number
+    state1: Number,
+    serchValue: String
   },
 
   data() {
@@ -80,14 +81,18 @@ export default {
       tableDate: [],
       loading: true,
       state: 0,
+      queryForm: {
+        pageNo: 1,
+        pageSize: 20,
+        title: '',
+      },
+      layout: 'total, sizes, prev, pager, next, jumper',
+      total: 0,
     };
   },
 
   mounted() {
     this.loading = true
-    // console.log('55555555555');
-    // console.log(this.listData);
-    // console.log(this.state);
     this.initData()
     // this.state=0
   },
@@ -96,30 +101,55 @@ export default {
       this.initData()
     },
     state1(newV) {
-      console.log('123123123123123312332121312fgdgfg');
+      console.error('state2');
+      console.log(this.state2);
       this.state = newV
       this.initData()
+    },
+    serchValue(newV) {
+      console.log(2222);
+      console.log(this.tableDate);
+      if (newV === '') {
+        this.tableDate = [...this.listData]
+      }
+      else {
+        this.tableDate=[]
+        this.listData.forEach(item => {
+          if (item.role === 0) {
+            if ((item.studentName + '').indexOf(newV) !== -1 || (item.studentNumber + '').indexOf(newV) !== -1||(item.studentPhone + '').indexOf(newV) !== -1) {
+              this.tableDate.push(item)
+              console.log('add');
+            }
+          } else {
+            if ((item.teacherName + '').indexOf(newV) !== -1 || (item.teacherPhone + '').indexOf(newV) !== -1||(item.teacherPhone + '').indexOf(newV) !== -1) {
+              this.tableDate.push(item)
+              console.log('add');
+            }
+          }
+
+
+        })
+      }
     }
   },
   computed: {
-      height() {
-        return this.$baseTableHeight()
-      },
+    height() {
+      return this.$baseTableHeight()
     },
+  },
   methods: {
     initData() {
       this.loading = true
       this.tableDate = []
-      console.log('initData');
-      console.warn(this.state);
       this.listData.forEach(item => {
         if (item.isProve === this.state) {
           this.tableDate.push(item)
         }
       });
+      this.total = this.tableDate.length
       setTimeout(() => {
         this.loading = false
-      }, 1500);
+      }, 500);
     },
     addroom() {
 
@@ -168,8 +198,15 @@ export default {
           this.initData()
         })
       }
-    }
+    },
+    handleSizeChange(val) {
+      this.queryForm.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.queryForm.pageNo = val
+    },
   },
+
 
 };
 </script>

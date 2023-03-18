@@ -2,25 +2,18 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-16 08:46:42
- * @LastEditTime: 2023-03-17 18:07:13
+ * @LastEditTime: 2023-03-18 18:27:00
 -->
 <template>
   <div class="container">
     <el-table v-loading="loading" element-loading-text="加载中，请稍后..." :data="tableData" style="width: 100%" align='center'
-      max-height="400px"
-      :height="height">
+      max-height="400px" :height="height">
       <el-table-column label="序号" align='center' width="80">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
       <el-table-column prop="appointName" label="申请人" align='center' width="80">
-        <!-- <span v-if="listData.isProve==0">111</span> -->
-        <!-- <template slot-scope="scope"> -->
-        <!-- {{scope.row}} -->
-
-
-        <!-- </template> -->
       </el-table-column>
       <el-table-column prop="appointPhone" label="联系方式" align='center' width="100" sortable>
       </el-table-column>
@@ -43,6 +36,8 @@
       </el-table-column>
 
     </el-table>
+    <el-pagination :background="true" :current-page="queryForm.pageNo" :layout="layout" :page-size="queryForm.pageSize"
+      :total="total" @current-change="handleCurrentChange" @size-change="handleSizeChange"></el-pagination>
   </div>
 </template>
 
@@ -51,12 +46,20 @@ export default {
   name: 'MeetingAdminListItem',
   props: {
     listData: Array,
+    serchValue:String
   },
 
   data() {
     return {
       tableData: [],
       loading: true,
+      queryForm: {
+        pageNo: 1,
+        pageSize: 20,
+        title: '',
+      },
+      layout: 'total, sizes, prev, pager, next, jumper',
+      total: 0,
     };
   },
 
@@ -71,23 +74,47 @@ export default {
     },
     state(newV) {
       this.initData()
+    },
+    serchValue(newV) {
+      console.log('213  '+newV);
+      console.log(this.tableData);
+      if (newV === '') {
+        this.tableData = [...this.listData]
+      }
+      else {
+        this.tableData = []
+        this.listData.forEach(item => {
+          if ((item.appointName + '').indexOf(newV) !== -1 || (item.appointPhone + '').indexOf(newV) !== -1) {
+              this.tableData.push(item)
+              console.log('add');
+            }
+        })
+        console.log(this.tableData);
+      }
     }
   },
   computed: {
-      height() {
-        return this.$baseTableHeight()
-      },
+    height() {
+      return this.$baseTableHeight()
     },
+  },
   methods: {
     addroom() { },
     initData() {
       this.loading = true
       this.tableData = [...this.listData]
+      this.total=this.tableData.length
       console.log(this.tableData);
       setTimeout(() => {
         this.loading = false
-      }, 1500);
-    }
+      }, 500);
+    },
+    handleSizeChange(val) {
+      this.queryForm.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.queryForm.pageNo = val
+    },
   },
 
 };
@@ -99,20 +126,13 @@ export default {
   line-height: 25px;
   height: 100%;
 
-  // .el-tabs--border-card >.el-tabs__content{
-  //     padding: 0px;
-  //   }
   /deep/.el-table {
     text-align: left;
 
     .el-button {
       width: 50px;
 
-      // text-align: center;
-      span {
-        // text-align: center;
-      }
-
+      span {}
     }
 
     .el-button--mini {
