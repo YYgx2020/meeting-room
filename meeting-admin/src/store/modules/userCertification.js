@@ -9,6 +9,7 @@ const userCertification = {
   },
   mutations: {
     SET_STATE: (state, state2) => {
+      console.log('11111');
       state.state2 = state2
   },
   },

@@ -1,20 +1,27 @@
 <template>
   <div id="Home">
     <el-container>
-      <el-aside width="200px">
-        <div class="logo">
-          <h4>GUET会议室预约管理系统</h4>
-        </div>
+   
+       
+      <el-aside :width="collapse?'':'200px' " class="aside" >
+        <div class="logo" > 
+          <h4 >{{collapse?'GUET':'GUET会议室预约管理系统'}}</h4>
+          <!-- GUET会议室预约管理系统 -->
+        </div>   
         <Menu></Menu>
       </el-aside>
+
 
       <el-container>
         <el-header>
           <Header />
         </el-header>
+
+
         <el-main>
           <router-view></router-view>
         </el-main>
+
         <el-footer>
           <Footer></Footer>
         </el-footer>
@@ -29,6 +36,8 @@ import Menu from '@/components/Menu';
 import Footer from '@/components/Footer';
 
 import Cookie from 'js-cookie';
+import { mapGetters } from 'vuex'
+
 
 export default {
   name: 'Home',
@@ -39,14 +48,24 @@ export default {
   },
   data() {
     return {
-
+      title: 'GUET',
+      width:'200px'
     }
   },
   created() {
     // 获取用户信息
     console.log(JSON.parse(Cookie.get('adminInfo')));
     const adminInfo = JSON.parse(Cookie.get('adminInfo'));
+  },
+  computed: {
+    ...mapGetters({
+      collapse:'get_collapse'
+    })
+  },
+  watch: {
+    
   }
+  
 }
 </script>
 
@@ -67,14 +86,23 @@ export default {
     text-align: center;
     // line-height: 200px;
     height: 100vh;
+    // transition: all 0.5s;
 
+
+    // .logo:hover{
+    //   // width: 400px;
+    //   // display: none;
+    //   // transform: ;
+    //   width: 0px;
+    //   transform: scale(1.6);
+    // }
     .logo {
       line-height: 60px;
       color: #409EFF;
-
       h4 {
         font-weight: 500;
       }
+      transition: all 3s;
 
       cursor: pointer;
     }

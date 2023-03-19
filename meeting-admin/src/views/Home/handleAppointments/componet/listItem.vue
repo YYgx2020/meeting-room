@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-16 08:46:42
- * @LastEditTime: 2023-03-18 18:27:00
+ * @LastEditTime: 2023-03-19 11:51:54
 -->
 <template>
   <div class="container">
@@ -36,8 +36,11 @@
       </el-table-column>
 
     </el-table>
-    <el-pagination :background="true" :current-page="queryForm.pageNo" :layout="layout" :page-size="queryForm.pageSize"
+    <div class="pagin">
+          <el-pagination :background="true" :current-page="queryForm.pageNo" :layout="layout" :page-size="queryForm.pageSize"
       :total="total" @current-change="handleCurrentChange" @size-change="handleSizeChange"></el-pagination>
+    </div>
+
   </div>
 </template>
 
@@ -139,7 +142,11 @@ export default {
       padding: 7px 0px;
     }
   }
-
+  .pagin{
+    // background-color: red;
+    min-width: 200px;
+    overflow: auto;
+  }
 
 
 }
