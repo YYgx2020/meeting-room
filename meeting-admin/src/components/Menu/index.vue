@@ -1,3 +1,9 @@
+<!--
+ * @Author: liangminqiang
+ * @Description: 
+ * @Date: 2023-03-15 13:05:14
+ * @LastEditTime: 2023-03-19 14:18:14
+-->
 <template>
   <div id="Menu">
     <!-- 
@@ -7,7 +13,7 @@
       3.会议室管理 roomManagement
     -->
     <el-menu :router='true' 
-    default-active="/home/handleAppointments" 
+    :default-active="path" 
     class="el-menu-vertical-demo"
       background-color="#304156" 
       text-color="#fff" 
@@ -35,12 +41,14 @@ export default {
   data() {
     return {
       menus: [],
+      path:''
       //
       // collapse:true
     }
   },
   created() {
     console.log(this.$router.options.routes);
+    this.path=window.location.pathname
     // 目前菜单较少
     this.menus = [...this.$router.options.routes[1].children];
   },
