@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-16 08:46:42
- * @LastEditTime: 2023-03-19 11:51:54
+ * @LastEditTime: 2023-03-20 13:06:53
 -->
 <template>
   <div class="container">
@@ -15,7 +15,7 @@
       </el-table-column>
       <el-table-column prop="appointName" label="申请人" align='center' width="80">
       </el-table-column>
-      <el-table-column prop="appointPhone" label="联系方式" align='center' width="100" sortable>
+      <el-table-column prop="appointPhone" label="联系方式" align='center' width="140" >
       </el-table-column>
       <el-table-column prop="roomid" label="预约教室" align='center' width="100" sortable>
 
@@ -25,10 +25,10 @@
           {{ scope.row.time.startTime }}-{{ scope.row.time.endTime }}
         </template>
       </el-table-column>
-      <el-table-column prop="applyTime" label="申请时间" align='center' width="0">
+      <el-table-column prop="applyTime" label="申请时间" align='center' width="0" sortable>
 
       </el-table-column>
-      <el-table-column prop="thingsText" label="申请事宜" align='center' width="150">
+      <el-table-column prop="thingsText" label="申请事宜" align='center' width="0">
       </el-table-column>
       <el-table-column prop="op" label="操作" align='center' width="150">
         <el-button size="mini" @click="addroom" type="success">同意</el-button>
@@ -68,14 +68,18 @@ export default {
 
   mounted() {
     console.log(this.listData);
+    console.warn('mouted');
     this.initData()
-
   },
   watch: {
     listData(newV) {
+      console.warn('listData');
+
       this.initData()
     },
     state(newV) {
+      console.warn('state');
+
       this.initData()
     },
     serchValue(newV) {
