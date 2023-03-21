@@ -1,59 +1,56 @@
 /*
  * @Author: liangminqiang
- * @Description: 
+ * @Description:
  * @Date: 2023-03-17 16:56:04
- * @LastEditTime: 2023-03-20 11:54:21
+ * @LastEditTime: 2023-03-21 16:46:59
  */
 
-import { MessageBox } from 'element-ui'
+import { MessageBox } from "element-ui";
 
 const install = (Vue, opts = {}) => {
-
-
   /* 全局TableHeight */
   Vue.prototype.$baseTableHeight = (formType) => {
-    let height = window.innerHeight
-    let height2 = document.documentElement.clientHeight
-    
+    let height = window.innerHeight;
+    let height2 = document.documentElement.clientHeight;
 
-    console.error('定位');
-    console.log('windowheight', height);
-    console.log('windowheight',height2);
-    let paddingHeight = 400
-    const formHeight = 50
-    let layout = 'vertical'
+    // console.error('定位');
+    // console.log('windowheight', height);
+    // console.log('windowheight',height2);
+    let paddingHeight = 400;
+    const formHeight = 50;
+    let layout = "vertical";
 
-    if (layout === 'vertical') {
-      paddingHeight = 280
+    if (layout === "vertical") {
+      paddingHeight = 280;
     }
 
-    if ('number' == typeof formType) {
-      height = height - paddingHeight - formHeight * formType
+    if ("number" == typeof formType) {
+      height = height - paddingHeight - formHeight * formType;
     } else {
-      height = height - paddingHeight
+      height = height - paddingHeight;
     }
-    return height
-  }
+    return height;
+  };
 
-    /* 全局Confirm */
-    Vue.prototype.$baseConfirm = (content, title, callback1, callback2) => {
-      MessageBox.confirm(content, title || '温馨提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        closeOnClickModal: false,
-        type: 'warning',
+  /* 全局Confirm */
+  Vue.prototype.$baseConfirm = (content, title, callback1, callback2) => {
+    MessageBox.confirm(content, title || "温馨提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      closeOnClickModal: false,
+      type: "warning",
+    })
+      .then(() => {
+        if (callback1) {
+          callback1();
+        }
       })
-        .then(() => {
-          if (callback1) {
-            callback1()
-          }
-        })
-        .catch(() => {
-          if (callback2) {
-            callback2()
-          }
-        })
-    }
-}
+      .catch(() => {
+        if (callback2) {
+          callback2();
+        }
+      });
+  };
+};
 
-export default install
+export default install;

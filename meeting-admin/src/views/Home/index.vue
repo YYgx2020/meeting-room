@@ -1,22 +1,18 @@
 <template>
   <div id="Home">
     <el-container>
-   
-       
-      <el-aside :width="collapse?'':'200px' " class="aside" >
-        <div class="logo" > 
-          <h4 >{{collapse?'GUET':'GUET会议室预约管理系统'}}</h4>
+      <el-aside :width="collapse ? '' : '200px'" class="aside">
+        <div class="logo">
+          <h4>{{ collapse ? 'GUET' : 'GUET会议室预约管理系统' }}</h4>
           <!-- GUET会议室预约管理系统 -->
-        </div>   
+        </div>
         <Menu></Menu>
       </el-aside>
-
 
       <el-container>
         <el-header>
           <Header />
         </el-header>
-
 
         <el-main>
           <router-view></router-view>
@@ -36,8 +32,7 @@ import Menu from '@/components/Menu';
 import Footer from '@/components/Footer';
 
 import Cookie from 'js-cookie';
-import { mapGetters } from 'vuex'
-
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
@@ -49,29 +44,25 @@ export default {
   data() {
     return {
       title: 'GUET',
-      width:'200px'
-    }
+      width: '200px',
+    };
   },
   created() {
     // 获取用户信息
-    console.log(JSON.parse(Cookie.get('adminInfo')));
+    // console.log(JSON.parse(Cookie.get('adminInfo')));
     const adminInfo = JSON.parse(Cookie.get('adminInfo'));
   },
   computed: {
     ...mapGetters({
-      collapse:'get_collapse'
-    })
+      collapse: 'get_collapse',
+    }),
   },
-  watch: {
-    
-  }
-  
-}
+  watch: {},
+};
 </script>
 
 <style lang="less" scoped>
 #Home {
-
   .el-header,
   .el-footer {
     // background-color: #B3C0D1;
@@ -88,7 +79,6 @@ export default {
     height: 100vh;
     // transition: all 0.5s;
 
-
     // .logo:hover{
     //   // width: 400px;
     //   // display: none;
@@ -98,7 +88,7 @@ export default {
     // }
     .logo {
       line-height: 60px;
-      color: #409EFF;
+      color: #409eff;
       h4 {
         font-weight: 500;
       }
@@ -109,14 +99,14 @@ export default {
   }
 
   .el-main {
-    background-color: #E9EEF3;
+    background-color: #e9eef3;
     color: #333;
     text-align: center;
     line-height: 160px;
     padding: 20px 20px 0px;
   }
 
-  body>.el-container {
+  body > .el-container {
     margin-bottom: 40px;
   }
 

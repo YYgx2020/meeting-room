@@ -1,14 +1,19 @@
+<!--
+ * @Author: liangminqiang
+ * @Description: 
+ * @Date: 2023-03-15 13:05:14
+ * @LastEditTime: 2023-03-21 16:47:32
+-->
 <template>
   <div id="app">
-    <router-view></router-view>    
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'App',
-}
+};
 </script>
 
 <style>

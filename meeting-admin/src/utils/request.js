@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description:
  * @Date: 2023-03-15 13:05:14
- * @LastEditTime: 2023-03-18 16:34:28
+ * @LastEditTime: 2023-03-21 10:29:13
  */
 // 封装 axios
 import axios from "axios";
@@ -26,7 +26,7 @@ _axios.interceptors.request.use(
     // 发请求之前先查看 access_token 是否过期，如果没有则正常发送请求，否则提示用户过期，重新刷新网页登录以获取新的 access_token
     // const token = store.state.token
     const access_token = Cookies.get("access_token");
-    console.log("req: ", req);
+    // console.log("req: ", req);
     console.log(access_token);
     // 先看是不是登录请求
     if (req.url === "/cgi-bin/token" || access_token) {
@@ -62,7 +62,6 @@ _axios.interceptors.response.use(
       });
       return Promise.reject(resp);
     } else {
-      
       // resp.data.errcode = 40001 //测试token过期
       if (resp.data.errcode === 40001) {
         // console.log(resp.data.errcode === 40001);
@@ -81,10 +80,8 @@ _axios.interceptors.response.use(
           });
           return Promise.reject("登录token失效");
         } else {
-
         }
       }
-
     }
     return resp;
   },

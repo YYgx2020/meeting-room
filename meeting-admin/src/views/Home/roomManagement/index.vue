@@ -4,17 +4,22 @@
       <span class="time">3/15 周三</span>
       <span>教室列表</span>
       <span class="serch">
-        <el-input v-model="roomName" placeholder="查找 教室/会议室" size="mini"></el-input>
+        <el-input
+          v-model="roomName"
+          placeholder="查找 教室/会议室"
+          size="mini"
+        ></el-input>
       </span>
-      <span class="addroom"><el-button size="mini" @click="addroom">添加教室</el-button></span>
+      <span class="addroom"
+        ><el-button size="mini" @click="addroom">添加教室</el-button></span
+      >
     </div>
     <div class="list-box">
       <div class="list_item" v-for="(room, index) in roomList" :key="index">
-
         <span class="room_img">
-          <img :src="room.roomCoverImg">
+          <img :src="room.roomCoverImg" />
         </span>
-        <div class="content ">
+        <div class="content">
           <span class="roomid">{{ room.roomid }}</span>
           <span class="roomT">{{ room.roomType }}</span>
         </div>
@@ -23,76 +28,116 @@
           <span class="roomPeople_t1">可容纳人数</span>
           <span class="roomPeople_t2">{{ room.roomPeople }}</span>
         </div>
-
-
       </div>
-
     </div>
 
     <div>
-      <el-dialog @open="onOpen" @close="onClose" title="新增教室" :visible="isshow">
-        <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
-
+      <el-dialog
+        @open="onOpen"
+        @close="onClose"
+        title="新增教室"
+        :visible="isshow"
+      >
+        <el-form
+          ref="elForm"
+          :model="formData"
+          :rules="rules"
+          size="medium"
+          label-width="100px"
+        >
           <div class="a">您可以在这里新增一个教室的信息</div>
           <div class="a">Tip:</div>
           <div class="a">1. <span class="t1">*</span> 为必填项</div>
           <div class="a t1">2. 会议室编号一旦输入并提交成功，则不予修改</div>
 
           <el-form-item label="编号" prop="id">
-            <el-input v-model="formData.id" placeholder="请填写教室编号" clearable :style="{ width: '100%' }"></el-input>
+            <el-input
+              v-model="formData.id"
+              placeholder="请填写教室编号"
+              clearable
+              :style="{ width: '100%' }"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="名称" prop="r_name">
-            <el-input v-model="formData.r_name" placeholder="请填写教室名称" clearable :style="{ width: '100%' }"></el-input>
+            <el-input
+              v-model="formData.r_name"
+              placeholder="请填写教室名称"
+              clearable
+              :style="{ width: '100%' }"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="姓名" prop="name">
-            <el-input v-model="formData.name" placeholder="请填写教室联系人的姓名" clearable :style="{ width: '100%' }"></el-input>
+            <el-input
+              v-model="formData.name"
+              placeholder="请填写教室联系人的姓名"
+              clearable
+              :style="{ width: '100%' }"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="电话" prop="mobile">
-            <el-input v-model="formData.mobile" placeholder="请填写教室联系人的电话号码" clearable
-              :style="{ width: '100%' }"></el-input>
+            <el-input
+              v-model="formData.mobile"
+              placeholder="请填写教室联系人的电话号码"
+              clearable
+              :style="{ width: '100%' }"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="类型" prop="type">
-            <el-select v-model="formData.type" placeholder="请下拉选择" clearable :style="{ width: '100%' }">
-              <el-option v-for="(item, index) in field103Options" :key="index" :label="item.label" :value="item.value"
-                :disabled="item.disabled"></el-option>
+            <el-select
+              v-model="formData.type"
+              placeholder="请下拉选择"
+              clearable
+              :style="{ width: '100%' }"
+            >
+              <el-option
+                v-for="(item, index) in field103Options"
+                :key="index"
+                :label="item.label"
+                :value="item.value"
+                :disabled="item.disabled"
+              ></el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item label="人数" prop="count">
-            <el-input v-model="formData.count" placeholder="请填写教室可容纳的人数" clearable :style="{ width: '100%' }"></el-input>
+            <el-input
+              v-model="formData.count"
+              placeholder="请填写教室可容纳的人数"
+              clearable
+              :style="{ width: '100%' }"
+            ></el-input>
           </el-form-item>
 
           <el-form-item label="简介" prop="content">
-            <el-input v-model="formData.field101" type="textarea" placeholder="请输入新增教室的简介"
-              :autosize="{ minRows: 4, maxRows: 4 }" :style="{ width: '100%' }"></el-input>
+            <el-input
+              v-model="formData.field101"
+              type="textarea"
+              placeholder="请输入新增教室的简介"
+              :autosize="{ minRows: 4, maxRows: 4 }"
+              :style="{ width: '100%' }"
+            ></el-input>
           </el-form-item>
 
-          <div style="lineHeight:50px">
+          <div style="lineheight: 50px">
             <el-button type="primary">提交</el-button>
             <el-button type="warning">取消</el-button>
           </div>
-
         </el-form>
       </el-dialog>
     </div>
   </div>
 </template>
 
-
 <script>
-
-
 import { getRoomInfo } from '@/api';
 
 export default {
   name: 'room-management',
-  components: {
-
-  },
+  components: {},
   data() {
     return {
       roomInfo: [],
@@ -108,134 +153,147 @@ export default {
         type: '',
         count: '',
       },
-      field103Options: [{
-        "label": "教室",
-        "value": 0
-      },
-      {
-        "label": "面试间",
-        "value": 1
-      },
-      {
-        "label": "笔试间",
-        "value": 2
-      },
-      {
-        "label": "校企合作基地",
-        "value": 3
-      },
-      {
-        "label": "会议室",
-        "value": 4
-      },
-      {
-        "label": "培训室",
-        "value": 5
-      },
-      {
-        "label": "宣讲室",
-        "value": 6
-      }],
+      field103Options: [
+        {
+          label: '教室',
+          value: 0,
+        },
+        {
+          label: '面试间',
+          value: 1,
+        },
+        {
+          label: '笔试间',
+          value: 2,
+        },
+        {
+          label: '校企合作基地',
+          value: 3,
+        },
+        {
+          label: '会议室',
+          value: 4,
+        },
+        {
+          label: '培训室',
+          value: 5,
+        },
+        {
+          label: '宣讲室',
+          value: 6,
+        },
+      ],
 
       rules: {
-        id: [{
-          required: true,
-          message: '请输入教室编号',
-          trigger: 'blur'
-        }],
-        r_name: [{
-          required: true,
-          message: '请输入教室名称',
-          trigger: 'blur'
-        }],
-        name: [{
-          required: true,
-          message: '请输入教室联系人姓名',
-          trigger: 'blur'
-        }],
-        mobile: [{
-          required: true,
-          message: '请输入手机号',
-          trigger: 'blur'
-        }, {
-          pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-          message: '手机号格式错误',
-          trigger: 'blur'
-        }],
-        type: [{
-          required: true,
-          message: '请下拉选择类型',
-          trigger: 'change'
-        }],
-        count: [{
-          required: true,
-          message: '请输入教室可容纳人数',
-          trigger: 'blur'
-        }],
-
+        id: [
+          {
+            required: true,
+            message: '请输入教室编号',
+            trigger: 'blur',
+          },
+        ],
+        r_name: [
+          {
+            required: true,
+            message: '请输入教室名称',
+            trigger: 'blur',
+          },
+        ],
+        name: [
+          {
+            required: true,
+            message: '请输入教室联系人姓名',
+            trigger: 'blur',
+          },
+        ],
+        mobile: [
+          {
+            required: true,
+            message: '请输入手机号',
+            trigger: 'blur',
+          },
+          {
+            pattern: /^1(3|4|5|7|8|9)\d{9}$/,
+            message: '手机号格式错误',
+            trigger: 'blur',
+          },
+        ],
+        type: [
+          {
+            required: true,
+            message: '请下拉选择类型',
+            trigger: 'change',
+          },
+        ],
+        count: [
+          {
+            required: true,
+            message: '请输入教室可容纳人数',
+            trigger: 'blur',
+          },
+        ],
       },
-    }
+    };
   },
   created() {
-    this.loading = true
+    this.loading = true;
 
     // 获取教室列表
-    getRoomInfo().then(res => {
-      console.log('获取教室列表');
-      console.log();
+    getRoomInfo()
+      .then((res) => {
+        // console.log('获取教室列表');
+        // console.log();
 
-      res.data.data.forEach(item => {
-        this.roomInfo.push(JSON.parse(item))
+        res.data.data.forEach((item) => {
+          this.roomInfo.push(JSON.parse(item));
+        });
+        this.roomList = [...this.roomInfo];
+        // console.log(this.roomInfo);
       })
-      this.roomList = [...this.roomInfo]
-      console.log(this.roomInfo);
-    }).catch(e => {
-      console.log(e);
-    })
+      .catch((e) => {
+        console.log(e);
+      });
     setTimeout(() => {
-      this.loading = false
+      this.loading = false;
     }, 1500);
   },
   watch: {
     roomName(newV, oldV) {
-      console.log(newV);
+      // console.log(newV);
       if (newV) {
-        this.roomList = []
-        this.roomInfo.forEach(item => {
-          if ((item.roomid + '').indexOf(newV) !== -1 || (item.roomType + '').indexOf(newV) !== -1) {
-            this.roomList.push(item)
-            console.log('add');
+        this.roomList = [];
+        this.roomInfo.forEach((item) => {
+          if (
+            (item.roomid + '').indexOf(newV) !== -1 ||
+            (item.roomType + '').indexOf(newV) !== -1
+          ) {
+            this.roomList.push(item);
+            // console.log('add');
           }
-
-        })
+        });
+      } else {
+        // console.log('empty');
+        this.roomList = [...this.roomInfo];
       }
-      else {
-        console.log('empty');
-        this.roomList = [...this.roomInfo]
-
-      }
-    }
-
-
+    },
   },
   methods: {
     addroom() {
-      console.log('this.roomName');
-      this.isshow = true
+      // console.log('this.roomName');
+      this.isshow = true;
       // for (let index = 0; index < 2; index++) {
       //   this.roomList.push(this.roomInfo[index])
 
       // }
     },
-    onOpen() { },
+    onOpen() {},
     onClose() {
       this.isshow = false;
       console.log('12312312321312312312312312gdfgdf');
-      this.$refs['elForm'].resetFields()
+      this.$refs['elForm'].resetFields();
     },
   },
-}
-
+};
 </script>
 
 <style lang="less" scoped>
@@ -250,14 +308,12 @@ export default {
     padding-left: 30px;
     text-align: left;
     line-height: 30px;
-
   }
 
   /deep/.el-dialog__header {
     line-height: 30px;
     padding: 10px 20px;
     max-width: 450px;
-
   }
 
   /deep/.el-dialog__body {
@@ -274,14 +330,14 @@ export default {
     color: red;
   }
 
-  .t2 {}
+  .t2 {
+  }
 
   .head {
     height: 30px;
     line-height: 30px;
 
     .time {
-
       float: left;
     }
 
@@ -294,8 +350,6 @@ export default {
       float: right;
       // margin-right: 20px;
     }
-
-
   }
 
   .list_item {
@@ -363,11 +417,8 @@ export default {
         flex: 1;
         width: 80px;
         color: gray;
-
       }
     }
-
-
   }
 }
 </style>

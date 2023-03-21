@@ -40,7 +40,7 @@ export function getAccessToken(data) {
  */
 
 export function loginAuth(access_token, phone, password) {
-  console.log("查看", access_token, phone, password);
+  // console.log("查看", access_token, phone, password);
   return axios({
     url: `/tcb/databasequery?access_token=${access_token}`,
     method: "post",

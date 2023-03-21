@@ -2,7 +2,7 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-15 13:05:14
- * @LastEditTime: 2023-03-19 14:18:14
+ * @LastEditTime: 2023-03-21 10:28:46
 -->
 <template>
   <div id="Menu">
@@ -12,21 +12,21 @@
       2.学生/教师认证申请审核 UserManagement
       3.会议室管理 roomManagement
     -->
-    <el-menu :router='true' 
-    :default-active="path" 
-    class="el-menu-vertical-demo"
-      background-color="#304156" 
-      text-color="#fff" 
+    <el-menu
+      :router="true"
+      :default-active="path"
+      class="el-menu-vertical-demo"
+      background-color="#304156"
+      text-color="#fff"
       active-text-color="#409EFF"
       mode="vertical"
       :collapse="collapse"
       :collapse-transition="false"
-      >
+    >
       <div v-for="(item, index) in menus" :key="index + ''">
         <el-menu-item :index="item.path">
           <i :class="item.iconClass"></i>
-          <span slot="title">{{ item.name }}
-          </span>
+          <span slot="title">{{ item.name }} </span>
         </el-menu-item>
       </div>
     </el-menu>
@@ -34,30 +34,30 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Menu',
   data() {
     return {
       menus: [],
-      path:''
+      path: '',
       //
       // collapse:true
-    }
+    };
   },
   created() {
-    console.log(this.$router.options.routes);
-    this.path=window.location.pathname
+    // console.log(this.$router.options.routes);
+    this.path = window.location.pathname;
     // 目前菜单较少
     this.menus = [...this.$router.options.routes[1].children];
   },
   computed: {
     ...mapGetters({
-      collapse:'get_collapse'
-    })
-  }
-}
+      collapse: 'get_collapse',
+    }),
+  },
+};
 </script>
 
 <style lang="less" scoped>

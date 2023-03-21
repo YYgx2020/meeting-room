@@ -2,46 +2,54 @@
  * @Author: liangminqiang
  * @Description: 
  * @Date: 2023-03-15 13:05:14
- * @LastEditTime: 2023-03-18 17:50:58
+ * @LastEditTime: 2023-03-21 11:55:57
 -->
 <template>
   <div class="handle-appoinement">
-
-    <el-tabs type="border-card" v-model="activeName">
-
+    <el-tabs type="border-card" v-model="activeName" stretch>
       <el-tab-pane label="待审核" name="0"></el-tab-pane>
       <el-tab-pane label="已通过" name="1"></el-tab-pane>
       <el-tab-pane label="未通过" name="-1"></el-tab-pane>
 
       <el-form :inline="true">
         <el-form-item>
-          <el-input v-model="serch" placeholder="输入学号或姓名或电话号码"  size="mini"/>
+          <el-input
+            v-model="serch"
+            placeholder="输入学号或姓名或电话号码"
+            size="mini"
+          />
         </el-form-item>
 
-      <el-form-item label-width="50px">
-        <el-button icon="el-icon-search" type="primary" size="mini" @click="handleQuery">
+        <el-form-item label-width="50px">
+          <el-button
+            icon="el-icon-search"
+            type="primary"
+            size="mini"
+            @click="handleQuery"
+          >
             查询
-          </el-button> 
+          </el-button>
         </el-form-item>
-
       </el-form>
-      <div style="minHeight:100%">
-        <listItem :listData="list" :state1="TabActiveName" :serchValue="serchValue"></listItem>
+      <div style="minheight: 100%">
+        <listItem
+          :listData="list"
+          :state1="TabActiveName"
+          :serchValue="serchValue"
+        ></listItem>
       </div>
     </el-tabs>
-
   </div>
 </template>
 
 <script>
-import listItem from './componet/listItem'
+import listItem from './componet/listItem';
 import { getTcount, getScount } from '@/api';
-
 
 export default {
   name: 'Home',
   components: {
-    listItem
+    listItem,
   },
 
   data() {
@@ -50,40 +58,38 @@ export default {
       state: 1,
       activeName: '',
       serch: '',
-      serchValue:''
-    }
+      serchValue: '',
+    };
   },
   created() {
-    // 获取审核列表 
-    console.log('获取审核列表');
-    this.getCount()
+    // 获取审核列表
+    // console.log('获取审核列表');
+    this.getCount();
   },
   methods: {
-
     async getCount() {
-      let c1 = (await getScount()).data.data
-      let c2 = (await getTcount()).data.data
+      let c1 = (await getScount()).data.data;
+      let c2 = (await getTcount()).data.data;
       // console.log(c1, c2);
-      let t = c1.concat(c2)
-      t.forEach(item => {
-        this.list.push(JSON.parse(item))
-      })
-      console.log(this.list);
+      let t = c1.concat(c2);
+      t.forEach((item) => {
+        this.list.push(JSON.parse(item));
+      });
+      // console.log(this.list);
     },
     handleQuery() {
-      this.serchValue=this.serch
-      },
+      this.serchValue = this.serch;
+    },
   },
   computed: {
     TabActiveName() {
-      return Number.parseInt(this.activeName)
-    }
-
-  }
-}
+      return Number.parseInt(this.activeName);
+    },
+  },
+};
 </script>
 
-<style lang="less" scoped >
+<style lang="less" scoped>
 .handle-appoinement {
   line-height: 20px;
 }
@@ -92,14 +98,20 @@ export default {
   height: 50px;
   line-height: 60px;
 }
-/deep/ .el-form{
+/deep/.el-tabs--border-card {
+  .el-tabs__nav.is-stretch {
+    height: 102%;
+    .el-tabs__item {
+      height: 100%;
+    }
+  }
+}
+/deep/ .el-form {
   float: right;
   height: 40px;
-
 }
 /deep/.el-tabs__content {
   // background-color: aqua;
   padding: 0;
-
 }
 </style>
