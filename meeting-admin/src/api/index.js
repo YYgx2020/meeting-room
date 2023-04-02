@@ -129,3 +129,27 @@ export function updateUserInfo(event) {
     },
   });
 }
+
+export function addRoom(event) {
+  return axios({
+    url: `/tcb/databasequery?access_token=${access_token}`,
+    method: "post",
+    data: {
+      env,
+      query: `db.collection('roomInfo')
+      .add({
+        data: {
+          fileID: '',
+          roomPeople: '123',
+          roomType: '教室',
+          roomName: 'test',
+          roomContactPhone: '18934959429',
+          roomContactName: '梁敏强',
+          roomBriefInfo: '发达',
+          roomid: 3
+        }
+      })`
+    }
+  });
+  // console.log(event);
+}

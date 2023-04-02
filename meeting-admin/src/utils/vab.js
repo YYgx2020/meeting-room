@@ -11,10 +11,10 @@ const install = (Vue, opts = {}) => {
   /* 全局TableHeight */
   Vue.prototype.$baseTableHeight = (formType) => {
     let height = window.innerHeight;
-    let height2 = document.documentElement.clientHeight;
+    // let height2 = document.documentElement.clientHeight;
 
-    // console.error('定位');
-    // console.log('windowheight', height);
+    console.error('定位');
+    console.log('windowheight', height);
     // console.log('windowheight',height2);
     let paddingHeight = 400;
     const formHeight = 50;

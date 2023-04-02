@@ -6,7 +6,7 @@
 -->
 <template>
   <div id="Header">
-    <el-col :xs="14" :sm="12" :md="12" :lg="12" :xl="12">
+    <el-col :xs="13" :sm="12" :md="12" :lg="12" :xl="12">
       <div class="left-panel">
         <!-- 展示学校logo、管理员头像等 -->
         <i
@@ -30,7 +30,7 @@
         </el-breadcrumb>
       </div>
     </el-col>
-    <el-col :xs="10" :sm="12" :md="12" :lg="12" :xl="12">
+    <el-col :xs="11" :sm="12" :md="12" :lg="12" :xl="12">
       <div class="right-panel">
         <el-dropdown @command="handleCommand">
           <span class="avatar-dropdown">

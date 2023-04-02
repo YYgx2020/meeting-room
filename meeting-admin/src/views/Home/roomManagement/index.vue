@@ -1,186 +1,195 @@
 <template>
   <div class="container" v-loading.fullscreen="loading">
-    <div class="head">
-      <span class="time">3/15 周三</span>
-      <span>教室列表</span>
-      <span class="serch">
-        <el-input
-          v-model="roomName"
-          placeholder="查找 教室/会议室"
-          size="mini"
-        ></el-input>
-      </span>
-      <span class="addroom"
-        ><el-button size="mini" @click="addroom">添加教室</el-button></span
-      >
-    </div>
-    <div class="list-box">
-      <div class="list_item" v-for="(room, index) in roomList" :key="index">
-        <span class="room_img">
-          <img :src="room.roomCoverImg" />
-        </span>
-        <div class="content">
-          <span class="roomid">{{ room.roomid }}</span>
-          <span class="roomT">{{ room.roomType }}</span>
-        </div>
-
-        <div class="roomPeople">
-          <span class="roomPeople_t1">可容纳人数</span>
-          <span class="roomPeople_t2">{{ room.roomPeople }}</span>
+    <el-card :body-style="{ height: height + 'px', padding: '0px' }">
+      <div slot="header">
+        <div class="head">
+          <span class="time">4/1 周五</span>
+          <span>教室列表</span>
+          <span class="serch">
+            <el-input
+              v-model="roomName"
+              placeholder="查找 教室/会议室"
+              size="mini"
+            ></el-input>
+          </span>
+          <span class="addroom"
+            ><el-button size="mini" @click="addroom">添加教室</el-button></span
+          >
         </div>
       </div>
-    </div>
 
-    <div>
-      <el-dialog
-        @open="onOpen"
-        @close="onClose"
-        title="新增教室"
-        :visible="isshow"
-      >
-        <el-form
-          ref="elForm"
-          :model="formData"
-          :rules="rules"
-          size="medium"
-          label-width="100px"
+      <div class="list-box">
+        <div class="list_item" v-for="(room, index) in roomList" :key="index">
+          <el-card
+            style="height: 100%"
+            :body-style="{ padding: '0px', height: '100%' }"
+          >
+            <span class="room_img">
+              <img :src="room.roomCoverImg" />
+            </span>
+            <div class="content">
+              <span class="roomid">{{ room.roomid }}</span>
+              <span class="roomT">{{ room.roomType }}</span>
+            </div>
+            <div class="roomPeople">
+              <span class="roomPeople_t1">可容纳人数</span>
+              <span class="roomPeople_t2">{{ room.roomPeople }}</span>
+            </div>
+          </el-card>
+        </div>
+      </div>
+
+      <div>
+        <el-dialog
+          @open="onOpen"
+          @close="onClose"
+          title="新增教室"
+          :visible="isshow"
         >
-          <div class="a">您可以在这里新增一个教室的信息</div>
-          <div class="a">Tip:</div>
-          <div class="a">1. <span class="t1">*</span> 为必填项</div>
-          <div class="a t1">2. 会议室编号一旦输入并提交成功，则不予修改</div>
+          <el-form
+            ref="elForm"
+            :model="formData"
+            :rules="rules"
+            size="medium"
+            label-width="100px"
+          >
+            <div class="a">您可以在这里新增一个教室的信息</div>
+            <div class="a">Tip:</div>
+            <div class="a">1. <span class="t1">*</span> 为必填项</div>
+            <div class="a t1">2. 会议室编号一旦输入并提交成功，则不予修改</div>
 
-          <el-form-item label="编号" prop="id">
-            <el-input
-              v-model="formData.id"
-              placeholder="请填写教室编号"
-              clearable
-              :style="{ width: '100%' }"
-            ></el-input>
-          </el-form-item>
+            <el-form-item label="编号" prop="id">
+              <el-input
+                v-model="formData.id"
+                placeholder="请填写教室编号"
+                clearable
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
 
-          <el-form-item label="名称" prop="r_name">
-            <el-input
-              v-model="formData.r_name"
-              placeholder="请填写教室名称"
-              clearable
-              :style="{ width: '100%' }"
-            ></el-input>
-          </el-form-item>
+            <el-form-item label="名称" prop="r_name">
+              <el-input
+                v-model="formData.r_name"
+                placeholder="请填写教室名称"
+                clearable
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
 
-          <el-form-item label="姓名" prop="name">
-            <el-input
-              v-model="formData.name"
-              placeholder="请填写教室联系人的姓名"
-              clearable
-              :style="{ width: '100%' }"
-            ></el-input>
-          </el-form-item>
+            <el-form-item label="姓名" prop="name">
+              <el-input
+                v-model="formData.name"
+                placeholder="请填写教室联系人的姓名"
+                clearable
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
 
-          <el-form-item label="电话" prop="mobile">
-            <el-input
-              v-model="formData.mobile"
-              placeholder="请填写教室联系人的电话号码"
-              clearable
-              :style="{ width: '100%' }"
-            ></el-input>
-          </el-form-item>
+            <el-form-item label="电话" prop="mobile">
+              <el-input
+                v-model="formData.mobile"
+                placeholder="请填写教室联系人的电话号码"
+                clearable
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
 
-          <el-form-item label="类型" prop="type">
-            <el-select
-              v-model="formData.type"
-              placeholder="请下拉选择"
-              clearable
-              :style="{ width: '100%' }"
-            >
-              <el-option
-                v-for="(item, index) in field103Options"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-                :disabled="item.disabled"
-              ></el-option>
-            </el-select>
-          </el-form-item>
+            <el-form-item label="类型" prop="type">
+              <el-select
+                v-model="formData.type"
+                placeholder="请下拉选择"
+                clearable
+                :style="{ width: '100%' }"
+              >
+                <el-option
+                  v-for="(item, index) in field103Options"
+                  :key="index"
+                  :label="item.label"
+                  :value="item.value"
+                  :disabled="item.disabled"
+                ></el-option>
+              </el-select>
+            </el-form-item>
 
-          <el-form-item label="人数" prop="count">
-            <el-input
-              v-model="formData.count"
-              placeholder="请填写教室可容纳的人数"
-              clearable
-              :style="{ width: '100%' }"
-            ></el-input>
-          </el-form-item>
+            <el-form-item label="人数" prop="count">
+              <el-input
+                v-model="formData.count"
+                placeholder="请填写教室可容纳的人数"
+                clearable
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
 
-          <el-form-item label="简介" prop="content">
-            <el-input
-              v-model="formData.field101"
-              type="textarea"
-              placeholder="请输入新增教室的简介"
-              :autosize="{ minRows: 4, maxRows: 4 }"
-              :style="{ width: '100%' }"
-            ></el-input>
-          </el-form-item>
+            <el-form-item label="简介" prop="content">
+              <el-input
+                v-model="formData.field101"
+                type="textarea"
+                placeholder="请输入新增教室的简介"
+                :autosize="{ minRows: 4, maxRows: 4 }"
+                :style="{ width: '100%' }"
+              ></el-input>
+            </el-form-item>
 
-          <div style="lineheight: 50px">
-            <el-button type="primary">提交</el-button>
-            <el-button type="warning">取消</el-button>
-          </div>
-        </el-form>
-      </el-dialog>
-    </div>
+            <div style="lineheight: 50px">
+              <el-button type="primary" @click="commit">提交</el-button>
+              <el-button type="warning" @click="cancel">取消</el-button>
+            </div>
+          </el-form>
+        </el-dialog>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
-import { getRoomInfo } from '@/api';
+import { getRoomInfo, addRoom as addClass} from "@/api";
 
 export default {
-  name: 'room-management',
+  name: "room-management",
   components: {},
   data() {
     return {
       roomInfo: [],
       roomList: [],
-      roomName: '',
+      roomName: "",
       isshow: false,
       loading: true,
       formData: {
-        id: '',
-        r_name: '',
-        name: '',
-        mobile: '',
-        type: '',
-        count: '',
+        id: "",
+        r_name: "",
+        name: "",
+        mobile: "",
+        type: "",
+        count: "",
       },
       field103Options: [
         {
-          label: '教室',
-          value: 0,
+          label: "教室",
+          value: "教室",
         },
         {
-          label: '面试间',
-          value: 1,
+          label: "面试间",
+          value: "面试间",
         },
         {
-          label: '笔试间',
-          value: 2,
+          label: "笔试间",
+          value: "笔试间",
         },
         {
-          label: '校企合作基地',
-          value: 3,
+          label: "校企合作基地",
+          value: "校企合作基地",
         },
         {
-          label: '会议室',
-          value: 4,
+          label: "会议室",
+          value: "校企合作基地",
         },
         {
-          label: '培训室',
-          value: 5,
+          label: "培训室",
+          value: "培训室",
         },
         {
-          label: '宣讲室',
-          value: 6,
+          label: "宣讲室",
+          value: "宣讲室",
         },
       ],
 
@@ -188,48 +197,46 @@ export default {
         id: [
           {
             required: true,
-            message: '请输入教室编号',
-            trigger: 'blur',
+            message: "请输入教室编号",
+            trigger: "blur",
           },
         ],
         r_name: [
           {
             required: true,
-            message: '请输入教室名称',
-            trigger: 'blur',
+            message: "请输入教室名称",
+            trigger: "blur",
           },
         ],
         name: [
           {
-            required: true,
-            message: '请输入教室联系人姓名',
-            trigger: 'blur',
+            message: "请输入教室联系人姓名",
+            trigger: "blur",
           },
         ],
         mobile: [
           {
-            required: true,
-            message: '请输入手机号',
-            trigger: 'blur',
+            message: "请输入手机号",
+            trigger: "blur",
           },
           {
             pattern: /^1(3|4|5|7|8|9)\d{9}$/,
-            message: '手机号格式错误',
-            trigger: 'blur',
+            message: "手机号格式错误",
+            trigger: "blur",
           },
         ],
         type: [
           {
             required: true,
-            message: '请下拉选择类型',
-            trigger: 'change',
+            message: "请下拉选择类型",
+            trigger: "change",
           },
         ],
         count: [
           {
             required: true,
-            message: '请输入教室可容纳人数',
-            trigger: 'blur',
+            message: "请输入教室可容纳人数",
+            trigger: "blur",
           },
         ],
       },
@@ -264,8 +271,8 @@ export default {
         this.roomList = [];
         this.roomInfo.forEach((item) => {
           if (
-            (item.roomid + '').indexOf(newV) !== -1 ||
-            (item.roomType + '').indexOf(newV) !== -1
+            (item.roomid + "").indexOf(newV) !== -1 ||
+            (item.roomType + "").indexOf(newV) !== -1
           ) {
             this.roomList.push(item);
             // console.log('add');
@@ -278,6 +285,36 @@ export default {
     },
   },
   methods: {
+    commit() {
+      console.log(this.formData);
+
+      const {
+        count: roomPeople,
+        field101: roomBriefInfo,
+        id: roomid,
+        mobile: roomContactPhone,
+        name: roomContactName,
+        r_name: roomName,
+        type: roomType,
+      } = this.formData;
+
+      let data = {
+        fileID:'',
+        roomPeople,
+        roomCoverImg:'',
+        roomType,
+        roomName,
+        roomContactPhone,
+        roomContactName,
+        roomBriefInfo,
+        roomid,
+      };
+      addClass(data)
+      // console.log(data);
+    },
+    cancel() {
+      this.isshow = false;
+    },
     addroom() {
       // console.log('this.roomName');
       this.isshow = true;
@@ -289,8 +326,14 @@ export default {
     onOpen() {},
     onClose() {
       this.isshow = false;
-      console.log('12312312321312312312312312gdfgdf');
-      this.$refs['elForm'].resetFields();
+      console.log("12312312321312312312312312gdfgdf");
+      this.$refs["elForm"].resetFields();
+    },
+  },
+  computed: {
+    height() {
+      // console.log(this.$baseTableHeight());
+      return this.$baseTableHeight();
     },
   },
 };
@@ -356,13 +399,17 @@ export default {
     height: 100px;
     margin-top: 20px;
     position: relative;
+    padding: 0 20px;
 
     img {
       height: 100px;
       width: 100px;
     }
 
-    background-color: #dbdbdb;
+    // background-color: #dbdbdb;
+    .el-card__body {
+      padding: 0px;
+    }
   }
 
   .list-box {
@@ -373,7 +420,7 @@ export default {
       display: flex;
       flex-direction: column;
       position: absolute;
-      left: 110px;
+      margin-left: 110px;
       width: 100px;
       height: 100px;
       top: 0px;

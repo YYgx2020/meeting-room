@@ -12,7 +12,7 @@
       :data="tableDate"
       style="width: 100%"
       align="center"
-      max-height="400px"
+
       :height="height"
     >
       <el-table-column label="序号" align="center" width="80">

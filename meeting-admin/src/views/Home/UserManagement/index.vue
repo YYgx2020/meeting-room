@@ -75,7 +75,8 @@ export default {
       t.forEach((item) => {
         this.list.push(JSON.parse(item));
       });
-      // console.log(this.list);
+      console.error("list");
+       console.log(this.list);
     },
     handleQuery() {
       this.serchValue = this.serch;
