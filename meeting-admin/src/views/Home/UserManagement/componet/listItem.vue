@@ -26,7 +26,7 @@
         <!-- {{scope.row}} -->
         <span v-if="state == 0">待审核</span>
         <span v-else-if="state == 1">已通过</span>
-        <span v-else="state == -1">待审核</span>
+        <span v-else="state == -1">未通过</span>
 
         <!-- </template> -->
       </el-table-column>
@@ -199,7 +199,6 @@ export default {
         this.loading = false;
       }, 500);
     },
-    addroom() {},
     handleDisagree(item) {
       // console.log(item);
       //学生
@@ -209,7 +208,9 @@ export default {
           sheetName: 'studentInfo',
           isProve: -1,
         }).then((res) => {
-          this.initData();
+          // console.log(res);
+          // this.initData();
+          this.$emit('op_event')
         });
       }
       //老师
@@ -219,7 +220,8 @@ export default {
           sheetName: 'teacherInfo',
           isProve: -1,
         }).then((res) => {
-          this.initData();
+          // this.initData();
+          this.$emit('op_event')
         });
       }
     },
@@ -230,7 +232,9 @@ export default {
           sheetName: 'studentInfo',
           isProve: 1,
         }).then((res) => {
-          this.initData();
+          // console.log(res);
+          this.$emit('op_event')
+          // this.initData();
         });
       }
       //老师
@@ -240,7 +244,8 @@ export default {
           sheetName: 'teacherInfo',
           isProve: 1,
         }).then((res) => {
-          this.initData();
+          // this.initData();
+          this.$emit('op_event')
         });
       }
     },

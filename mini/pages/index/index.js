@@ -117,6 +117,8 @@ Page({
       }).get()
 
     Promise.all([res1, res2]).then(resArr => {
+
+      app.globalData.isAdmin=false
       wx.hideToast();
       console.log(resArr);
       let studentInfo = resArr[0].data[0]

@@ -36,6 +36,7 @@
           :listData="list"
           :state1="TabActiveName"
           :serchValue="serchValue"
+          @op_event="op_event"
         ></listItem>
       </div>
     </el-tabs>
@@ -67,7 +68,11 @@ export default {
     this.getCount();
   },
   methods: {
+    op_event(){
+      this.getCount()
+    },
     async getCount() {
+      this.list=[]
       let c1 = (await getScount()).data.data;
       let c2 = (await getTcount()).data.data;
       // console.log(c1, c2);

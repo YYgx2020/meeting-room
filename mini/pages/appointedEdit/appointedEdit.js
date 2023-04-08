@@ -225,11 +225,13 @@ Page({
           return itm;
         });
         detail = JSON.parse(JSON.stringify(detail[index]));
+        console.log("detail",detail);
+        console.log("detail2",appointArr[item.firstIndex].detail);
         appointArr[item.firstIndex].detail = detail;
         appointArr[item.firstIndex].status = '已预约';
         // 更新用户预约信息和会议室预约信息
         let rejectReason = '其他预约申请的优先级更高';
-        this.updateAppointInfo(appointArr, otherAppointInfo, rejectReason, item.roomid);
+        // this.updateAppointInfo(appointArr, otherAppointInfo, rejectReason, item.roomid);
       })
       .catch(err => {
         console.log(err);

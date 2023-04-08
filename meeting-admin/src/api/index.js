@@ -8,6 +8,7 @@
 import axios from "../utils/request";
 import Cookies from "js-cookie";
 import { env } from "@/utils/constant";
+import c1 from "@/cloud/init_cloud";
 
 // 从 cookie 中获取 access_token
 const access_token = Cookies.get("access_token");
@@ -120,36 +121,106 @@ export function getRoomAppointInfo(time) {
   });
 }
 export function updateUserInfo(event) {
-  return axios({
-    url: `/tcb/databasequery?access_token=${access_token}`,
-    method: "post",
+  return c1.callFunction({
+    name: "UpdateUserInfo",
     data: {
-      env,
-      query: `db.collection('${event.sheetName}').where({openid: '${event.openid}'}).update({'data':{ isProve : ${event.isProve}}})`,
+      sheetName: event.sheetName,
+      openid: event.openid,
+      isProve: event.isProve,
     },
   });
 }
 
-export function addRoom(event) {
-  return axios({
-    url: `/tcb/databasequery?access_token=${access_token}`,
-    method: "post",
+// export function uploadCoverImg(event){
+
+// }
+export function delRoomInfoItem(event) {
+  
+  return c1.callFunction({
+    name: "delRoomInfoItem",
     data: {
-      env,
-      query: `db.collection('roomInfo')
-      .add({
-        data: {
-          fileID: '',
-          roomPeople: '123',
-          roomType: '教室',
-          roomName: 'test',
-          roomContactPhone: '18934959429',
-          roomContactName: '梁敏强',
-          roomBriefInfo: '发达',
-          roomid: 3
-        }
-      })`
-    }
+      roomid: event.roomid,
+    },
   });
-  // console.log(event);
 }
+export async function uploadCoverImg(event) {
+  let timestamp = new Date().getTime();
+  console.log("time", timestamp);
+  console.log(event.tempFilePaths);
+  try {
+    let res1 = await c1.callFunction({
+      name: "uploadCoverImg",
+      data: {
+        cloudPath: "roomCoverImage/" + timestamp + ".png",
+        // 指定要上传的文件的小程序临时文件路径
+        filePath: event.tempFilePaths,
+      },
+    });
+
+    console.log("res1",res1);
+    return c1.callFunction({
+      name: "getCoverImagePath",
+      data: {
+        fileList: [
+          {
+            fileID: res1.fileID,
+          },
+        ],
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function addRoomInfo(event) {
+  return c1.callFunction({
+    name: "addRoomInfo",
+    data: event
+  });
+}
+
+  export function updateRoomInfo(event) {
+    return c1.callFunction({
+      name: "updateRoomInfo",
+      data: event
+    })
+  }
+  export function getRoomInfoByTimeID(event) {
+    // console.log("event",event.roomid,event.time);
+    return c1.callFunction({
+      name: "getRoomInfoByTimeID",
+      data: 
+      {
+        roomid: event.roomid,
+        date: event.time
+      }
+    })
+  }
+  export function updateRoomAppointInfo2(event) {
+    console.log("eeeeee31231");
+    console.log("updateRoomAppointInfo2",event.roomid,event.time,event.appointArr);
+    return c1.callFunction({
+      name: "updateRoomAppointInfo2",
+      data: 
+      {
+        roomid: event.roomid,
+        time: event.time,
+        appointArr: event.appointArr
+      }
+    })
+  }
+  export function updateUserAppointInfo2(event) {
+    console.log("updateUserAppointInfo2",event.openid,event.createTime,event.isAgree,event.rejectReason);
+    return c1.callFunction({
+      name: "updateUserAppointInfo2",
+      data: 
+      {
+        openid: event.openid,
+        createTime: event.createTime,
+        isAgree: event.isAgree,
+        rejectReason:event.rejectReason
+      }
+    })
+  }
+  

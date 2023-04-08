@@ -23,17 +23,26 @@
           <el-card
             style="height: 100%"
             :body-style="{ padding: '0px', height: '100%' }"
+            @click="editRoom(room)"
           >
-            <span class="room_img">
+            <span class="room_img" @click="editRoom(room)">
               <img :src="room.roomCoverImg" />
             </span>
             <div class="content">
               <span class="roomid">{{ room.roomid }}</span>
               <span class="roomT">{{ room.roomType }}</span>
             </div>
-            <div class="roomPeople">
-              <span class="roomPeople_t1">可容纳人数</span>
-              <span class="roomPeople_t2">{{ room.roomPeople }}</span>
+
+            <div class="content2">
+              <div class="roomPeople">
+                <span class="roomPeople_t1">可容纳人数</span>
+                <span class="roomPeople_t2">{{ room.roomPeople }}</span>
+              </div>
+              <div class="delete">
+                <el-button size="mini" @click="deleteRoom(room)" type="danger"
+                  >删除</el-button
+                >
+              </div>
             </div>
           </el-card>
         </div>
@@ -58,12 +67,34 @@
             <div class="a">1. <span class="t1">*</span> 为必填项</div>
             <div class="a t1">2. 会议室编号一旦输入并提交成功，则不予修改</div>
 
+            <el-upload
+              v-if="!ImageUrl"
+              action=""
+              list-type="picture-card"
+              :before-upload="beforeAvatarUpload"
+            >
+              <i slot="default" class="el-icon-plus"></i>
+              <div slot="tip" class="el-upload__tip">
+                只能上传jpg/png文件，且不超过500kb
+              </div>
+            </el-upload>
+
+            <!-- <img width="100%" :src="ImageUrl" alt="" /> -->
+            <el-image
+              v-if="ImageUrl"
+              style="width: 73%; "
+              :src="ImageUrl"
+              :preview-src-list="[ImageUrl]"
+              fit="cover"
+            ></el-image>
+
             <el-form-item label="编号" prop="id">
               <el-input
                 v-model="formData.id"
                 placeholder="请填写教室编号"
                 clearable
                 :style="{ width: '100%' }"
+                :disabled="flag==='edit'"
               ></el-input>
             </el-form-item>
 
@@ -142,13 +173,20 @@
 </template>
 
 <script>
-import { getRoomInfo, addRoom as addClass} from "@/api";
+import {
+  getRoomInfo,
+  addRoomInfo,
+  delRoomInfoItem,
+  uploadCoverImg,
+  updateRoomInfo,
+} from "@/api";
 
 export default {
   name: "room-management",
   components: {},
   data() {
     return {
+      ImageUrl: "",
       roomInfo: [],
       roomList: [],
       roomName: "",
@@ -161,7 +199,10 @@ export default {
         mobile: "",
         type: "",
         count: "",
+        field101: "",
+        room: "",
       },
+      flag: "",
       field103Options: [
         {
           label: "教室",
@@ -244,25 +285,8 @@ export default {
   },
   created() {
     this.loading = true;
-
     // 获取教室列表
-    getRoomInfo()
-      .then((res) => {
-        // console.log('获取教室列表');
-        // console.log();
-
-        res.data.data.forEach((item) => {
-          this.roomInfo.push(JSON.parse(item));
-        });
-        this.roomList = [...this.roomInfo];
-        // console.log(this.roomInfo);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setTimeout(() => {
-      this.loading = false;
-    }, 1500);
+    this.getRoomList();
   },
   watch: {
     roomName(newV, oldV) {
@@ -285,49 +309,198 @@ export default {
     },
   },
   methods: {
-    commit() {
-      console.log(this.formData);
+    //修改教室信息
+    editRoom(room) {
+      this.flag = "edit";
+      console.log(room);
+      this.room = room;
 
       const {
-        count: roomPeople,
-        field101: roomBriefInfo,
-        id: roomid,
-        mobile: roomContactPhone,
-        name: roomContactName,
-        r_name: roomName,
-        type: roomType,
-      } = this.formData;
+        roomPeople: count,
+        roomBriefInfo: field101,
+        roomid: id,
+        roomContactPhone: mobile,
+        roomContactName: name,
+        roomName: r_name,
+        roomType: type,
+      } = room;
 
-      let data = {
-        fileID:'',
-        roomPeople,
-        roomCoverImg:'',
-        roomType,
-        roomName,
-        roomContactPhone,
-        roomContactName,
-        roomBriefInfo,
-        roomid,
+      this.formData = {
+        count,
+        field101,
+        id,
+        mobile,
+        name,
+        r_name,
+        type,
       };
-      addClass(data)
-      // console.log(data);
+      this.ImageUrl = room.roomCoverImg;
+      this.isshow = true;
+      // this.formData = { ...room };
+      console.log(this.formData);
+      // this.commit(this.formData)
     },
+    //获取教室列表
+    getRoomList() {
+      getRoomInfo()
+        .then((res) => {
+          this.roomInfo = [];
+          res.data.data.forEach((item) => {
+            this.roomInfo.push(JSON.parse(item));
+          });
+          this.roomList = [...this.roomInfo];
+          // console.log("thisroomInfo",this.roomInfo);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      setTimeout(() => {
+        this.loading = false;
+      }, 1500);
+    },
+    //删除教室
+    deleteRoom(room) {
+      this.$baseConfirm(
+        "确定删除此教室吗",
+        null,
+        async () => {
+          await delRoomInfoItem({ roomid: room.roomid });
+          this.$message({
+            message: "删除成功",
+            type: "success",
+          });
+          // console.log("this", this);
+          this.getRoomList();
+        },
+        (e) => {
+          console.log(e);
+        }
+      );
+      // console.log(room);
+    },
+    //提交教室图片（未实现）
+    beforeAvatarUpload(file) {
+      const isJPG_PNG = file.type === "image/jpeg" || file.type === "image/png";
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isJPG_PNG) {
+        this.$message.error("上传头像图片只能是 JPG 或 PNG 格式!");
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+      }
+      if (isJPG_PNG && isLt2M) {
+        this.upload_flag = true;
+        console.log(URL.createObjectURL(file));
+        this.ImageUrl = URL.createObjectURL(file);
+        uploadCoverImg({ tempFilePaths: this.ImageUrl }).then((res) => {
+          console.log("res", res);
+        });
+      } else {
+        this.upload_flag = false;
+      }
+      return isJPG_PNG && isLt2M;
+    },
+    //添加教室
+    commit() {
+      console.log("flag",this.flag);
+      if (this.flag === "add") {
+        const {
+          count: roomPeople,
+          field101: roomBriefInfo,
+          id: roomid,
+          mobile: roomContactPhone,
+          name: roomContactName,
+          r_name: roomName,
+          type: roomType,
+        } = this.formData;
+
+        let data = {
+          roomInfo: {
+            fileID: "",
+            roomPeople,
+            roomCoverImg: "",
+            roomType,
+            roomName,
+            roomContactPhone,
+            roomContactName,
+            roomBriefInfo,
+            roomid,
+          },
+        };
+        addRoomInfo(data)
+          .then((res) => {
+            this.$message({
+              message: "添加成功",
+              type: "success",
+            });
+            this.isshow = false;
+            console.log(res);
+            this.getRoomList();
+          })
+          .catch((e) => console.log(e));
+        console.log(data);
+      } else {
+      
+        const {
+          count: roomPeople,
+          field101: roomBriefInfo,
+          id: roomid,
+          mobile: roomContactPhone,
+          name: roomContactName,
+          r_name: roomName,
+          type: roomType,
+        } = this.formData;
+
+        let data = {
+            fileID: this.room.fileID,
+            roomPeople,
+            roomCoverImg: this.room.roomCoverImg,
+            roomType,
+            roomName,
+            roomContactPhone,
+            roomContactName,
+            roomBriefInfo,
+            roomid:this.room.roomid,
+        };
+        console.log(data);
+
+        updateRoomInfo(data)
+          .then((res) => {
+            this.$message({
+              message: "修改成功",
+              type: "success",
+            });
+            this.isshow = false;
+            console.log(res);
+            this.getRoomList();
+          })
+          .catch((e) => console.log(e));
+      }
+    },
+
     cancel() {
       this.isshow = false;
     },
+    //按钮
     addroom() {
-      // console.log('this.roomName');
       this.isshow = true;
-      // for (let index = 0; index < 2; index++) {
-      //   this.roomList.push(this.roomInfo[index])
-
-      // }
+      this.flag = "add";
     },
     onOpen() {},
     onClose() {
       this.isshow = false;
-      console.log("12312312321312312312312312gdfgdf");
       this.$refs["elForm"].resetFields();
+      this.ImageUrl = "";
+      this.formData = {
+        id: "",
+        r_name: "",
+        name: "",
+        mobile: "",
+        type: "",
+        count: "",
+        field101: "",
+      };
     },
   },
   computed: {
@@ -340,10 +513,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// el-main {
+//   line-height: 100px;
+// }
 .container {
   min-width: 650px;
   height: 100%;
   max-height: 40vh;
+  line-height: normal;
 
   .a {
     // color: red;
@@ -361,7 +538,7 @@ export default {
 
   /deep/.el-dialog__body {
     padding: 0px 20px 20px;
-    max-width: 450px;
+    // max-width: 450px;
     // min-width: 450px;
   }
 
@@ -422,7 +599,7 @@ export default {
       position: absolute;
       margin-left: 110px;
       width: 100px;
-      height: 100px;
+      height: 50px;
       top: 0px;
 
       .roomid {
@@ -439,15 +616,25 @@ export default {
         color: gray;
       }
     }
+    .content2 {
+      display: flex;
+      flex-direction: column;
+      width: 100px;
+      height: 100px;
+      float: right;
+      margin-right: 30px;
+      justify-content: center;
+      .delete {
+        width: 28px;
+      }
+    }
 
     .roomPeople {
       display: flex;
       float: right;
       flex-direction: row;
-      position: absolute;
-      right: 0px;
       width: 180px;
-      height: 100px;
+      height: 50px;
       top: 0px;
 
       .roomPeople_t1 {

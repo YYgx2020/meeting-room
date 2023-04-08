@@ -28,7 +28,7 @@
         </el-form-item>
       </el-form>
       <div style="minheight: 100%">
-        <listItem :listData="list" :serchValue="serchValue"></listItem>
+        <listItem :listData="list" :serchValue="serchValue" @event="getEvent"></listItem>
       </div>
     </el-tabs>
   </div>
@@ -52,10 +52,18 @@ export default {
     };
   },
   created() {
+    this.initData()
+  },
+  methods: {
+    getEvent(){
+      console.log("getEvent");
+      this.initData();
+    },
+    initData(){
     // 获取预约总数
     // console.log('获取预约总数');
     // this.getCount()
-    getUserAppointInfo().then((res) => {
+      getUserAppointInfo().then((res) => {
       // console.log('jjjjjj');
       // console.log(res);
     });
@@ -63,8 +71,7 @@ export default {
     this.setWeek();
     //获取本周预约列表
     this.setAppointInfoList();
-  },
-  methods: {
+    },
     setWeek() {
       const myDate = new Date();
       let dateList = [];
@@ -104,9 +111,6 @@ export default {
         Promise_Appoint.push(this.getRoomAppointInfoList(this.week[i].time));
       }
       let Appoint_res = Promise.all([...Promise_Appoint]).then((res) => {
-        // console.warn('appoint_res');
-        // console.log(res);
-
         let templist = [];
         res.forEach((item) => {
           let t = item.data.data;
@@ -118,12 +122,14 @@ export default {
         // console.log(templist);
         //拿到预约列表
         let data = [];
+        console.log("item",templist);
         for (let item of templist) {
           let appointArr = item.appointArr;
           for (let i = 0; i < appointArr.length; i++) {
+            // console.log("isban",appointArr[i].detail.isban );
             if (
               appointArr[i].status === '空闲' &&
-              appointArr[i].detail.length !== 0
+              appointArr[i].detail.length !== 0 
             ) {
               // data.push()
               // console.log(_item.detail);
@@ -133,7 +139,11 @@ export default {
                 detail[j].firstIndex = i;
                 detail[j].secondIndex = j;
                 detail[j].showMore = true;
-                data.push(detail[j]);
+                detail[j].date=item.date
+
+                if(!detail[j].isban){
+                  data.push(detail[j]);
+                }
               }
             }
           }
@@ -146,6 +156,7 @@ export default {
     handleQuery() {
       this.serchValue = this.serch;
     },
+
   },
   computed: {},
 };

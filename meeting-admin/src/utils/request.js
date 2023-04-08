@@ -90,6 +90,8 @@ _axios.interceptors.response.use(
     if (err.response.status === 403) {
       localStorage.removeItem("token");
       localStorage.removeItem("userInfo");
+      const time = new Date(new Date() * 1 + 2 * 60 * 60 * 1000);
+      Cookie.set('access_token', '', { expires: new Date(0).toUTCString() });
 
       Notification({
         title: "错误",

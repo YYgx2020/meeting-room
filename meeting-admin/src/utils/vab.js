@@ -45,9 +45,9 @@ const install = (Vue, opts = {}) => {
           callback1();
         }
       })
-      .catch(() => {
+      .catch((e) => {
         if (callback2) {
-          callback2();
+          callback2(e);
         }
       });
   };
