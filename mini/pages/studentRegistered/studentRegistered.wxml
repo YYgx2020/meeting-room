@@ -1,7 +1,8 @@
 <!--pages/studentRegistered/studentRegistered.wxml-->
 <view class="mainContainer">
   <view class="headerTip">
-    <text>申请学生认证之后方可使用预约功能</text>
+    <text>认证后方可预约，*为必填</text>
+    
   </view>
   <!-- 学号 -->
   <view class="student_number">

@@ -60,6 +60,7 @@
                 <text class="tip1">所属实验室</text>
                 <text class="tip2">{{items.studentLab}}</text>
               </view>
+              <view></view>
               <!-- 选择按钮 -->
               <view wx:if="{{items.isProve === 0}}" class="chooseBtn">
                 <view class="disagree_1">

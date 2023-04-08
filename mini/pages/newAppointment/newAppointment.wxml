@@ -3,7 +3,8 @@
 <view class="pageContainer">
   <!-- 头部提示信息 -->
   <view class="header">
-    <text>请填写相关信息</text>
+  
+    <text>请填写相关信息，*为必填</text>
   </view>
   <!-- 内容填写区域 -->
   <view class="formContainer">
@@ -40,6 +41,8 @@
     </view>
     <!-- 填写申请事宜 -->
     <view class="things">
+    
+      <text class="imporant">*</text>
       <text class="thingsTip">申请事宜</text>
       <textarea name="" id="" cols="40" rows="30" maxlength="40" show-confirm-bar="true" bindconfirm="getRoomBriefInfo"
         confirm-type="return" style="height: 6em" placeholder="请输入您的申请事宜"
