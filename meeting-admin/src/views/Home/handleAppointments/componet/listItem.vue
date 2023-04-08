@@ -188,31 +188,6 @@ export default {
         "其他预约申请的优先级更高",
         item.roomid
       );
-
-      // wx.cloud.database().collection('roomAppointInfo')
-      // .where({
-      //   roomid: item.roomid,
-      //   date: dateList[current].time
-      // })
-      // .get()
-      // .then(res => {
-      //   console.log("getres",res);
-      //   const otherAppointInfo = [];
-      //   otherAppointInfo.push(JSON.parse(JSON.stringify(item)));
-      //   otherAppointInfo[0].choosed = false;
-      //   const appointArr = res.data[0].appointArr;
-      //   item.isban = true;
-      //   appointArr[item.firstIndex].detail[item.secondIndex] = JSON.parse(JSON.stringify(item));
-      //   this.updateAppointInfo(appointArr, otherAppointInfo, '', item.roomid);
-      // })
-      // .catch(err => {
-      //   console.log(err);
-      //   wx.showToast({
-      //     title: '出错了',
-      //     icon: 'error',
-      //   })
-      // })
-      // console.log(item);
     },
     async handleAgree(item) {
       console.log("sadasdasd");
@@ -237,35 +212,17 @@ export default {
       // detail = JSON.parse(JSON.stringify(detail[index]));
       // appointArr[item.firstIndex].detail = detail;
       appointArr[item.firstIndex].status = "已预约";
-      console.log("agree",appointArr, otherAppointInfo, "", item.roomid,appointArr[item.firstIndex].detail);
+      console.log(
+        "agree",
+        appointArr,
+        otherAppointInfo,
+        "",
+        item.roomid,
+        appointArr[item.firstIndex].detail
+      );
 
-      // 更新用户预约信息和会议室预约信息
+      // 更新用户预约信息和会议室预约信息11111
       this.updateAppointInfo(appointArr, otherAppointInfo, "", item.roomid);
-
-      // wx.cloud.database().collection('roomAppointInfo')
-      // .where({
-      //   roomid: item.roomid,
-      //   date: dateList[current].time
-      // })
-      // .get()
-      // .then(res => {
-      //   console.log("getres",res);
-      //   const otherAppointInfo = [];
-      //   otherAppointInfo.push(JSON.parse(JSON.stringify(item)));
-      //   otherAppointInfo[0].choosed = false;
-      //   const appointArr = res.data[0].appointArr;
-      //   item.isban = true;
-      //   appointArr[item.firstIndex].detail[item.secondIndex] = JSON.parse(JSON.stringify(item));
-      //   this.updateAppointInfo(appointArr, otherAppointInfo, '', item.roomid);
-      // })
-      // .catch(err => {
-      //   console.log(err);
-      //   wx.showToast({
-      //     title: '出错了',
-      //     icon: 'error',
-      //   })
-      // })
-      // console.log(item);
     },
     async updateAppointInfo(
       appointArr,
