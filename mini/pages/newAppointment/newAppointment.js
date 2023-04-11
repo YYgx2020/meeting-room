@@ -272,6 +272,7 @@ Page({
       isAppointed,  // 标记当前数据在数据库中是否存在记录
       timeStamp,
     } = this.data;
+    
     if (phoneError) {
       return
     }
@@ -294,6 +295,12 @@ Page({
         content: '请输入预约人的电话',
       })
       return
+    }else if (thingsText == '') {
+        wx.showModal({
+          title: '提示',
+          content: '请输入申请事宜',
+        })
+        return
     }
     let myDate = new Date();
     let applyTime = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + ' ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds();
@@ -317,6 +324,7 @@ Page({
       "openid": app.globalData.openid,
       "isban": false,  // 增加一个管理员审核状态
     })
+    
     if (app.globalData.isAdmin) {
       defaultAppoint[currentIndex].status = '已预约';
       defaultAppoint[currentIndex].detail = defaultAppoint[currentIndex].detail[0];
