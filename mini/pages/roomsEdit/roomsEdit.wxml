@@ -13,7 +13,7 @@
   <view wx:if="{{isShowSearch}}" class="headerSearch">
     <view class="inputBox">
       <text class="searchIcon2 iconfont icon-sousuo"></text>
-      <input type="text" class="" placeholder="搜索" placeholder-class="placeholder" bindinput="handleInputChange"
+      <input type="text" class="" placeholder="请输入教室或会议室编号" placeholder-class="placeholder" bindinput="handleInputChange"
         value="{{searchContent}}" />
       <text bindtap="clearSearchContent" hidden="{{!isShowClearIcon}}" class="clear iconfont icon-quxiao"></text>
     </view>

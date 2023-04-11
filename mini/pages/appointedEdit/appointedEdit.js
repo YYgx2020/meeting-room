@@ -18,6 +18,7 @@ Page({
     navId: 0, // 导航标识
     current: 0, // swiper的索引，默认显示第一个
     showMore: false, // 是否展示更多
+    
   },
 
   /**
@@ -25,7 +26,9 @@ Page({
    */
   onLoad: function (options) {
     this.getDefaultDate();
+    this.getUserAppointInfo();
     this.getRoomAppointInfo(0);
+    this.updateBadge();
   },
 
   // 获取未来一周的日期
@@ -58,13 +61,21 @@ Page({
 
   // 获取用户预约表
   getUserAppointInfo() {
+    console.log("hhhhhhhhhhhhhhhhhhh")
+    console.log("LLLLLL")
     wx.cloud.database().collection('userAppointInfo')
       .get()
       .then(res => {
-        console.log(res);
+        console.log("******************")
+        console.log(res.data);
+        console.log("#################################")
         this.setData({
           userAppointInfo: res.data,
         })
+        console.log("----------------------")
+        console.log(this.userAppointInfo)
+        console.log("*************************")
+
       })
       .catch(err => {
         console.log(err);
@@ -93,6 +104,7 @@ Page({
       .get()
       .then(res => {
         wx.hideToast();
+        console.log("这是romm")
         console.log(res);
         // 处理数据
         let data = [];
@@ -189,8 +201,21 @@ Page({
           icon: 'error',
         })
       })
-  },
+      },
+ updateBadge() {
 
+
+    // if (count > 0) {
+    //   wx.setTabBarBadge({
+    //     index: 1, // 在第二个 tab 上显示小红点提示
+    //     text: count.toString()
+    //   })
+    // } else {
+    //   wx.removeTabBarBadge({
+    //     index: 1 // 隐藏小红点提示
+    //   })
+    // }
+  },
   // 同意按钮处理事件
   handleAgree(e) {
     let {
@@ -200,6 +225,7 @@ Page({
     } = this.data;
     console.log(e);
     let { index, item } = e.currentTarget.dataset;
+  
     if (item.isban) {
       return
     }
@@ -225,13 +251,11 @@ Page({
           return itm;
         });
         detail = JSON.parse(JSON.stringify(detail[index]));
-        console.log("detail",detail);
-        console.log("detail2",appointArr[item.firstIndex].detail);
         appointArr[item.firstIndex].detail = detail;
         appointArr[item.firstIndex].status = '已预约';
         // 更新用户预约信息和会议室预约信息
         let rejectReason = '其他预约申请的优先级更高';
-        // this.updateAppointInfo(appointArr, otherAppointInfo, rejectReason, item.roomid);
+        this.updateAppointInfo(appointArr, otherAppointInfo, rejectReason, item.roomid);
       })
       .catch(err => {
         console.log(err);

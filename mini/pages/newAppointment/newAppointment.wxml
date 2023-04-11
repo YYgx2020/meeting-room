@@ -3,8 +3,7 @@
 <view class="pageContainer">
   <!-- 头部提示信息 -->
   <view class="header">
-  
-    <text>请填写相关信息，*为必填</text>
+    <text>请填写相关信息</text>
   </view>
   <!-- 内容填写区域 -->
   <view class="formContainer">
@@ -41,8 +40,6 @@
     </view>
     <!-- 填写申请事宜 -->
     <view class="things">
-    
-      <text class="imporant">*</text>
       <text class="thingsTip">申请事宜</text>
       <textarea name="" id="" cols="40" rows="30" maxlength="40" show-confirm-bar="true" bindconfirm="getRoomBriefInfo"
         confirm-type="return" style="height: 6em" placeholder="请输入您的申请事宜"
@@ -52,11 +49,12 @@
     </view>
     <!-- 提示信息 -->
     <view class="timeChooseTip">
+    <view>
+    </view>
       <!-- 提示当前选中的时间段，并告知可以预约的时长 -->
       <text class="tip1">注意:</text>
-      <text class="tip2" decode="true">&emsp;1.可预约时间段为08:00到22:00，一个时间段为2个小时</text>
-      <text class="tip3"
-        decode="true">&emsp;2.当前选中的教室为&nbsp;<text class="tip3_1">{{currentRoomid}}</text>,日期为&nbsp;<text class="tip3_1">{{currentDate}}</text>,选中的时间段为&nbsp;<text class="tip3_1">{{currentStartTime}}-{{currentEndTime}}</text></text>
+      <text class="tip2" decode="true">&emsp;可预约时间段为08:00到22:00，一个时间段为2个小时</text>
+ 
     </view>
     <!-- 底部提交按钮，不用固定位置 -->
     <view class="confirmBtn">

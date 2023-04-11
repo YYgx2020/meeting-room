@@ -88,6 +88,7 @@ Page({
       detail: [],
       status: '空闲',
     }], // 默认的安排
+
   },
 
   /**
@@ -138,6 +139,7 @@ Page({
       icon: 'loading'
     })
     this.getDateAppointList();
+    this.handleShowModal();
   },
 
   // 开始时间处理
@@ -250,6 +252,7 @@ Page({
     })
   },
 
+
   // 提交按钮
   handleConfirm(e) {
     console.log(e);
@@ -272,7 +275,6 @@ Page({
       isAppointed,  // 标记当前数据在数据库中是否存在记录
       timeStamp,
     } = this.data;
-    
     if (phoneError) {
       return
     }
@@ -295,12 +297,6 @@ Page({
         content: '请输入预约人的电话',
       })
       return
-    }else if (thingsText == '') {
-        wx.showModal({
-          title: '提示',
-          content: '请输入申请事宜',
-        })
-        return
     }
     let myDate = new Date();
     let applyTime = myDate.getFullYear() + '-' + (myDate.getMonth() + 1) + '-' + myDate.getDate() + ' ' + myDate.getHours() + ':' + myDate.getMinutes() + ':' + myDate.getSeconds();
@@ -324,7 +320,6 @@ Page({
       "openid": app.globalData.openid,
       "isban": false,  // 增加一个管理员审核状态
     })
-    
     if (app.globalData.isAdmin) {
       defaultAppoint[currentIndex].status = '已预约';
       defaultAppoint[currentIndex].detail = defaultAppoint[currentIndex].detail[0];
@@ -658,7 +653,21 @@ Page({
         console.log(err);
       })
   },
-
+  //预约消息弹窗
+  handleShowModal() {
+    wx.showModal({
+      title: '注意', //提示的标题
+      content: '当前选中的教室为'+this.data.currentRoomid+","
+     +'日期为'+this.data.currentDate+','+''+'选中的时间段为'+this.data.currentStartTime+'-'+this.data.currentEndTime ,//提示的内容
+      success(res) {
+        if(res.confirm) {
+          console.log('用户点击了确定')
+        } else if(res.cancel) {
+          console.log('用户点击了取消')
+        }
+      }
+    })
+  },
   // 更新用户的预约表
   updateUserAppointInfo(openid, userAppointInfo) {
     let appointArr = userAppointInfo;
