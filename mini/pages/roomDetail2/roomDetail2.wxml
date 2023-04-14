@@ -12,7 +12,7 @@
     </view>
     <!-- 加个查看更多 -->
     <view class="more" bindtap="handleLookMore">
-      <text class="moreTip">查看更多</text>
+      <text class="moreTip">教室信息</text>
       <text class="moreIcon iconfont icon-xiangyou"></text>
     </view>
   </view>

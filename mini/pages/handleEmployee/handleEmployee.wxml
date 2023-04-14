@@ -60,15 +60,15 @@
                 <text class="tip1">所属实验室</text>
                 <text class="tip2">{{items.studentLab}}</text>
               </view>
-              <view></view>
+              <view class="item_label"></view>
               <!-- 选择按钮 -->
               <view wx:if="{{items.isProve === 0}}" class="chooseBtn">
                 <view class="disagree_1">
-                  <button style="width: 240rpx; height: 60rpx; line-height: 30rpx;" bindtap="handleDisagree"
+                  <button style="width: 240rpx; height: 60rpx; line-height: 30rpx; position: relative; left: -65rpx; top: -30rpx" bindtap="handleDisagree"
                     data-item="{{items}}" data-index="{{idx}}">不通过</button>
                 </view>
                 <view class="agree_1">
-                  <button style="width: 240rpx; height: 60rpx; line-height: 30rpx;" type="primary" bindtap="handleAgree"
+                  <button style="width: 240rpx; height: 60rpx; line-height: 30rpx; position: relative; left: 25rpx; top: -30rpx" type="primary" bindtap="handleAgree"
                     data-item="{{items}}" data-index="{{idx}}">通过</button>
                 </view>
               </view>

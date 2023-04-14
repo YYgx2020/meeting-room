@@ -42,6 +42,7 @@ Page({
         })
         // 将用户的 openid 进行全局的存储
         app.globalData.openid = res.result.openid;
+        
       })
 
       .catch(err => {
@@ -94,7 +95,7 @@ Page({
     // 标记是否认证通过
     let isPassed = false;
     // 标记通过后是否是第一次使用，用于展示消息红点
-
+  // 设置全局属性
 
     
     let isFirst = false;

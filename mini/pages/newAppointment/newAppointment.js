@@ -233,7 +233,12 @@ Page({
         this.setData({
           phoneError: true,
         })
-      } else {
+        
+      } //if (appointPhone == '')
+     // {
+        //phoneError: true;
+     // }
+      else {
         this.setData({
           appointPhone: e.detail.value,
           phoneError: false,
@@ -241,7 +246,10 @@ Page({
       }
     }
   },
-
+//if (appointPhone = '')
+     // {
+       // phoneError: true;
+     // }
   // 获取申请事宜
   textareaLostFocus(e) {
     console.log("文本域失去焦点：", e.detail.value);
@@ -278,23 +286,51 @@ Page({
     if (phoneError) {
       return
     }
+    //if (appointPhone == '')
+     // {
+        //phoneError: true;
+     // }
     // 先判断是否输入姓名和电话号码
-    if (appointName === '' && appointPhone === '') {
+    if (appointName === '' && appointPhone === ''&&thingsText === '') {
       wx.showModal({
         title: '提示',
-        content: '请输入预约人的姓名和电话号码',
+        content: '请输入姓名，电话号码和申请事宜',
       })
       return
-    } else if (appointName === '' && appointPhone !== '') {
+    } else if (appointName === '' && appointPhone !== ''&&thingsText !== '') {
       wx.showModal({
         title: '提示',
         content: '请输入预约人的姓名',
       })
       return
-    } else if (appointName !== '' && appointPhone === '') {
+    } else if (appointName !== '' && appointPhone === ''&&thingsText !== '') {
       wx.showModal({
         title: '提示',
         content: '请输入预约人的电话',
+      })
+      return
+    } else if (thingsText === ''&&appointName !== '' && appointPhone !== '') {
+      wx.showModal({
+        title: '提示',
+        content: '请输入申请事宜',
+      })
+      return
+    } else if (thingsText === ''&&appointName == '' && appointPhone !== '') {
+      wx.showModal({
+        title: '提示',
+        content: '请输入姓名和申请事宜',
+      })
+      return
+    } else if (thingsText !== ''&&appointName == '' && appointPhone == '') {
+      wx.showModal({
+        title: '提示',
+        content: '请输入预约人的姓名和电话',
+      })
+      return
+    } else if (thingsText == ''&&appointName !== '' && appointPhone == '') {
+      wx.showModal({
+        title: '提示',
+        content: '请输入电话和申请事宜',
       })
       return
     }
